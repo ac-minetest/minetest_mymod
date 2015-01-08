@@ -1,0 +1,44 @@
+*~
+## Generic ignorable patterns and files
+.*.swp
+*bak*
+tags
+*.vim
+shooter.conf
+*.orig
+*.rej
+
+## Non-static Minetest directories
+/bin/
+/src/
+/po/
+/util/
+/build/
+/builtin/
+/client/
+/locale/
+## /games/*
+/cache/
+/textures/*
+/doc/
+/fonts/
+/sounds/
+## /mods/*
+/worlds/
+/world/
+
+## Configuration/log files
+## minetest.conf
+debug.txt
+
+!.gitignore
+
+cmake
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+CMakeLists.txt
+CPackConfig.cmake
+CPackSourceConfig.cmake
+install_manifest.txt
+Makefile
