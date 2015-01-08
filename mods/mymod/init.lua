@@ -325,7 +325,7 @@ minetest.register_abm(
 			local damage = 1
 			if dist > 0 and obj:get_hp()>1 then -- no damage if hp<=1
 				if playerdata[obj:get_player_name()].speed==false then
-					minetest.chat_send_player(name, "haha, you are slow now")
+					minetest.chat_send_player(obj:get_player_name(), "haha, you are slow now")
 				end
 				obj:set_physics_override({speed =  0.1});
 				playerdata[obj:get_player_name()] = {speed = true}; -- remember that speed was changed
