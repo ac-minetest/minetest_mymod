@@ -12,8 +12,8 @@ shooter:register_weapon("shooter:pistol", {
 	},
 })
 
-shooter:register_weapon("shooter:rifle", {
-	description = "Rifle",
+shooter:register_weapon("shooter:ak47", {
+	description = "AK-47",
 	inventory_image = "shooter_rifle.png",
 	rounds = 500,
 	spec = {
@@ -40,8 +40,8 @@ shooter:register_weapon("shooter:shotgun", {
 	},
 })
 
-shooter:register_weapon("shooter:ak47", {
-	description = "AK-47",
+shooter:register_weapon("shooter:uzi", {
+	description = "UZI",
 	inventory_image = "shooter_smgun.png",
 	rounds = 200,
 	shots = 4,
