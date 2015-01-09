@@ -45,7 +45,7 @@ mobs:register_mob("mobs:chicken", {
 	passive = true,
 })
 
-mobs:register_spawn("mobs:chicken", {"default:dirt_with_grass", "ethereal:bamboo_dirt"}, 20, 8, 9000, 1, 31000)
+mobs:register_spawn("mobs:chicken", {"default:dirt_with_grass", "ethereal:bamboo_dirt"}, 20, 8, 900, 1, 31000)
 
 -- Chicken (right-click chicken to place in inventory)
 

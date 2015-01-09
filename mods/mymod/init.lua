@@ -274,9 +274,6 @@ minetest.register_globalstep(function(dtime)
 	local t
 	if time > MYMOD_UPDATE_TIME then
 		for _,player in ipairs(minetest.get_connected_players()) do 
-			 -- check whether speed was already affected
-			if playerdata[player:get_player_name()]==nil or playerdata[player:get_player_name()] == false then 
-
 			pos = player:getpos()
 			-- SPEED ADJUSTMENT
 			mult = math.sqrt((pos.x-spawnpoint.x)^2+(pos.z-spawnpoint.z)^2)
@@ -285,7 +282,10 @@ minetest.register_globalstep(function(dtime)
 			else
 				mult = 1.
 			end
-			player:set_physics_override({speed =  mult});
+			-- check whether speed was already affected
+			if playerdata[player:get_player_name()]==nil or playerdata[player:get_player_name()] == false then 
+				player:set_physics_override({speed =  mult});
+			end
 			--minetest.chat_send_player(player:get_player_name(), "speed factor "..mult) --debug only
 				
 			--GRAVITY ADJUSTMENT above y = 50
@@ -296,7 +296,7 @@ minetest.register_globalstep(function(dtime)
 			end
 			player:set_physics_override({gravity =  mult});
 			
-		end
+		
 		time = 0
 		
 		
