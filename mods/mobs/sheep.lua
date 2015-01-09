@@ -71,4 +71,4 @@ mobs:register_mob("mobs:sheep", {
 		end
 	end,
 })
-mobs:register_spawn("mobs:sheep", {"default:dirt_with_grass", "ethereal:green_dirt_top"}, 20, 8, 9000, 1, 31000)
+mobs:register_spawn("mobs:sheep", {"default:dirt_with_grass", "ethereal:green_dirt_top"}, 20, 8, 900, 1, 31000)

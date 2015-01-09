@@ -59,7 +59,7 @@ mobs:register_mob("mobs:spider", {
 	sounds = {},
 	step = 1,
 })
-mobs:register_spawn("mobs:spider", {"default:desert_stone", "ethereal:crystal_topped_dirt", "default:dirt_with_grass","default:dirt"}, 20, -1, 1000, 1, 31000)
+mobs:register_spawn("mobs:spider", {"default:desert_stone", "ethereal:crystal_topped_dirt", "default:dirt_with_grass","default:dirt"}, 20, -1, 500, 1, 31000)
 
 -- Ethereal crystal spike compatibility
 

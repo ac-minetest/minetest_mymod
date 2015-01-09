@@ -43,4 +43,4 @@ mobs:register_mob("mobs:dirt_monster", {
 	step = 0.5,
 	blood_texture = "default_dirt.png",
 })
-mobs:register_spawn("mobs:dirt_monster", {"default:dirt_with_grass", "ethereal:gray_dirt_top"}, 3, -1, 7000, 1, 31000)
+mobs:register_spawn("mobs:dirt_monster", {"default:dirt_with_grass", "ethereal:gray_dirt_top"}, 3, -1, 700, 1, 31000)
