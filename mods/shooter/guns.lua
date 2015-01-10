@@ -69,7 +69,7 @@ if SHOOTER_ENABLE_CRAFTING == true then
 		},
 	})
 	minetest.register_craft({
-		output = "shooter:rifle 1 0",
+		output = "shooter:ak47 1 0",
 		recipe = {
 			{"default:steel_ingot", "", ""},
 			{"", "default:bronze_ingot", ""},
@@ -85,7 +85,7 @@ if SHOOTER_ENABLE_CRAFTING == true then
 		},
 	})
 	minetest.register_craft({
-		output = "shooter:ak47 1 0",
+		output = "shooter:uzi 1 0",
 		recipe = {
 			{"default:steel_ingot", "default:steel_ingot", "default:steel_ingot"},
 			{"", "default:bronze_ingot", "default:mese_crystal"},
