@@ -42,7 +42,7 @@ jump = true,
 step = 1,
 passive = true,
 })
-mobs:register_spawn("mobs:bee", {"group:flower", "default:dirt_with_grass","default:dirt"}, 20, -1, 700, 1, 31000)
+mobs:register_spawn("mobs:bee", {"group:flower", "default:dirt_with_grass","default:dirt"}, 20, -1, 700, 10, 31000)
 
 minetest.register_craftitem("mobs:bee", {
 	description = "bee",
