@@ -21,7 +21,7 @@ mobs:register_mob("mobs:stone_monster", {
 		min = 3,
 		max = 5,},
 		{name = "shooter:pistol",
-		chance=8,
+		chance=20,
 		min=1,
 		max=2,},
 		{name = "default:iron_lump",
