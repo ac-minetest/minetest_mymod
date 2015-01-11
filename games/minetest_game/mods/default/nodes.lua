@@ -1080,6 +1080,7 @@ minetest.register_node("default:grass_1", {
 		-- place a random grass node
 		local stack = ItemStack("default:grass_"..math.random(1,5))
 		local ret = minetest.item_place(stack, placer, pointed_thing)
+		if ret == nil then return end -- rnd safety check
 		return ItemStack("default:grass_1 "..itemstack:get_count()-(1-ret:get_count()))
 	end,
 })
