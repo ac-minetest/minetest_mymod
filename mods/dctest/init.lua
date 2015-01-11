@@ -10,7 +10,7 @@ function mob_breeder(pos, mob_name)
 		-- how to make it check for object mob name==mob_name?
 		-- or count the mobs within radius in a more elegant way
 		if (obj:is_player()) then
-			mob_count++
+			mob_count = mob_count + 1
 		end
 	end
 	if mob_count < 5 then
