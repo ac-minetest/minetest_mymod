@@ -244,10 +244,12 @@ armor.get_player_skin = function(self, name)
 end
 
 armor.get_armor_formspec = function(self, name)
-	local formspec = armor.formspec:gsub("player_name", name)
-	formspec = formspec:gsub("armor_preview", armor.textures[name].preview)
-	formspec = formspec:gsub("armor_level", armor.def[name].level)
-	return formspec:gsub("armor_heal", armor.def[name].heal)
+	if name ~= nil then --disableclouds
+		local formspec = armor.formspec:gsub("player_name", name)
+		formspec = formspec:gsub("armor_preview", armor.textures[name].preview)
+		formspec = formspec:gsub("armor_level", armor.def[name].level)
+		return formspec:gsub("armor_heal", armor.def[name].heal)
+	end
 end
 
 armor.update_inventory = function(self, player)
