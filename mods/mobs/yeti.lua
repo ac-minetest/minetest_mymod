@@ -19,7 +19,7 @@ mobs:register_mob("mobs:yeti", {
 		{name = "default:ice",
 		chance = 1,
 		min = 3,
-		max = 5,},
+		max = 10,},
 	},
 	light_resistant = true,
 	armor = 60,

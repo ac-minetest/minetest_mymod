@@ -25,7 +25,7 @@ mobs:register_mob("mobs:oerkki", {
 		min = 1,
 		max = 2,},
 		{name = "default:sapling",
-		chance = 10,
+		chance = 15,
 		min = 1,
 		max = 2,},
 		},
