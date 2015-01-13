@@ -202,7 +202,7 @@ function mobs:register_mob(name, def)
 				local pos = self.object:getpos()
 								
 				-- rnd: only lay eggs outside spawn
-				if math.random(1, 1000) <= 1 and not (math.abs(pos.x-static_spawnpoint.x)<20 and math.abs(pos.y-static_spawnpoint.y)<20 and math.abs(pos.z-static_spawnpoint.z) < 20) then
+				if math.random(1, 1000) <= 1 and not (math.abs(pos.x-static_spawnpoint.x)<20 and math.abs(pos.y-static_spawnpoint.y)<20 and math.abs(pos.z-static_spawnpoint.z) < 20) 
 				and minetest.get_node(self.object:getpos()).name == "air"
 				and self.state == "stand" then
 					minetest.add_entity(self.object:getpos(), "mobs:egg") -- RND FIX: eggs arent placed anymore by chicken
