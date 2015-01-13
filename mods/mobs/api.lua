@@ -878,7 +878,7 @@ function mobs:register_spawn(name, nodes, max_light, min_light, chance, active_o
 				mob.object:set_armor_groups({fleshy=new_armor})
 				local dropst = mob.drops;
 				
-				for i,_ in pairs(dropst) do -- more probability of drops
+				for i,_ in pairs(dropst) do -- more probability of drops, DOES THIS WORK CORRECTLY?
 					mob.drops[i].chance=math.max(1,math.ceil(dropst[i].chance*mult))
 				end
 				
