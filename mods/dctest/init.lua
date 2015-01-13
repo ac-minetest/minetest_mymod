@@ -22,6 +22,7 @@ end
 -- animal spawners named "barn", monster spawners named "cursed stone" like on just test
 minetest.register_node("dctest:mob_breeder", {
 	description = "Chicken breeding barn",
+	tiles = {"kfc.png"},
 	drawtype = "glasslike",
 	groups = {snappy=1,choppy=2,oddly_breakable_by_hand=2,flammable=3,wood=1},
 	sounds = default.node_sound_wood_defaults(),
@@ -41,4 +42,14 @@ minetest.register_abm({
 			mob_breeder(pos, "mobs:chicken")
 		end
 	end,
+})
+
+
+minetest.register_craft({
+	output = "dctest:mob_breeder",
+	recipe = {
+		{"mobs:chicken", "mobs:chicken","mobs:chicken"},
+		{"mobs:chicken", "default:mese_block","mobs:chicken"},
+		{"mobs:chicken", "mobs:chicken","mobs:chicken"}
+	}
 })
