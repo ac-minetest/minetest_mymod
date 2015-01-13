@@ -197,7 +197,12 @@ function mobs:register_mob(name, def)
 
 			-- drop egg
 			if self.animaltype == "clucky" then
-				if math.random(1, 1000) <= 1
+				
+				local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
+				local pos = self.object:getpos()
+								
+				-- rnd: only lay eggs outside spawn
+				if math.random(1, 1000) <= 1 and not (math.abs(pos.x-static_spawnpoint.x)<20 and math.abs(pos.y-static_spawnpoint.y)<20 and math.abs(pos.z-static_spawnpoint.z) < 20) then
 				and minetest.get_node(self.object:getpos()).name == "air"
 				and self.state == "stand" then
 					minetest.add_entity(self.object:getpos(), "mobs:egg") -- RND FIX: eggs arent placed anymore by chicken
