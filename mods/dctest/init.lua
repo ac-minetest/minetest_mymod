@@ -23,12 +23,8 @@ end
 minetest.register_node("dctest:mob_breeder", {
 	description = "Chicken breeding barn",
 	tiles = {"kfc.png"},
-	drawtype = "glasslike",
 	groups = {snappy=1,choppy=2,oddly_breakable_by_hand=2,flammable=3,wood=1},
 	sounds = default.node_sound_wood_defaults(),
-	tiles = {"default_glass.png"},   
-	sunlight_propagates = true,
-	param2 = "light",
 })
 
 minetest.register_abm({
