@@ -205,7 +205,8 @@ function mobs:register_mob(name, def)
 				if math.random(1, 1000) <= 1 and not (math.abs(pos.x-static_spawnpoint.x)<20 and math.abs(pos.y-static_spawnpoint.y)<20 and math.abs(pos.z-static_spawnpoint.z) < 20) 
 				and minetest.get_node(self.object:getpos()).name == "air"
 				and self.state == "stand" then
-					minetest.add_entity(self.object:getpos(), "mobs:egg") -- RND FIX: eggs arent placed anymore by chicken
+					local d = ItemStack("mobs:egg 1")
+					minetest.add_item(pos,d) -- RND FIX: eggs arent placed anymore by chicken
 					--minetest.set_node(self.object:getpos(), {name="mobs:egg"})
 				end
 			end
