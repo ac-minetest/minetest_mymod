@@ -1,4 +1,5 @@
 mobs = {}
+mobs = {}
 mobs.mod = "redo"
 function mobs:register_mob(name, def)
 	minetest.register_entity(name, {
@@ -199,7 +200,8 @@ function mobs:register_mob(name, def)
 				if math.random(1, 1000) <= 1
 				and minetest.get_node(self.object:getpos()).name == "air"
 				and self.state == "stand" then
-					minetest.set_node(self.object:getpos(), {name="mobs:egg"})
+					minetest.add_entity(self.object:getpos(), "mobs:egg") -- RND FIX: eggs arent placed anymore by chicken
+					--minetest.set_node(self.object:getpos(), {name="mobs:egg"})
 				end
 			end
 			
