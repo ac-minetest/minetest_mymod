@@ -35,6 +35,6 @@ minetest.register_abm({
 	interval = 1.0,
 	chance = 20,
 	action = function(pos)
-		mob_breeder(pos, "mob:chicken")
+		mob_breeder(pos, "mobs:chicken")
 	end,
 })
