@@ -2,7 +2,6 @@
 minetest.register_on_newplayer(
 function(player)
 		minetest.log("action", "Giving initial stuff to player "..player:get_player_name())
-		player:get_inventory():add_item('main', 'default:pick_stone')
 		player:get_inventory():add_item('main', 'default:torch 1')
 		player:get_inventory():add_item('main', 'default:sword_wood')
 		

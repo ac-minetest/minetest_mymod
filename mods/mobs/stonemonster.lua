@@ -20,6 +20,10 @@ mobs:register_mob("mobs:stone_monster", {
 		chance = 2,
 		min = 3,
 		max = 5,},
+		{name = "default:cobble", -- need this for stone pick
+		chance = 2,
+		min = 1,
+		max = 1,},
 		{name = "shooter:pistol",
 		chance=50,
 		min=1,
