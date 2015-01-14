@@ -20,8 +20,7 @@ local object_detector_on_receive_fields = function(pos, formname, fields)
 			if  o:is_player() then name = o:get_player_name() break end
 	end
 	
-	if name==nil or not protector.can_dig(5,pos,name) then return end
-	end
+	if name==nil or not protector:protector.can_dig(5,pos,name) then return end
 	-- rnd: end
 	
 	if not fields.scanname or not fields.digiline_channel then return end;
