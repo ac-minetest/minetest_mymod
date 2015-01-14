@@ -14,12 +14,14 @@ end
 
 local object_detector_on_receive_fields = function(pos, formname, fields)
 	--rnd : players cant change fields if protected
-	
-	local objs = minetest:get_objects_inside_radius(pos,4) 
+		
+	local objs = minetest:get_objects_inside_radius(pos,4.0) 
 	local name = nil
 	for _, o in pairs(objs) do
-			if  o:is_player() then name = o:get_player_name() break end
+			if  o:is_player() then name = o:get_player_name() end
 	end
+	--debug
+	minetest.chat_send_all("debug name ".. name .. " check " .. protector.can_dig(5,pos,name))
 	
 	if name==nil or not protector.can_dig(5,pos,name) then return end
 	-- rnd: end
