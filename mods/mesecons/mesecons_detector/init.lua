@@ -20,9 +20,6 @@ local object_detector_on_receive_fields = function(pos, formname, fields)
 	for _, o in pairs(objs) do
 			if  o:is_player() then name = o:get_player_name() end
 	end
-	--debug
-	minetest.chat_send_all("debug name ".. name .. " check " .. protector.can_dig(5,pos,name))
-	
 	if name==nil or not protector.can_dig(5,pos,name) then return end
 	-- rnd: end
 	

@@ -158,7 +158,8 @@ end
 
 local old_is_protected = minetest.is_protected
 function minetest.is_protected(pos, name)
-	if not protector.can_dig(5,pos,name) then
+	local player = minetest.get_player_by_name(name)
+	if not protector.can_dig(5,pos,player) then
 		return true
 	end
 	return old_is_protected(pos, name)
