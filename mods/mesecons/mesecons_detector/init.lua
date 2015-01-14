@@ -13,6 +13,17 @@ local object_detector_make_formspec = function (pos)
 end
 
 local object_detector_on_receive_fields = function(pos, formname, fields)
+	--rnd : players cant change fields if protected
+	local objs = minetest.env:get_objects_inside_radius(pos,4) 
+	local name = nil
+	for _, o in pairs(objs) do
+			if  o:is_player() then name = o:get_player_name() break end
+	end
+	
+	if name==nil or not protector.can_dig(5,pos,name) then return end
+	end
+	-- rnd: end
+	
 	if not fields.scanname or not fields.digiline_channel then return end;
 
 	local meta = minetest.get_meta(pos)
