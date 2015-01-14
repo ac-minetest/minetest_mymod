@@ -878,15 +878,16 @@ function mobs:register_spawn(name, nodes, max_light, min_light, chance, active_o
 					mult = 1/(mult/500+1.) -- at distance 0 armor is normal, at 500 it 50% (smaller the better)
 				else
 					mult = math.abs(pos.y-spawnpoint.y); -- deep enough only depth
-					mult = 1/(mult/500+1.) -- depth 500, double armor
+					mult = 1/(mult/300+1.) -- depth 300, double armor
 				end
 				local new_armor = mob.armor*mult;
 				mob.object:set_armor_groups({fleshy=new_armor})
-				local dropst = mob.drops;
 				
-				for i,_ in pairs(dropst) do -- more probability of drops, DOES THIS WORK CORRECTLY?
-					mob.drops[i].chance=math.max(1,math.ceil(dropst[i].chance*mult))
-				end
+				-- rnd DOESNT SEEM TO WORK CORRECTLY! drops everything ??
+				-- local dropst = mob.drops;
+				-- for i,_ in pairs(dropst) do -- more probability of drops, DOES THIS WORK CORRECTLY?
+					-- mob.drops[i].chance=math.max(1,math.ceil(dropst[i].chance*mult))
+				-- end
 				
 				
 				
