@@ -153,6 +153,24 @@ function minetest.node_dig(pos, node, digger)
 	end
 end
 
+
+-- rnd: add is_protected check - good for sign protection etc..
+
+local old_is_protected = minetest.is_protected
+function minetest.is_protected(pos, name)
+	if not protector.can_dig(5,pos,name) then
+		return true
+	end
+	return old_is_protected(pos, name)
+end
+
+
+
+
+
+
+
+
 local old_node_place = minetest.item_place
 function minetest.item_place(itemstack, placer, pointed_thing)
 	if itemstack:get_definition().type == "node" then

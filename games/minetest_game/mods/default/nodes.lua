@@ -248,7 +248,7 @@ minetest.register_node("default:jungletree", {
 minetest.register_node("default:junglewood", {
 	description = "Junglewood Planks",
 	tiles = {"default_junglewood.png"},
-	groups = {choppy=2,oddly_breakable_by_hand=2,flammable=3,wood=1},
+	groups = {choppy=2,flammable=3,wood=1},--oddly_breakable_by_hand=2,
 	sounds = default.node_sound_wood_defaults(),
 })
 
@@ -519,7 +519,7 @@ minetest.register_node("default:ladder", {
 minetest.register_node("default:wood", {
 	description = "Wooden Planks",
 	tiles = {"default_wood.png"},
-	groups = {choppy=2,oddly_breakable_by_hand=2,flammable=3,wood=1},
+	groups = {choppy=2,flammable=3,wood=1}, --oddly_breakable_by_hand=2,
 	sounds = default.node_sound_wood_defaults(),
 })
 
