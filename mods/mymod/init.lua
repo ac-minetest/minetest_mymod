@@ -410,7 +410,7 @@ minetest.register_node("mymod:landmine_off", {
 function bone_extractor(pos)
 	
 	local above  = {x=pos.x,y=pos.y+1,z=pos.z};
-	minetest.set_node(above, {name="default:air"})
+	minetest.set_node(above, {name="air"})
 	local  i = math.random(1000);
 	local out;
 	
