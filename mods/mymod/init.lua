@@ -438,7 +438,7 @@ minetest.register_abm({
 	chance = 1,
 	action = function(pos)		
 		local pos_above = {x=pos.x,y=pos.y+1,z=pos.z}
-		local above = minetest.get_node(pos_under)
+		local above = minetest.get_node(pos_above)
 		if above.name == "bones:bones" then 
 			bone_extractor(pos)
 		end
