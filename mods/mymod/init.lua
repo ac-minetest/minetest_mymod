@@ -402,3 +402,55 @@ minetest.register_node("mymod:landmine_off", {
 		{"default:steel_ingot","default:steel_ingot","default:steel_ingot"},
 	}
 })
+
+
+
+-- EXTRACTOR: extract stuff from bones with small probability
+
+function bone_extractor(pos)
+	
+	local above  = {x=pos.x,y=pos.y+1,z=pos.z};
+	minetest.set_node(above, {name="default:air"})
+	local  i = math.random(1000);
+	local out;
+	
+	if i>=500 and i<1000 then out = "default:tree" end
+	if i>=200 then and i<500 then out = "default:stone_with_iron" end
+	if i>=100 and i< 200 then out = "default:stone_with_iron" end
+	if i<50 then out = "default:stone_with_mese" end
+	local below  = {x=pos.x,y=pos.y-1,z=pos.z};
+	minetest.set_node(below, {name=out})
+		
+end
+
+-- here i see a for looping over a list and defining spawners for specific mob types
+-- animal spawners named "barn", monster spawners named "cursed stone" like on just test
+minetest.register_node("mymod:bone_extractor", {
+	description = "Bone extractor",
+	tiles = {"extractor.png"},
+	groups = {oddly_breakable_by_hand=2},
+	sounds = default.node_sound_wood_defaults(),
+})
+
+minetest.register_abm({
+	nodenames = {"mymod:bone_extractor"},
+	interval = 10.0,
+	chance = 1,
+	action = function(pos)		
+		local pos_above = {x=pos.x,y=pos.y+1,z=pos.z}
+		local above = minetest.get_node(pos_under)
+		if above.name == "bones:bones" then 
+			bone_extractor(pos)
+		end
+	end,
+})
+
+
+minetest.register_craft({
+	output = "mymod:bone_extractor",
+	recipe = {
+		{"bones:bones", "bones:bones", "bones:bones"},
+		{"bones:bones", "default:mese_block","bones:bones"},
+		{"bones:bones", "bones:bones", "bones:bones"}
+	}
+})
