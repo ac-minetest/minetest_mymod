@@ -19,7 +19,6 @@ local object_detector_on_receive_fields = function(pos, formname, fields)
 	for _, o in pairs(objs) do
 			if  o:is_player() then player = o end
 	end
-	
 	if player == nil then return end
 	if not protector.can_dig(5,pos,player) then return end
 	-- rnd: end
