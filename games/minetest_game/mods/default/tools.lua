@@ -77,6 +77,7 @@ minetest.register_tool("default:pick_mese", {
 		max_drop_level=3,
 		groupcaps={
 			cracky = {times={[1]=2.4, [2]=1.2, [3]=0.60}, uses=180, maxlevel=3},
+			choppy={times={[1]=2.20, [2]=1.00, [3]=0.60}, uses=400, maxlevel=3},
 		},
 		damage_groups = {fleshy=5},
 	},
