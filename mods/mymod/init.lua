@@ -421,7 +421,8 @@ function bone_extractor(pos)
 	if i>=200 and i<500 then out = "default:stone_with_iron" end
 	if i>=100 and i< 200 then out = "default:stone_with_gold" end
 	if i>=50 and i<100 then out = "default:stone_with_mese" end
-	if i>=0 and i<50 then out = "default:stone_with_diamond" end
+	if i>=25 and i<50 then out = "default:stone_with_diamond" end
+	if i>=10 and i<25 then out = "moreores:mineral_mithril" end
 	if out~=nil then
 		minetest.set_node(pos_below, {name=out})
 	end
