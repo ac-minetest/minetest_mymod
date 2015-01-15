@@ -436,6 +436,10 @@ minetest.register_node("mymod:bone_extractor", {
 	tiles = {"extractor.png"},
 	groups = {oddly_breakable_by_hand=2},
 	sounds = default.node_sound_wood_defaults(),
+	after_place_node = function(pos, placer)
+		local meta = minetest.env:get_meta(pos)
+		meta:set_string("infotext", "Bone extractor: place bones on top, extract appears below")
+	end,
 })
 
 minetest.register_abm({
