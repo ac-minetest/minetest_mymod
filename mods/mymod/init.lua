@@ -409,17 +409,22 @@ minetest.register_node("mymod:landmine_off", {
 
 function bone_extractor(pos)
 	
-	local above  = {x=pos.x,y=pos.y+1,z=pos.z};
-	minetest.set_node(above, {name="air"})
+	local pos_above  = {x=pos.x,y=pos.y+1,z=pos.z};
+	local pos_below  = {x=pos.x,y=pos.y-1,z=pos.z};
+	local below = minetest.get_node(pos_above);
+	if below.name~="air" then return end
+	minetest.set_node(pos_above, {name="air"})
 	local  i = math.random(1000);
+
 	local out;
 	if i>=500 and i<1000 then out = "default:copper" end
 	if i>=200 and i<500 then out = "default:stone_with_iron" end
-	if i>=100 and i< 200 then out = "stone_with_gold" end
+	if i>=100 and i< 200 then out = "default:stone_with_gold" end
 	if i>=50 and i<100 then out = "default:stone_with_mese" end
 	if i>=0 and i<50 then out = "default:stone_with_diamond" end
-	local below  = {x=pos.x,y=pos.y-1,z=pos.z};
-	minetest.set_node(below, {name=out})
+	if out~=nil then
+		minetest.set_node(pos_below, {name=out})
+	end
 		
 end
 
