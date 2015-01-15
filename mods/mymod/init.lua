@@ -411,7 +411,7 @@ function bone_extractor(pos)
 	
 	local pos_above  = {x=pos.x,y=pos.y+1,z=pos.z};
 	local pos_below  = {x=pos.x,y=pos.y-1,z=pos.z};
-	local below = minetest.get_node(pos_above);
+	local below = minetest.get_node(pos_below);
 	if below.name~="air" then return end
 	minetest.set_node(pos_above, {name="air"})
 	local  i = math.random(1000);
