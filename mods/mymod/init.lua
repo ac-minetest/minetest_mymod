@@ -413,11 +413,11 @@ function bone_extractor(pos)
 	minetest.set_node(above, {name="air"})
 	local  i = math.random(1000);
 	local out;
-	
-	if i>=500 and i<1000 then out = "default:tree" end
+	if i>=500 and i<1000 then out = "default:copper" end
 	if i>=200 and i<500 then out = "default:stone_with_iron" end
-	if i>=100 and i< 200 then out = "default:stone_with_iron" end
-	if i<50 then out = "default:stone_with_mese" end
+	if i>=100 and i< 200 then out = "stone_with_gold" end
+	if i>=50 and i<100 then out = "default:stone_with_mese" end
+	if i>=0 and i<50 then out = "default:stone_with_diamond" end
 	local below  = {x=pos.x,y=pos.y-1,z=pos.z};
 	minetest.set_node(below, {name=out})
 		
