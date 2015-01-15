@@ -415,7 +415,7 @@ function bone_extractor(pos)
 	local out;
 	
 	if i>=500 and i<1000 then out = "default:tree" end
-	if i>=200 then and i<500 then out = "default:stone_with_iron" end
+	if i>=200 and i<500 then out = "default:stone_with_iron" end
 	if i>=100 and i< 200 then out = "default:stone_with_iron" end
 	if i<50 then out = "default:stone_with_mese" end
 	local below  = {x=pos.x,y=pos.y-1,z=pos.z};
