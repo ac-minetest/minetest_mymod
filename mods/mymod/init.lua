@@ -51,7 +51,7 @@ minetest.register_chatcommand("kill", {
 		
 		local pos=player:getpos()
 		local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
-		if math.abs(pos.x-static_spawnpoint.x)<20 and pos.y<static_spawnpoint.y and pos.y>static_spawnpoint.y-20 and math.abs(pos.z-static_spawnpoint.z) < 20 then 
+		if math.abs(pos.x-static_spawnpoint.x)<20 and pos.y<static_spawnpoint.y-3 and pos.y>static_spawnpoint.y-20 and math.abs(pos.z-static_spawnpoint.z) < 20 then 
 			player:set_hp(0)
 			else minetest.chat_send_player(name, "kill only works inside jail");return false
 		end -- no goto spawn inside spawn area
