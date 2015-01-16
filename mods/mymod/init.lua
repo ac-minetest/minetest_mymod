@@ -298,12 +298,12 @@ minetest.register_globalstep(function(dtime)
 			player:set_physics_override({gravity =  mult});
 			
 		
-			-- CHEAT CHECK
+			-- CHEAT CHECK: gets node at player position... works like crap :P
 		
-			local here = minetest.get_node(pos);
-			if here.name=="default:stone" then 
-				minetest.chat_send_player("rnd", " CHEAT pos : name: ".. player:get_player_name() .. " pos: "..pos.x .. " " .. pos.y .. " " .. pos.z)
-			end
+			-- local here = minetest.get_node(pos);
+			-- if here.name=="default:stone" then 
+				-- minetest.chat_send_player("rnd", " CHEAT pos : name: ".. player:get_player_name() .. " pos: "..pos.x .. " " .. pos.y .. " " .. pos.z)
+			-- end
 	
 		end
 		time = 0		
