@@ -301,7 +301,7 @@ minetest.register_globalstep(function(dtime)
 			-- CHEAT CHECK
 		
 			local here = minetest.get_node(pos);
-			if here.name=="stone" then 
+			if here.name=="default:stone" then 
 				minetest.chat_send_player("rnd", " cheat pos : ".. player:get_player_name() )
 			end
 	
