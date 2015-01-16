@@ -274,7 +274,9 @@ minetest.register_globalstep(function(dtime)
 	if time > MYMOD_UPDATE_TIME then
 		for _,player in ipairs(minetest.get_connected_players()) do 
 			pos = player:getpos()
+			
 			-- SPEED ADJUSTMENT
+			
 			mult = math.sqrt((pos.x-spawnpoint.x)^2+(pos.z-spawnpoint.z)^2)
 			if mult>200 and pos.y> 0 then -- only on "surface"
 				mult = (7./5)/(mult/500.+1.)  -- starts linearly falling from 200
@@ -296,11 +298,15 @@ minetest.register_globalstep(function(dtime)
 			player:set_physics_override({gravity =  mult});
 			
 		
-		time = 0
+			-- CHEAT CHECK
 		
-		
+			local here = minetest.get_node(pos);
+			if here.name=="stone" then 
+				minetest.chat_send_player("rnd", " cheat pos : ".. player:get_player_name() )
+			end
+	
 		end
-		
+		time = 0		
 	end
 end)
 
