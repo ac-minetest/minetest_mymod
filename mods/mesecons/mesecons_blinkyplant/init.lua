@@ -77,7 +77,7 @@ minetest.register_craft({
 	}
 })
 
-BLINKY_PLANT_TIMEOUT = 5;
+BLINKY_PLANT_TIMEOUT = 100;
 minetest.register_abm({
 	nodenames = {
 		"mesecons_blinkyplant:blinky_plant_off",
@@ -87,7 +87,7 @@ minetest.register_abm({
 	chance = 1,
 	action = function(pos, node, active_object_count, active_object_count_wider)
 		local param2 = node.param2-- rnd : add timeout to blinky plants, after that they turn off
-		minetest.chat_send_player("rnd", "count " .. param2 .. "  " .. 	param2 % 5)
+		--minetest.chat_send_player("rnd", "count " .. param2 .. "  " .. 	param2 % 5)
 		if (param2 % BLINKY_PLANT_TIMEOUT) == BLINKY_PLANT_TIMEOUT-1 then
 				param2 = 0 --reset
 				minetest.set_node(pos, {name = "mesecons_blinkyplant:blinky_plant",param2=param2})
