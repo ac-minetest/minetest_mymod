@@ -93,10 +93,11 @@ minetest.register_entity("shooter:turret_entity", {
 				z = math.sin(yaw),
 			})
 			local pos
-			if dir ~= nil then -- fix to prevent crash
+			if dir ~= nil and self.player:getpos()~=nil then -- fix to prevent crash
 				pos = vector.subtract(self.player:getpos(), dir) -- bug here,  cause dir undefined in one case
-			else pos = self.player:getpos() 
+				else return
 			end
+			pos = self.player:getpos() 
 			minetest.after(0.2, function(player)
 				player:setpos(pos)
 			end, self.player)
