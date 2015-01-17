@@ -20,7 +20,7 @@ minetest.register_node("bones:bones", {
 		"bones_front.png"
 	},
 	paramtype2 = "facedir",
-	groups = {dig_immediate=2},
+	groups = {dig_immediate=3}, -- Calinou's advice
 	sounds = default.node_sound_dirt_defaults({
 		footstep = {name="default_gravel_footstep", gain=0.5},
 		dug = {name="default_gravel_footstep", gain=1.0},
