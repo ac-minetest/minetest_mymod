@@ -135,10 +135,16 @@ minetest.register_on_joinplayer(function(player)
 	apply_stats(player)
 end)
 
+function init_experience(player)
+	local name = player:get_player_name(); if name == nil then return end
+	playerdata[name].xp = 0
+	playerdata[name].dig = 0;
+end
 
 minetest.register_on_leaveplayer(function(player) -- save data when player leaves server
 	local name = player:get_player_name(); if name == nil then return end
 	local file =  io.open(minetest.get_worldpath().."/players/"..name.."_experience", "w")
+	if playerdata[name].dig==nil then init_experience(player) end
 	file:write(playerdata[name].xp .. "\n"..playerdata[name].dig);
 	file:close()
 end)
@@ -149,8 +155,8 @@ minetest.register_on_shutdown(function()
 			local name = player:get_player_name();
 			if name ~= nil then
 				local file =  io.open(minetest.get_worldpath().."/players/"..name.."_experience", "w")
-				if playerdata[name].xp==nil then file:write("0\n0") else --
-					file:write(playerdata[name].xp .. "\n"..playerdata[name].dig);
+				if playerdata[name].xp==nil init_experience(player) end
+				file:write(playerdata[name].xp .. "\n"..playerdata[name].dig);
 				end
 				file:close()
 			end
