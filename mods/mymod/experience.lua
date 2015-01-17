@@ -160,6 +160,5 @@ minetest.register_on_shutdown(function()
 				end
 				file:close()
 			end
-	end
 	--minetest.chat_send_all("Server shutting down")
 end)
