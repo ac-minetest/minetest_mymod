@@ -44,7 +44,7 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 		elseif  name == "moreores:mineral_mithril" then xp = 128
 	end
 	name = digger:get_player_name();
-	if playerdata[name] == nil then playerdata[name]={dig=0} end
+	if playerdata[name] == nil or playerdata[name].xp == nil then init_experience(digger) end
 	local oldxp  =  playerdata[name].dig;
 	local newxp  = oldxp+xp
 	playerdata[name].dig  = newxp
