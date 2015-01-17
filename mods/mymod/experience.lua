@@ -149,7 +149,9 @@ minetest.register_on_shutdown(function()
 			local name = player:get_player_name();
 			if name ~= nil then
 				local file =  io.open(minetest.get_worldpath().."/players/"..name.."_experience", "w")
-				file:write(playerdata[name].xp .. "\n"..playerdata[name].dig);
+				if playerdata[name].xp==nil then file:write("0\n0") else
+					file:write(playerdata[name].xp .. "\n"..playerdata[name].dig);
+				end
 				file:close()
 			end
 	end
