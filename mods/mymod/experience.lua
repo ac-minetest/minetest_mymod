@@ -11,7 +11,7 @@ minetest.register_chatcommand("xp", {
         end
 		
 		if playerdata[name] == nil or playerdata[name].dig==nil then playerdata[name]={xp=0,dig=0} end		
-		minetest.chat_send_player(name, "You have ".. playerdata[name].xp  .. " experience points, skill points: dig ".. playerdata[name].dig )
+		minetest.chat_send_player(name, "You have ".. playerdata[name].xp  .. " experience points, skill points: dig ".. playerdata[name].dig.. ", level ".. get_level(playerdata[name].dig) )
 end,	
 })
 
@@ -21,14 +21,12 @@ local experience = {}
 experience.dig_levels = {[2]=10,[3]=40,[4]=80,[5]=160,[6]=320,[7]=640,[8]=1200,[9]=2400,[10]=5000}
 
 function get_level(xp)
-local i,v,j,k
-j=-1
+local i,v,j
+j=1
 	for i,v in pairs(experience.dig_levels) do
-		if xp<v then j = i end
-		k = i
+		if xp>v then j = i end
 	end
-	if j == -1 then return k end
-	return j-1	
+	return j
 end
 
 minetest.register_on_dignode(function(pos, oldnode, digger)
