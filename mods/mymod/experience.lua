@@ -16,8 +16,9 @@ end,
 })
 
 
--- add experience on various events
-
+-- add experience and skill points on various events
+local experience = {}
+experience.dig_levels = {[2]=10,[3]=40,[4]=80,[5]=160,[6]=320,[7]=640,[8]=1200,[9]=2400,[10]=5000}
 
 minetest.register_on_dignode(function(pos, oldnode, digger)
 	if digger == nil then return end
@@ -32,8 +33,6 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 		elseif  name == "default:stone_with_mese" then xp = 32
 		elseif  name == "default:stone_with_diamond" then xp = 64
 		elseif  name == "moreores:mineral_mithril" then xp = 128
-		
-		
 	end
 	name = digger:get_player_name();
 	if playerdata[name] == nil then playerdata[name]={dig=0} end
@@ -41,10 +40,13 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 	local newxp  = oldxp+xp
 	playerdata[name].dig  = newxp
 	
-	if oldxp<10 and newxp>10 then
-		minetest.chat_send_player(name, "You have reached level 2 in mining.")
-		apply_stats(digger)
+	local i,v
+	for i,v in pairs(experience.dig_levels) do
+		if oldxp<v and newxp>=v then
+			minetest.chat_send_player(name, "You have reached level "..i.." in mining.")
+		end
 	end
+	apply_stats(digger)
 	
 	--APPLY LEVEL RELATED EFFECTS
 	local wear -- limits uses of pickaxes
@@ -64,12 +66,11 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 	-- local dp = core.get_dig_params(def.groups, tp)
 	-- if wdef and wdef.after_use then
 		-- wielded = wdef.after_use(wielded, digger, node, dp) or wielded
-	-- else
-		Wear out tool
-		if not core.setting_getbool("creative_mode") then
+	-- else --Wear out tool
+		--if not core.setting_getbool("creative_mode") then
 			-- wielded:add_wear(dp.wear*100)
 			-- wielded:add_wear(65535/10)
-		end
+	--	end
 	-- end 
 	
 	
