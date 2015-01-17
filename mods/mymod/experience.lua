@@ -153,8 +153,9 @@ end)
 minetest.register_on_shutdown(function()
     for _,player in ipairs(minetest.get_connected_players()) do 
 			local name = player:get_player_name();
+			local file
 			if name ~= nil then
-				local file =  io.open(minetest.get_worldpath().."/players/"..name.."_experience", "w")
+				file =  io.open(minetest.get_worldpath().."/players/"..name.."_experience", "w")
 				if playerdata[name].xp==nil then init_experience(player) end
 				file:write(playerdata[name].xp .. "\n"..playerdata[name].dig);
 				end
