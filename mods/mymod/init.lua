@@ -63,38 +63,6 @@ end,
 
 
 
--- ICE/WATER
-
--- rnd freezing still water to snow if not bright enough
-
-minetest.register_abm({ -- water freeze
-	nodenames = {"default:water_source"},
-	neighbors = {""},
-	interval = 20,
-	chance = 5,
-	action = function(pos, node, active_object_count, active_object_count_wider)
-		local p = {x=pos.x, y=pos.y+1, z=pos.z}
-		local above = minetest.get_node(p) 
-		if above.name == "air" and minetest.get_node_light(p)<=LIGHT_MAX*0.7  then -- check if above air and if not too bright
-			minetest.set_node(pos, {name="default:ice"})
-		end 
-	end,
-})
-
-
-minetest.register_abm({
-	nodenames = {"default:ice"},
-	neighbors = {""},
-	interval = 20,
-	chance = 5,
-	action = function(pos, node, active_object_count, active_object_count_wider)
-		local p = {x=pos.x, y=pos.y+1, z=pos.z}
-		local above = minetest.get_node(p) 
-		if above.name =="air" and minetest.get_node_light(p)>LIGHT_MAX*0.7 then -- snow melts -- minetest.get_node_light(p)>LIGHT_MAX-3
-			minetest.set_node(pos, {name="default:water_source"})
-		end
-	end,
-})
 
 
 minetest.register_abm({ -- lava destroyes bones (every?) after 5 minutes
@@ -258,7 +226,11 @@ minetest.register_craft({
 
 
 -- here various player stats are saved
-local playerdata = {};
+playerdata = {};
+dofile(minetest.get_modpath("mymod").."/experience.lua")
+dofile(minetest.get_modpath("mymod").."/landmine.lua")
+dofile(minetest.get_modpath("mymod").."/extractor.lua")
+dofile(minetest.get_modpath("mymod").."/freezing.lua")
 
 -- players walk slower away from spawn
 local time = 0
@@ -312,161 +284,7 @@ end)
 
 
 
--- cripple land mine, activated by mese
-
-LANDMINE_RANGE = 4
-
-minetest.register_abm(
-	{nodenames = {"mymod:landmine_on"},
-	interval = 1.0,
-	chance = 1,
-	action = function(pos)
-
-	local objects = minetest.get_objects_inside_radius(pos, LANDMINE_RANGE) -- radius
-	for _,obj in ipairs(objects) do
-		if (obj:is_player()) then
-			local obj_pos = obj:getpos()
-			local dist = vector.distance(obj_pos, pos)
-			local damage = 1
-			if dist > 0 and obj:get_hp()>1 then -- no damage if hp<=1
-				if playerdata[obj:get_player_name()] == nil then
-					playerdata[obj:get_player_name()] = {speed=false}
-				end
-				if playerdata[obj:get_player_name()].speed==false then -- player not yet affected
-					minetest.chat_send_player(obj:get_player_name(), "<EFFECT> slowed by mine")
-				end
-				obj:set_physics_override({speed =  0.1});
-				playerdata[obj:get_player_name()] = {speed = true}; -- remember that speed was changed
-				obj:punch(obj, 1.0, {
-						 full_punch_interval = 1.0,
-						 damage_groups = {fleshy=damage},
-					})
-				
-			end
-		end
-	end 
-	end,
-}) 
 
 
 
-minetest.register_node("mymod:landmine_on", {
-	description = "landmine on",
-	inventory_image = "side_on.png",
-	wield_image = "side_on.png",
-	wield_scale = {x=0.8,y=2.5,z=1.3},
-	tiles = {"side_on.png","side_on.png","side_on.png"},
-	stack_max = 1,
-	groups = {oddly_breakable_by_hand=1,mesecon_effector_on = 1},
-	mesecons = {effector = {
-		action_off = function (pos, node)
-			minetest.swap_node(pos, {name = "mymod:landmine_off"})
-		end
-	}}
-	}
-)
 
-
-
-minetest.register_node("mymod:landmine_off", {
-	description = "landmine off",
-	inventory_image = "side_off.png",
-	wield_image = "side_off.png",
-	wield_scale = {x=0.8,y=2.5,z=1.3},
-	tiles = {"side_off.png","side_off.png","side_off.png"},
-	stack_max = 1,
-	groups = {oddly_breakable_by_hand=1,mesecon_effector_on = 1},
-	mesecons = {effector = {
-		action_on = function (pos, node)
-			minetest.swap_node(pos, {name = "mymod:landmine_on"})
-			local objects = minetest.get_objects_inside_radius(pos, LANDMINE_RANGE) -- radius
-			for _,obj in ipairs(objects) do
-				if (obj:is_player()) then
-					local obj_pos = obj:getpos()
-					local dist = vector.distance(obj_pos, pos)
-					if dist > 0 then -- restore movement speed, whatever....
-						obj:set_physics_override({speed =  0.1});
-					end
-				end
-			end		
-		end
-	}}
-	}
-)
-
- 
- minetest.register_on_dieplayer(function(player) -- restore ill effects with death
-	player:set_physics_override({speed =  1.0})
-	playerdata[player:get_player_name()] = {speed = false}; 
- end)
- 
- 
- minetest.register_craft({
-	output = "mymod:landmine_off",
-	recipe = {
-		{"","default:mese_crystal",""},
-		{"default:steel_ingot","default:steel_ingot","default:steel_ingot"},
-	}
-})
-
-
-
--- EXTRACTOR: extract stuff from bones with small probability
-
-function bone_extractor(pos)
-	
-	local pos_above  = {x=pos.x,y=pos.y+1,z=pos.z};
-	local pos_below  = {x=pos.x,y=pos.y-1,z=pos.z};
-	local below = minetest.get_node(pos_below);
-	if below.name~="air" then return end
-	minetest.set_node(pos_above, {name="air"})
-	local  i = math.random(1000);
-
-	local out;
-	if i>=500 and i<1000 then out = "default:stone_with_copper" end
-	if i>=200 and i<500 then out = "default:stone_with_iron" end
-	if i>=100 and i< 200 then out = "default:stone_with_gold" end
-	if i>=50 and i<100 then out = "default:stone_with_mese" end
-	if i>=25 and i<50 then out = "default:stone_with_diamond" end
-	if i>=10 and i<25 then out = "moreores:mineral_mithril" end
-	if out~=nil then
-		minetest.set_node(pos_below, {name=out})
-	end
-		
-end
-
--- here i see a for looping over a list and defining spawners for specific mob types
--- animal spawners named "barn", monster spawners named "cursed stone" like on just test
-minetest.register_node("mymod:bone_extractor", {
-	description = "Bone extractor",
-	tiles = {"extractor.png"},
-	groups = {oddly_breakable_by_hand=2},
-	sounds = default.node_sound_wood_defaults(),
-	after_place_node = function(pos, placer)
-		local meta = minetest.env:get_meta(pos)
-		meta:set_string("infotext", "Bone extractor: place bones on top, extract appears below")
-	end,
-})
-
-minetest.register_abm({
-	nodenames = {"mymod:bone_extractor"},
-	interval = 10.0,
-	chance = 1,
-	action = function(pos)		
-		local pos_above = {x=pos.x,y=pos.y+1,z=pos.z}
-		local above = minetest.get_node(pos_above)
-		if above.name == "bones:bones" then 
-			bone_extractor(pos)
-		end
-	end,
-})
-
-
-minetest.register_craft({
-	output = "mymod:bone_extractor",
-	recipe = {
-		{"bones:bones", "bones:bones", "bones:bones"},
-		{"bones:bones", "default:mese_block","bones:bones"},
-		{"bones:bones", "bones:bones", "bones:bones"}
-	}
-})
