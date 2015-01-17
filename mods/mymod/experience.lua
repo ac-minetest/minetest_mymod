@@ -20,6 +20,17 @@ end,
 local experience = {}
 experience.dig_levels = {[2]=10,[3]=40,[4]=80,[5]=160,[6]=320,[7]=640,[8]=1200,[9]=2400,[10]=5000}
 
+function get_level(xp)
+local i,v,j,k
+j=-1
+	for i,v in pairs(experience.dig_levels) do
+		if xp<v then j = i end
+		k = i
+	end
+	if j == -1 then return k end
+	return j-1	
+end
+
 minetest.register_on_dignode(function(pos, oldnode, digger)
 	if digger == nil then return end
 	local name = oldnode.name
@@ -52,30 +63,23 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 	local wear -- limits uses of pickaxes
 	local dig = newxp;
 	
-	if dig < 10 then wear = 65536/10 end
-	if dig >= 10 then wear = 65536/100 end
+	
+	local level = get_level(xp)
+	local enhance = 5/level; -- pick wear will be multiplied by this	
 	
 	
 	
 	
-	
-	-- local def = ItemStack({name=oldnode.name}):get_definition()
-	-- local wielded = digger:get_wielded_item()
-	-- local wdef = wielded:get_definition()
-	-- local tp = wielded:get_tool_capabilities()
-	-- local dp = core.get_dig_params(def.groups, tp)
-	-- if wdef and wdef.after_use then
-		-- wielded = wdef.after_use(wielded, digger, node, dp) or wielded
-	-- else --Wear out tool
-		--if not core.setting_getbool("creative_mode") then
-			-- wielded:add_wear(dp.wear*100)
-			-- wielded:add_wear(65535/10)
-	--	end
-	-- end 
-	
-	
-	-- minetest.chat_send_player(name," WEAR is " ..wielded:get_wear())
-	
+	local def = ItemStack({name=oldnode.name}):get_definition()
+	local wielded = digger:get_wielded_item()
+	local tp = wielded:get_tool_capabilities()
+	local dp = core.get_dig_params(def.groups, tp)
+		
+	wielded:add_wear(dp.wear*enhance) -- adds modified wear
+	digger:set_wielded_item(wielded) -- this is needed or wear cant be observed
+
+
+	--minetest.chat_send_player(name, " Wielded item = ".. wielded)
 	
 	-- to do: if player has enough experience it will drop extra items, maybe decrease wear of tool occasionaly,
 	--	increase dig speed (start with low dig speed)
