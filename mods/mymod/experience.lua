@@ -31,7 +31,9 @@ experience.xp ={
 ["moreores:mineral_mithril"] = 128
 }
 function get_level(xp)
-local i,v,j;j=1
+local i
+local v
+local j=1
 	for i,v in pairs(experience.dig_levels) do
 		if xp>v then j = i end
 	end
