@@ -17,8 +17,8 @@ function get_level(xp) -- given xp, it returns level
 local i
 local v
 local j=1
-	for i,v in pairs(experience.dig_levels) do
-		if xp>v then j = i end
+	for i,v in pairs(experience.dig_levels) do -- maybe it doesnt go through table in presented order???
+		if xp>v and i>j then j = i end
 	end
 	return j
 end
