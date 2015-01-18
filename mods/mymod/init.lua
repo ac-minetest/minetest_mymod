@@ -227,6 +227,14 @@ minetest.register_craft({
 
 -- here various player stats are saved
 playerdata = {};
+minetest.register_on_joinplayer(function(player) -- init stuff on player join
+	local name = player:get_player_name();
+	if name == nil then return end -- ERROR!!!
+	playerdata[name] = {}
+	playerdata[name] = {xp=0,dig=0,speed=false};
+end)
+
+
 dofile(minetest.get_modpath("mymod").."/experience.lua")
 dofile(minetest.get_modpath("mymod").."/landmine.lua")
 dofile(minetest.get_modpath("mymod").."/extractor.lua")
@@ -235,6 +243,7 @@ dofile(minetest.get_modpath("mymod").."/freezing.lua")
 -- players walk slower away from spawn
 local time = 0
 MYMOD_UPDATE_TIME = 1
+
 
 minetest.register_globalstep(function(dtime)
 	time = time + dtime
@@ -281,10 +290,3 @@ minetest.register_globalstep(function(dtime)
 		time = 0		
 	end
 end)
-
-
-
-
-
-
-
