@@ -10,7 +10,7 @@ minetest.register_chatcommand("xp", {
             return false
         end
 		
-		if playerdata[name] == nil or playerdata[name].dig==nil then playerdata[name]={xp=0,dig=0} end		
+		if playerdata[name] == nil or playerdata[name].dig==nil then return end		
 		minetest.chat_send_player(name, "You have ".. playerdata[name].xp  .. " experience points, skill points: dig ".. playerdata[name].dig.. ", level ".. get_level(playerdata[name].dig) )
 end,	
 })
@@ -21,8 +21,7 @@ local experience = {}
 experience.dig_levels = {[2]=10,[3]=40,[4]=80,[5]=160,[6]=320,[7]=640,[8]=1200,[9]=2400,[10]=5000}
 
 function get_level(xp)
-local i,v,j
-j=1
+local i,v,j;j=1
 	for i,v in pairs(experience.dig_levels) do
 		if xp>v then j = i end
 	end
@@ -128,7 +127,6 @@ minetest.register_on_joinplayer(function(player)
 		file:write("0\n0");file:close()
 		file = io.open(minetest.get_worldpath().."/players/"..name.."_experience", "r")
 	end
-	if playerdata[name] == nil then playerdata[name] = {} end
 	local xp = tonumber(file:read("*line")); if xp == nil then xp = 0 end
 	playerdata[name].xp  = xp
 	local dig = tonumber(file:read("*line")); if dig == nil then dig = 0 end

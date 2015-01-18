@@ -16,14 +16,11 @@ minetest.register_abm(
 			local dist = vector.distance(obj_pos, pos)
 			local damage = 1
 			if dist > 0 and obj:get_hp()>1 then -- no damage if hp<=1
-				if playerdata[obj:get_player_name()] == nil then
-					playerdata[obj:get_player_name()] = {speed=false}
-				end
 				if playerdata[obj:get_player_name()].speed==false then -- player not yet affected
 					minetest.chat_send_player(obj:get_player_name(), "<EFFECT> slowed by mine")
 				end
 				obj:set_physics_override({speed =  0.1});
-				playerdata[obj:get_player_name()] = {speed = true}; -- remember that speed was changed
+				playerdata[obj:get_player_name()].speed = true; -- remember that speed was changed
 				obj:punch(obj, 1.0, {
 						 full_punch_interval = 1.0,
 						 damage_groups = {fleshy=damage},
@@ -84,7 +81,7 @@ minetest.register_node("mymod:landmine_off", {
  
  minetest.register_on_dieplayer(function(player) -- restore ill effects with death
 	player:set_physics_override({speed =  1.0})
-	playerdata[player:get_player_name()] = {speed = false}; 
+	playerdata[player:get_player_name()].speed = false; 
  end)
  
  
