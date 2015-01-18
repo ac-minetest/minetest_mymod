@@ -2,6 +2,7 @@
 ## Generic ignorable patterns and files
 .*.swp
 *bak*
+TODO
 tags
 *.vim
 shooter.conf
