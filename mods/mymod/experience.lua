@@ -12,14 +12,24 @@ minetest.register_chatcommand("xp", {
 		
 		if playerdata[name] == nil or playerdata[name].dig==nil then return end		
 		minetest.chat_send_player(name, "You have ".. playerdata[name].xp  .. " experience points, skill points: dig ".. playerdata[name].dig.. ", level ".. get_level(playerdata[name].dig) )
+		minetest.chat_send_player(name, "level/dig skill: 2/20, 3/40,4/80,5/160,7/640,8/1280,9/2560,10/5120");
 end,	
 })
 
 
 -- add experience and skill points on various events
 local experience = {}
-experience.dig_levels = {[2]=10,[3]=40,[4]=80,[5]=160,[6]=320,[7]=640,[8]=1200,[9]=2400,[10]=5000}
-
+experience.dig_levels = {[2]=20,[3]=40,[4]=80,[5]=160,[6]=320,[7]=640,[8]=1280,[9]=2560,[10]=5120}
+experience.xp ={
+["default:stone"]=0.01,
+["default:stone_with_coal"]=1,
+["default:stone_with_iron"]=4,
+["default:stone_with_copper"]= 4,
+["default:stone_with_gold"] = 16,
+["default:stone_with_mese"] = 32,
+["default:stone_with_diamond"] = 64,
+["moreores:mineral_mithril"] = 128
+}
 function get_level(xp)
 local i,v,j;j=1
 	for i,v in pairs(experience.dig_levels) do
@@ -32,57 +42,82 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 	if digger == nil then return end
 	local name = oldnode.name
 	local xp = 0;
-	if 
-				name == "default:stone" then xp  = 0.01
-		elseif  name == "default:stone_with_coal" then xp = 1
-		elseif  name == "default:stone_with_iron" then xp = 4
-		elseif  name == "default:stone_with_copper" then xp = 4
-		elseif  name == "default:stone_with_gold" then xp = 16
-		elseif  name == "default:stone_with_mese" then xp = 32
-		elseif  name == "default:stone_with_diamond" then xp = 64
-		elseif  name == "moreores:mineral_mithril" then xp = 128
+	local i,v
+	
+	for i,v in pairs(experience.xp) do
+		if name == i then xp = v end
 	end
-	name = digger:get_player_name();
-	if playerdata[name] == nil or playerdata[name].xp == nil then init_experience(digger) end
+	
+	name = digger:get_player_name(); if name == nil then return end
 	local oldxp  =  playerdata[name].dig;
 	local newxp  = oldxp+xp
 	playerdata[name].dig  = newxp
 	
-	local i,v
-	for i,v in pairs(experience.dig_levels) do
+	for i,v in pairs(experience.dig_levels) do -- check if levelup
 		if oldxp<v and newxp>=v then
-			minetest.chat_send_player(name, "You have reached level "..i.." in mining.")
+			minetest.chat_send_player(name, "You have reached level "..get_level(newxp).." in mining.")
 		end
 	end
-	apply_stats(digger)
-	
+		
 	--APPLY LEVEL RELATED EFFECTS
 	local wear -- limits uses of pickaxes
 	local dig = newxp;
 	
 	
-	local level = get_level(xp)
-	local enhance = 5/level; -- pick wear will be multiplied by this	
+	local level = get_level(newxp)
+	local enhance = -0.5*level+4.5; -- pick wear will be multiplied by this+1	: 5, ....,0.5 at level 10
 	
+	if level>=10 then 
+		enhance = -0.5 -- means 1-0.5 = 0.5 wear
+		i = math.random(1000);
+		if i<10 then  digger:set_hp(digger:get(hp)+1) end -- extra heal with levels >=10 with small probability
+	end 
+		
+	--level = 1: en = 5, level = 10: en = 0.5
+	-- level*-1/2+5.5-1 = -0.5*level+4.5
 	
-	
-	
+		
 	local def = ItemStack({name=oldnode.name}):get_definition()
 	local wielded = digger:get_wielded_item()
 	local tp = wielded:get_tool_capabilities()
 	local dp = core.get_dig_params(def.groups, tp)
 		
 	wielded:add_wear(dp.wear*enhance) -- adds modified wear
-	digger:set_wielded_item(wielded) -- this is needed or wear cant be observed
+	digger:set_wielded_item(wielded) -- this is needed or wear is not applied correctly
 
+	
+	--minetest.chat_send_player(name, " Wielded item = ".. wielded:get_name())
+	
+	tp = wielded:get_name() -- for example: default:pick_steel
+	-- tool level requirements: steel_pick: level 3, bronze_pick: level 4, diamond_pick: level 6, mithril pick: level 10
+	
+	if level < 3 and tp == "default:pick_steel" then
+		wielded:add_wear(65535/4);digger:set_wielded_item(wielded)
+		minetest.chat_send_player(name, " Your inexperience damages the steel pick. Need at least mining level 3, check level with /xp")
+	end
+	
+	if level < 4 and tp == "default:pick_bronze" then
+		wielded:add_wear(65535/4);digger:set_wielded_item(wielded)
+		minetest.chat_send_player(name, " Your inexperience damages the bronze pick. Need at least mining level 4, check level with /xp")
+	end
+	
+	if level < 6 and tp == "default:pick_diamond" then
+		wielded:add_wear(65535/4);digger:set_wielded_item(wielded)
+		minetest.chat_send_player(name, " Your inexperience damages the diamond pick. Need at least mining level 6, check level with /xp")
+	end
+	
+	if level < 10 and tp == "moreores:pick_mithril" then
+		wielded:add_wear(65535/4);digger:set_wielded_item(wielded)
+		minetest.chat_send_player(name, " Your inexperience damages the mithril pick. Need at least mining level 10, check level with /xp")
+	end
 
-	--minetest.chat_send_player(name, " Wielded item = ".. wielded)
+	
 	
 	-- to do: if player has enough experience it will drop extra items, maybe decrease wear of tool occasionaly,
 	--	increase dig speed (start with low dig speed)
 end) 
 
--- levelup
+-- levelup: nothing for now
 
 function apply_stats(player)
 
@@ -110,14 +145,16 @@ if dig >= 10 then enhance = 10. end -- enhancement reward
 -- })
 end
 
+
 -- bookeeping functions
 
---initialize record for new player
+--initialize record for new player: experience, dig skill
 minetest.register_on_newplayer(function(player)
 	local file = io.open(minetest.get_worldpath().."/players/"..player:get_player_name().."_experience", "w")
 	file:write("0\n0")
 	file:close()
 end) 
+
 
 minetest.register_on_joinplayer(function(player)
 	local name = player:get_player_name(); if name == nil then return end
