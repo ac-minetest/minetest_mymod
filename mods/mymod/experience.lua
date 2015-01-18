@@ -1,22 +1,4 @@
 
--- chat command to see experience
-minetest.register_chatcommand("xp", {
-    description = "Displays your experience",
-    privs = {},
-    func = function(name)
-        local player = minetest.env:get_player_by_name(name)
-		if player == nil then
-            -- just a check to prevent the server crashing
-            return false
-        end
-		
-		if playerdata[name] == nil or playerdata[name].dig==nil then return end		
-		minetest.chat_send_player(name, "You have ".. playerdata[name].xp  .. " experience points, skill points: dig ".. playerdata[name].dig.. ", level ".. get_level(playerdata[name].dig) )
-		minetest.chat_send_player(name, "level/dig skill: 2/20, 3/40,4/80,5/160,7/640,8/1280,9/2560,10/5120");
-end,	
-})
-
-
 -- add experience and skill points on various events
 local experience = {}
 experience.dig_levels = {[2]=20,[3]=40,[4]=80,[5]=160,[6]=320,[7]=640,[8]=1280,[9]=2560,[10]=5120}
@@ -30,7 +12,7 @@ experience.xp ={
 ["default:stone_with_diamond"] = 64,
 ["moreores:mineral_mithril"] = 128
 }
-function get_level(xp)
+function get_level(xp) -- given xp, it returns level
 local i
 local v
 local j=1
@@ -39,6 +21,24 @@ local j=1
 	end
 	return j
 end
+
+-- chat command to see experience
+minetest.register_chatcommand("xp", {
+    description = "Displays your experience",
+    privs = {},
+    func = function(name)
+        local player = minetest.env:get_player_by_name(name)
+		if player == nil then
+            -- just a check to prevent the server crashing
+            return false
+        end
+		
+		if playerdata[name] == nil or playerdata[name].dig==nil then return end		
+		minetest.chat_send_player(name, name .." has ".. playerdata[name].xp  .. " experience points, skill points: dig ".. playerdata[name].dig.. ", level ".. get_level(playerdata[name].dig ) )
+		minetest.chat_send_player(name, "level/dig skill: 2/20,3/40,4/80,5/160,6/320,7/640,8/1280,9/2560,10/5120");
+end,	
+})
+
 
 minetest.register_on_dignode(function(pos, oldnode, digger)
 	if digger == nil then return end
