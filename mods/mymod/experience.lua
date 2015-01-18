@@ -12,6 +12,7 @@ experience.xp ={
 ["default:stone_with_diamond"] = 64,
 ["moreores:mineral_mithril"] = 128
 }
+-- extremely strange bug........ for 247.1 it sometimes returns 3, should return 5??
 function get_level(xp) -- given xp, it returns level
 local i
 local v

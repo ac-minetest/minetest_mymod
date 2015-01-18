@@ -265,7 +265,7 @@ minetest.register_globalstep(function(dtime)
 				mult = 1.
 			end
 			-- check whether speed was already affected
-			if playerdata[player:get_player_name()]==nil or playerdata[player:get_player_name()] == false then 
+			if playerdata[player:get_player_name()].speed == false then 
 				player:set_physics_override({speed =  mult});
 			end
 			--minetest.chat_send_player(player:get_player_name(), "speed factor "..mult) --debug only
