@@ -230,10 +230,60 @@ playerdata = {};
 minetest.register_on_joinplayer(function(player) -- init stuff on player join
 	local name = player:get_player_name();
 	if name == nil then return end -- ERROR!!!
+	
+	--jail check
+	if playerdata[name]~= nil then
+		if playerdata[name].jail~= nil then
+			if playerdata[name].jail>0 then return end -- dont let player out of jail if in jail :)
+		end
+	end
+	
 	playerdata[name] = {}
-	playerdata[name] = {xp=0,dig=0,speed=false};
+	playerdata[name] = {xp=0,dig=0,speed=false, jail = 0}; -- jail >0 means player is in jail
+	
 end)
 
+
+minetest.register_chatcommand("free", {
+    description = "/free NAME to attempt to free NAME from jail, it costs 100 experience",
+    privs = {},
+    func = function(name, param)
+        local player = minetest.env:get_player_by_name(name)
+		local prisoner = minetest.env:get_player_by_name(param)
+		
+		if player == nil or prisoner == nil then
+            return
+        end
+		
+		if name==param and playerdata[param].jail>0 then
+			minetest.chat_send_all("Prisoner " .. name .. " wishes to get out of jail. You can help him with /free")
+			return
+		end
+		
+		if playerdata[name].xp < 100 then
+			minetest.chat_send_player(name, "You dont have enough experience to do that, need more than 100."); return
+		end
+		
+		if playerdata[param].jail==0 then 
+			minetest.chat_send_player(name, param.. " is not in jail."); return
+		end
+				
+		playerdata[name].xp = playerdata[name].xp-100;
+		playerdata[param].jail = playerdata[param].jail -1;
+		minetest.chat_send_all(param .. " was given pardon by " .. name .. ". ".. playerdata[param].jail " jail points left. " )
+		
+		if playerdata[param].jail<=0 then 
+			minetest.chat_send_player(name, param.. " freed from jail.")
+			local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
+			playerdata[param].jail = 0
+			prisoner:setpos(static_spawnpoint)
+			return
+		end
+	
+		
+		
+end,	
+})
 
 dofile(minetest.get_modpath("mymod").."/experience.lua")
 dofile(minetest.get_modpath("mymod").."/landmine.lua")

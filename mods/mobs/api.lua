@@ -686,6 +686,13 @@ function mobs:register_mob(name, def)
 							minetest.add_item(pos2,d)
 						end
 					end
+
+					--rnd 
+					local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
+					local distance =  math.sqrt(math.abs(static_spawnpoint.x-pos.x)^2+math.abs(static_spawnpoint.y-pos.y)^2+math.abs(static_spawnpoint.z-pos.z)^2)
+					distance = math.ceil(distance/100*100)/100
+					local name = hitter:get_player_name();
+					playerdata[name].xp = playerdata[name].xp + distance
 					
 --					if self.sounds.death ~= nil then
 --						minetest.sound_play(self.sounds.death,{
@@ -880,7 +887,7 @@ function mobs:register_spawn(name, nodes, max_light, min_light, chance, active_o
 					mult = math.abs(pos.y-spawnpoint.y); -- deep enough only depth
 					mult = 1/(mult/300+1.) -- depth 300, double armor
 				end
-				local new_armor = mob.armor*mult;
+				local new_armor = math.max(mob.armor*mult,1);
 				mob.object:set_armor_groups({fleshy=new_armor})
 				
 				-- rnd DOESNT SEEM TO WORK CORRECTLY! drops everything ??
@@ -888,7 +895,7 @@ function mobs:register_spawn(name, nodes, max_light, min_light, chance, active_o
 				-- for i,_ in pairs(dropst) do -- more probability of drops, DOES THIS WORK CORRECTLY?
 					-- mob.drops[i].chance=math.max(1,math.ceil(dropst[i].chance*mult))
 				-- end
-				
+				 --TO DO make dungeon master info "stonemonster king with flaming crown on its head"
 				
 				
 			end

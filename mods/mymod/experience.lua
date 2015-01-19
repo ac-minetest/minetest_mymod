@@ -1,7 +1,7 @@
 
 -- add experience and skill points on various events
 local experience = {}
-experience.dig_levels = {[2]=20,[3]=40,[4]=80,[5]=160,[6]=320,[7]=640,[8]=1280,[9]=2560,[10]=5120}
+experience.dig_levels = {[2]=80,[3]=160,[4]=320,[5]=640,[6]=1280,[7]=2560,[8]=5120,[9]=10240,[10]=20480}
 experience.xp ={
 ["default:stone"]=0.01,
 ["default:stone_with_coal"]=1,
@@ -12,7 +12,7 @@ experience.xp ={
 ["default:stone_with_diamond"] = 64,
 ["moreores:mineral_mithril"] = 128
 }
--- extremely strange bug........ for 247.1 it sometimes returns 3, should return 5??
+
 function get_level(xp) -- given xp, it returns level
 local i
 local v
@@ -36,10 +36,19 @@ minetest.register_chatcommand("xp", {
 		
 		if playerdata[name] == nil or playerdata[name].dig==nil then return end		
 		minetest.chat_send_player(name, name .." has ".. playerdata[name].xp  .. " experience points, skill points: dig ".. playerdata[name].dig.. ", level ".. get_level(playerdata[name].dig ) )
-		minetest.chat_send_player(name, "level/dig skill: 2/20,3/40,4/80,5/160,6/320,7/640,8/1280,9/2560,10/5120");
+		minetest.chat_send_player(name, "level/dig skill: 2/80,3/160,4/320,5/640,6/1280,7/2560,8/5120,9/10240,10/20480");
 end,	
 })
 
+minetest.register_on_dieplayer(
+	function(player)
+		local name = player:get_player_name()
+		if name == nil then return end
+		playerdata[name].xp = playerdata[name].xp*0.9
+		playerdata[name].dig = playerdata[name].dig*0.9
+		minetest.chat_send_player(name,"You loose 10% of your experience and skill because you died.");
+	end
+)
 
 minetest.register_on_dignode(function(pos, oldnode, digger)
 	if digger == nil then return end
@@ -73,7 +82,7 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 	if level>=10 then 
 		enhance = -0.5 -- means 1-0.5 = 0.5 wear
 		i = math.random(1000);
-		if i<10 then  digger:set_hp(digger:get(hp)+1) end -- extra heal with levels >=10 with small probability
+		if i<10 then  digger:set_hp(digger:get_hp()+1) end -- extra heal with levels >=10 with small probability
 	end 
 		
 	--level = 1: en = 5, level = 10: en = 0.5

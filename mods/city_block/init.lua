@@ -118,7 +118,7 @@ minetest.register_on_dieplayer(
 						if city_block.suspects[suspect_name]>1 then -- more then 1 registered kill
 							suspect:setpos( {x=spawnpoint.x, y=spawnpoint.y-5, z=spawnpoint.z} )
 							homepos[suspect:get_player_name()] = spawnpoint -- home pos reset :)
-							minetest.chat_send_all("Player "..suspect_name.." sent to jail as suspect for killing in town, you can get his old bones there :)")
+							minetest.chat_send_all("Player "..suspect_name.." sent to jail as suspect for killing in town. You can free him with /free ".. suspect_name)
 							minetest.log("action", "Player "..suspect_name.." warned for killing in town")
 							city_block.suspects[suspect_name]=1
 						else

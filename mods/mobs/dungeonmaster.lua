@@ -30,7 +30,7 @@ mobs:register_mob("mobs:dungeon_master", {
 		chance = 1,
 		min = 1,
 		max = 3,},
-		{name = "default:diamond",
+		{name = "d	efault:diamond",
 		chance = 4,
 		min = 1,
 		max = 4,},
