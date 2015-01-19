@@ -16,6 +16,7 @@ shooter.conf
 /util/
 /build/
 /builtin/
+/log/
 /client/
 /locale/
 ## /games/*
