@@ -1,2 +1,3 @@
 default
+bones
 craft_guide

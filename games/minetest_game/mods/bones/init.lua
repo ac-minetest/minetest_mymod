@@ -20,7 +20,7 @@ minetest.register_node("bones:bones", {
 		"bones_front.png"
 	},
 	paramtype2 = "facedir",
-	groups = {dig_immediate=3}, -- Calinou's advice
+	groups = {oddly_breakable_by_hand=1}, -- rnd
 	sounds = default.node_sound_dirt_defaults({
 		footstep = {name="default_gravel_footstep", gain=0.5},
 		dug = {name="default_gravel_footstep", gain=1.0},
@@ -59,6 +59,18 @@ minetest.register_node("bones:bones", {
 	on_punch = function(pos, node, player)
 		if(not is_owner(pos, player:get_player_name())) then
 			return
+		end
+		
+		--rnd
+		if playerdata[player:get_player_name()]==nil then  minetest.chat_send_all("CRAP") end
+		 --minetest.chat_send_all("TEST PUNCH BONES xp is ".. playerdata[player:get_player_name()].xp)
+		
+		local meta = minetest.get_meta(pos)
+		local ownername = meta:get_string("owner");
+		if playerdata[ownername]~=nil then
+			local xpadd = math.floor(10*playerdata[ownername].xp*0.05)/10
+			playerdata[player:get_player_name()].xp=playerdata[player:get_player_name()].xp+xpadd
+			minetest.chat_send_player(player:get_player_name(), "Received ".. xpadd .. " experience from players bones");
 		end
 		
 		local inv = minetest.get_meta(pos):get_inventory()

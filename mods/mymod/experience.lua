@@ -46,15 +46,70 @@ minetest.register_on_dieplayer(
 		if name == nil then return end
 		playerdata[name].xp = playerdata[name].xp*0.9
 		playerdata[name].dig = playerdata[name].dig*0.9
+		playerdata[name].jail = 0
 		minetest.chat_send_player(name,"You loose 10% of your experience and skill because you died.");
 	end
 )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- minetest.register_on_punchnode(function(pos, node, puncher)
+
+
+	-- minetest.chat_send_all("node name " .. node.name)
+	-- if node.name == "bones:bones" then
+		-- if(not is_owner(pos, puncher:get_player_name())) then
+			-- return
+		-- end
+		
+		-- --get experience by picking up bones RND
+		-- local meta = minetest.get_meta(pos)
+		-- local ownername = meta:get_string("owner");
+		-- minetest.chat_send_all("bones by " .. owner) -- XXXXX
+		-- if ownername~=nil then
+			-- local name = puncher:get_player_name()
+			-- if name~=nil then
+					-- mymod.playerdata[name].xp=mymod.playerdata[name].xp+math.ceil(0.05*mymod.playerdata[ownername].xp*10)/10
+					-- minetest.chat_send_player(name,"You collected ".. math.ceil(0.05*playerdata[ownername].xp*10)/10 .." experience from bones.");
+			-- end
+		-- end
+		-- return
+	
+	-- end
+
+-- end
+-- )
+
+
 
 minetest.register_on_dignode(function(pos, oldnode, digger)
 	if digger == nil then return end
 	local name = oldnode.name
 	local xp = 0;
 	local i,v
+
 	
 	for i,v in pairs(experience.xp) do
 		if name == i then xp = v end
@@ -70,6 +125,9 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 			minetest.chat_send_player(name, "You have reached level "..get_level(newxp).." in mining.")
 		end
 	end
+	
+	
+	
 		
 	--APPLY LEVEL RELATED EFFECTS
 	local wear -- limits uses of pickaxes
@@ -128,6 +186,9 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 	-- to do: if player has enough experience it will drop extra items, maybe decrease wear of tool occasionaly,
 	--	increase dig speed (start with low dig speed)
 end) 
+
+
+
 
 -- levelup: nothing for now
 
