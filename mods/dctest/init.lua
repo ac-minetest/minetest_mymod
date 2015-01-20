@@ -29,10 +29,10 @@ minetest.register_abm({
 	nodenames = {"dctest:mob_breeder"},
 	interval = 1.0,
 	chance = 10,
-	action = function(pos)		
+	action = function(pos)
 		local pos_under = {x=pos.x,y=pos.y-1,z=pos.z}
 		local under = minetest.get_node(pos_under)
-		if under.name == "default:furnace_active" then 
+		if under.name == "default:furnace_active" then
 			mob_breeder(pos, "mobs:chicken")
 		end
 	end,
