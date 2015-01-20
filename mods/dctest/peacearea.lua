@@ -2,6 +2,13 @@
 -- purpose: revoke interact privilege from players within effect area
 -- except admins
 
+-- pros: lets players read signs and chat peacefully as long
+--       as they are confined to the spawn cage
+--       (is this a + to you?)
+-- cons: needs a solution to monsters coming into spawn
+--       maybe just disappear them
+--       players can be sniped from outside (there is a hill though)
+
 -- checked on each server step
 minetest.register_globalstep(function(dtime)
 -- ugly hardcoded values of spawn area
