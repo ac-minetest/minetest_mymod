@@ -68,8 +68,8 @@ minetest.register_node("bones:bones", {
 		local meta = minetest.get_meta(pos)
 		local ownername = meta:get_string("owner");
 		if playerdata[ownername]~=nil then
-			local xpadd = math.floor(10*playerdata[ownername].xp*0.05)/10
-			playerdata[player:get_player_name()].xp=playerdata[player:get_player_name()].xp+xpadd
+			local xpadd = math.ceil(10*playerdata[ownername].xp*0.05)/10
+			playerdata[player:get_player_name()].xp=math.ceil(10*playerdata[player:get_player_name()].xp+xpadd)/10
 			minetest.chat_send_player(player:get_player_name(), "Received ".. xpadd .. " experience from players bones");
 		end
 		
