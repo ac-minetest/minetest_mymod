@@ -3,7 +3,7 @@
 
 mobs:register_mob("mobs:sand_monster", {
 	type = "monster",
-	hp_min = 10,
+	hp_min = 15,
 	hp_max = 20,
 	collisionbox = {-0.4, -0.01, -0.4, 0.4, 1.9, 0.4},
 	visual = "mesh",
@@ -13,7 +13,7 @@ mobs:register_mob("mobs:sand_monster", {
 	makes_footstep_sound = true,
 	view_range = 15,
 	walk_velocity = 1.5,
-	run_velocity = 4,
+	run_velocity = 5,
 	damage = 5,
 	drops = {
 		{name = "default:desert_sand",
@@ -55,10 +55,7 @@ mobs:register_mob("mobs:sand_monster", {
 	water_damage = 3,
 	lava_damage = 1,
 	light_damage = 0,
-	--attack_type = "dogfight",
-	attack_type = "shoot",
-	arrow = "mobs:sand_arrow",
-	shoot_interval = 2,
+	attack_type = "dogfight",
 	animation = {
 		speed_normal = 15,
 		speed_run = 15,

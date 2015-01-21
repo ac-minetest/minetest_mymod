@@ -922,7 +922,7 @@ function mobs:register_arrow(name, def)
 				return
 			end
 			-- pos.y = pos.y-1.0
-			for _,player in pairs(minetest.get_objects_inside_radius(pos, 1)) do
+			for _,player in pairs(minetest.get_objects_inside_radius(pos, 2)) do
 				if player:is_player() then
 					self.hit_player(self, player)
 					self.object:remove()
