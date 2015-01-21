@@ -428,7 +428,7 @@ function mobs:register_mob(name, def)
 							else
 								if self.jump and self.get_velocity(self) <= 1.5 and self.object:getvelocity().y == 0 then
 									local v = self.object:getvelocity()
-									v.y = 12 -- rnd increased jump
+									v.y = 7 -- rnd increased jump
 									self.object:setvelocity(v)
 								end
 								self.set_velocity(self, self.walk_velocity)
