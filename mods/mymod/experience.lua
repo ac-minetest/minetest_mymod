@@ -1,7 +1,9 @@
-
 -- add experience and skill points on various events
+-- 2 kinds of experience for now: experience and dig skill
 local experience = {}
 experience.dig_levels = {[2]=80,[3]=160,[4]=320,[5]=640,[6]=1280,[7]=2560,[8]=5120,[9]=10240,[10]=20480}
+experience.dig_levels_text = ""; for i,v in pairs(experience.dig_levels) do experience.dig_levels_text = experience.dig_levels_text .. i .."/".. v .. "," end
+
 experience.xp ={
 ["default:stone"]=0.01,
 ["default:stone_with_coal"]=1,
@@ -36,7 +38,7 @@ minetest.register_chatcommand("xp", {
 		
 		if playerdata[name] == nil or playerdata[name].dig==nil then return end		
 		minetest.chat_send_player(name, name .." has ".. playerdata[name].xp  .. " experience points, skill points: dig ".. playerdata[name].dig.. ", level ".. get_level(playerdata[name].dig ) )
-		minetest.chat_send_player(name, "level/dig skill: 2/80,3/160,4/320,5/640,6/1280,7/2560,8/5120,9/10240,10/20480");
+		minetest.chat_send_player(name, "level/dig skill: "..experience.dig_levels_text);
 end,	
 })
 
@@ -50,28 +52,6 @@ minetest.register_on_dieplayer(
 		minetest.chat_send_player(name,"You loose 10% of your experience and skill because you died.");
 	end
 )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -161,6 +141,11 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 	tp = wielded:get_name() -- for example: default:pick_steel
 	-- tool level requirements: steel_pick: level 3, bronze_pick: level 4, diamond_pick: level 6, mithril pick: level 10
 	
+	if level < 2 and tp == "default:pick_stone" then
+		wielded:add_wear(65535/4);digger:set_wielded_item(wielded)
+		minetest.chat_send_player(name, " Your inexperience damages the stone pick. Need at least mining level 2, check level with /xp")
+	end
+	
 	if level < 3 and tp == "default:pick_steel" then
 		wielded:add_wear(65535/4);digger:set_wielded_item(wielded)
 		minetest.chat_send_player(name, " Your inexperience damages the steel pick. Need at least mining level 3, check level with /xp")
@@ -171,9 +156,19 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 		minetest.chat_send_player(name, " Your inexperience damages the bronze pick. Need at least mining level 4, check level with /xp")
 	end
 	
-	if level < 6 and tp == "default:pick_diamond" then
+	if level < 5 and tp == "moreores:pick_silver" then
 		wielded:add_wear(65535/4);digger:set_wielded_item(wielded)
-		minetest.chat_send_player(name, " Your inexperience damages the diamond pick. Need at least mining level 6, check level with /xp")
+		minetest.chat_send_player(name, " Your inexperience damages the silver pick. Need at least mining level 5, check level with /xp")
+	end
+	
+	if level < 7 and tp == "default:pick_mese" then
+		wielded:add_wear(65535/4);digger:set_wielded_item(wielded)
+		minetest.chat_send_player(name, " Your inexperience damages the mese pick. Need at least mining level 7, check level with /xp")
+	end
+	
+	if level < 8 and tp == "default:pick_diamond" then
+		wielded:add_wear(65535/4);digger:set_wielded_item(wielded)
+		minetest.chat_send_player(name, " Your inexperience damages the diamond pick. Need at least mining level 8, check level with /xp")
 	end
 	
 	if level < 10 and tp == "moreores:pick_mithril" then
