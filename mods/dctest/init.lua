@@ -1,5 +1,5 @@
 -- NO KILL AREA INSIDE SPAWN by disableclouds, optimized by rnd
-dofile(minetest.get_modpath("dctest").."/peacearea.lua")
+--dofile(minetest.get_modpath("dctest").."/peacearea.lua")
 
 -- MOB BREEDER
 -- purpose: define nodes that spawn specific mobs if there are not too many around yet
