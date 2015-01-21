@@ -60,7 +60,7 @@ minetest.register_node("default:stone_with_gold", {
 	description = "Gold Ore",
 	tiles = {"default_stone.png^default_mineral_gold.png"},
 	is_ground_content = true,
-	groups = {cracky=2},
+	groups = {cracky=2, level = 2},
 	drop = "default:gold_lump",
 	sounds = default.node_sound_stone_defaults(),
 })
@@ -69,7 +69,7 @@ minetest.register_node("default:stone_with_diamond", {
 	description = "Diamond Ore",
 	tiles = {"default_stone.png^default_mineral_diamond.png"},
 	is_ground_content = true,
-	groups = {cracky=1},
+	groups = {cracky=1, level = 3},
 	drop = "default:diamond",
 	sounds = default.node_sound_stone_defaults(),
 })
@@ -221,7 +221,7 @@ minetest.register_node("default:brick", {
 	description = "Brick Block",
 	tiles = {"default_brick.png"},
 	is_ground_content = false,
-	groups = {cracky=3},
+	groups = {cracky=3,level = 2},
 	sounds = default.node_sound_stone_defaults(),
 })
 
@@ -920,7 +920,7 @@ minetest.register_node("default:bronzeblock", {
 	description = "Bronze Block",
 	tiles = {"default_bronze_block.png"},
 	is_ground_content = true,
-	groups = {cracky=1,level=2},
+	groups = {cracky=1,level=3},
 	sounds = default.node_sound_stone_defaults(),
 })
 
@@ -928,7 +928,7 @@ minetest.register_node("default:mese", {
 	description = "Mese Block",
 	tiles = {"default_mese_block.png"},
 	is_ground_content = true,
-	groups = {cracky=1,level=2},
+	groups = {cracky=1,level=3},
 	sounds = default.node_sound_stone_defaults(),
 })
 minetest.register_alias("default:mese_block", "default:mese")
@@ -945,7 +945,7 @@ minetest.register_node("default:diamondblock", {
 	description = "Diamond Block",
 	tiles = {"default_diamond_block.png"},
 	is_ground_content = true,
-	groups = {cracky=1,level=3},
+	groups = {cracky=1,level=4},
 	sounds = default.node_sound_stone_defaults(),
 })
 
@@ -965,14 +965,14 @@ minetest.register_node("default:obsidian", {
 	tiles = {"default_obsidian.png"},
 	is_ground_content = true,
 	sounds = default.node_sound_stone_defaults(),
-	groups = {cracky=1,level=3},
+	groups = {cracky=1,level=4},
 })
 
 minetest.register_node("default:obsidianbrick", {
 	description = "Obsidian Brick",
 	tiles = {"default_obsidian_brick.png"},
 	sounds = default.node_sound_stone_defaults(),
-	groups = {cracky=1,level=3},
+	groups = {cracky=1,level=4},
 })
 
 minetest.register_node("default:nyancat", {

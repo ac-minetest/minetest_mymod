@@ -292,23 +292,27 @@ dofile(minetest.get_modpath("mymod").."/freezing.lua")
 
 -- players walk slower away from spawn
 local time = 0
-MYMOD_UPDATE_TIME = 1
+MYMOD_UPDATE_TIME = 2
 
 
 minetest.register_globalstep(function(dtime)
 	time = time + dtime
+	if time < MYMOD_UPDATE_TIME then return end
+	time = 0
+	
 	local spawnpoint = core.setting_get_pos("static_spawnpoint")
 	local mult
-	local pos
+	local pos,dist
 	local player
 	local t
-	if time > MYMOD_UPDATE_TIME then
+	
 		for _,player in ipairs(minetest.get_connected_players()) do 
 			pos = player:getpos()
 			
 			-- SPEED ADJUSTMENT
 			
-			mult = math.sqrt((pos.x-spawnpoint.x)^2+(pos.z-spawnpoint.z)^2)
+			dist = math.sqrt((pos.x-spawnpoint.x)^2+(pos.z-spawnpoint.z)^2)
+			mult = dist
 			if mult>200 and pos.y> 0 then -- only on "surface"
 				mult = (7./5)/(mult/500.+1.)  -- starts linearly falling from 200
 			else
@@ -328,15 +332,21 @@ minetest.register_globalstep(function(dtime)
 			end
 			player:set_physics_override({gravity =  mult});
 			
-		
+			-- SURVIVABILITY CHECK
+			
+			if pos.y>0 and dist>500 and playerdata[player:get_player_name()].xp<1000 then
+				if minetest.get_node_light(pos)>LIGHT_MAX*0.9 then
+					if player:get_hp()==20 then
+						minetest.chat_send_player(player:get_player_name(),"You are exhausted from the sun, find shelter or get at least 1000 experience or return closer to spawn.")
+					end
+					player:set_hp(player:get_hp()-0.25)
+				end
+			end
 			-- CHEAT CHECK: gets node at player position... works like crap :P
 		
 			-- local here = minetest.get_node(pos);
 			-- if here.name=="default:stone" then 
 				-- minetest.chat_send_player("rnd", " CHEAT pos : name: ".. player:get_player_name() .. " pos: "..pos.x .. " " .. pos.y .. " " .. pos.z)
 			-- end
-	
 		end
-		time = 0		
-	end
 end)
