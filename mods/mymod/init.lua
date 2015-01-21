@@ -335,7 +335,7 @@ minetest.register_globalstep(function(dtime)
 			-- SURVIVABILITY CHECK
 			
 			if pos.y>0 and dist>500 and playerdata[player:get_player_name()].xp<1000 then
-				if minetest.get_node_light(pos)~=nil then -- crashed once, safety
+				if minetest.get_node_light(pos) ~= nil then -- crashed once, safety
 				if minetest.get_node_light(pos)>LIGHT_MAX*0.9 then
 					if player:get_hp()==20 then
 						minetest.chat_send_player(player:get_player_name(),"You are exhausted from the sun, find shelter or get at least 1000 experience or return closer to spawn.")
