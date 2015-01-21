@@ -3,18 +3,18 @@
 
 mobs:register_mob("mobs:rat", {
 	type = "monster",
-	hp_min = 10,
-	hp_max = 10, -- 1
+	hp_min = 5,
+	hp_max = 5, -- 1
 	collisionbox = {-0.2, -0.01, -0.2, 0.2, 0.2, 0.2},
 	visual = "mesh",
 	mesh = "mobs_rat.x",
 	textures = {"mobs_rat.png"},
 	makes_footstep_sound = false,
 	view_range = 30,
-	walk_velocity = 2,
-	run_velocity = 4,
+	walk_velocity = 1,
+	run_velocity = 2,
 	armor = 100,
-	damage = 3,
+	damage = 2,
 	attack_type = "dogfight",
 	drops = {
 	{name = "default:wood", -- rnd
