@@ -99,12 +99,17 @@ local function add_ore(modname, description, mineral_name, oredef)
 		})
 	end
 
+	--rnd
+	local orelevel=2;
+	if description == "Mithril" then orelevel = 4 end
+	if description == "Silver" then orelevel = 3 end
+	
 	if oredef.makes.block then
 		local blockitem = item_base .. "_block"
 		minetest.register_node(blockitem, {
 			description = S("%s Block"):format(S(description)),
 			tiles = { img_base .. "_block.png" },
-			groups = {snappy = 1,bendy = 2, cracky = 1,melty = 2,level= 2},
+			groups = {snappy = 1,bendy = 2, cracky = 1,melty = 2,level= orelevel},--rnd
 			sounds = default_stone_sounds
 		})
 		minetest.register_alias(mineral_name.."_block", blockitem)
@@ -235,7 +240,7 @@ local oredefs = {
 			},
 		tools = {
 			pick = {
-				cracky = {times = {[1] = 2.60, [2] = 1.00, [3] = 0.60}, uses = 100, maxlevel= 1}
+				cracky = {times = {[1] = 2.60, [2] = 1.00, [3] = 0.60}, uses = 150, maxlevel= 3}
 			},
 			hoe = {
 				uses = 300
@@ -278,7 +283,7 @@ local oredefs = {
 			},
 		tools = {
 			pick = {
-				cracky = {times = {[1] = 2.25, [2] = 0.55, [3] = 0.35}, uses = 200, maxlevel= 4}
+				cracky = {times = {[1] = 2.25, [2] = 0.55, [3] = 0.35}, uses = 600, maxlevel= 4}
 			},
 			hoe = {
 				uses = 1000
@@ -291,8 +296,8 @@ local oredefs = {
 				fleshy = {times = {[2] = 0.95, [3] = 0.30}, uses = 2000, maxlevel= 1}
 			},
 			sword = {
-				fleshy = {times = {[2] = 0.65, [3] = 0.25}, uses = 5000, maxlevel= 1},
-				snappy = {times = {[2] = 0.70, [3] = 0.25}, uses = 5000, maxlevel= 1},
+				fleshy = {times = {[2] = 0.65, [3] = 0.25}, uses = 5000, maxlevel= 4},
+				snappy = {times = {[2] = 0.70, [3] = 0.25}, uses = 5000, maxlevel= 4},
 				choppy = {times = {[3] = 0.65}, uses = 5000, maxlevel= 4}
 			}
 		},
@@ -304,6 +309,10 @@ local oredefs = {
 for orename,def in pairs(oredefs) do
 	add_ore(modname, def.desc, orename, def)
 end
+
+-- rnd: adjust ore levels:
+
+
 
 -- Copper rail (special node)
 

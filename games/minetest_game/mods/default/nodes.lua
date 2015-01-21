@@ -51,7 +51,7 @@ minetest.register_node("default:stone_with_mese", {
 	description = "Mese Ore",
 	tiles = {"default_stone.png^default_mineral_mese.png"},
 	is_ground_content = true,
-	groups = {cracky=1},
+	groups = {cracky=1, level = 3},
 	drop = "default:mese_crystal",
 	sounds = default.node_sound_stone_defaults(),
 })
@@ -965,14 +965,14 @@ minetest.register_node("default:obsidian", {
 	tiles = {"default_obsidian.png"},
 	is_ground_content = true,
 	sounds = default.node_sound_stone_defaults(),
-	groups = {cracky=1,level=2},
+	groups = {cracky=1,level=3},
 })
 
 minetest.register_node("default:obsidianbrick", {
 	description = "Obsidian Brick",
 	tiles = {"default_obsidian_brick.png"},
 	sounds = default.node_sound_stone_defaults(),
-	groups = {cracky=1,level=2},
+	groups = {cracky=1,level=3},
 })
 
 minetest.register_node("default:nyancat", {

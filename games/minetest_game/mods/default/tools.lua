@@ -38,7 +38,7 @@ minetest.register_tool("default:pick_stone", {
 	inventory_image = "default_tool_stonepick.png",
 	tool_capabilities = {
 		full_punch_interval = 1.3,
-		max_drop_level=0,
+		max_drop_level=1,
 		groupcaps={
 			cracky = {times={[2]=2.0, [3]=1.20}, uses=32, maxlevel=1},
 		},
@@ -50,7 +50,7 @@ minetest.register_tool("default:pick_steel", {
 	inventory_image = "default_tool_steelpick.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
-		max_drop_level=1,
+		max_drop_level=2,
 		groupcaps={
 			cracky = {times={[1]=4.00, [2]=1.60, [3]=0.80}, uses=80, maxlevel=2},
 		},
@@ -62,7 +62,7 @@ minetest.register_tool("default:pick_bronze", {
 	inventory_image = "default_tool_bronzepick.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
-		max_drop_level=1,
+		max_drop_level=2,
 		groupcaps={
 			cracky = {times={[1]=4.00, [2]=1.60, [3]=0.80}, uses=128, maxlevel=2},
 		},
@@ -87,9 +87,9 @@ minetest.register_tool("default:pick_diamond", {
 	inventory_image = "default_tool_diamondpick.png",
 	tool_capabilities = {
 		full_punch_interval = 0.9,
-		max_drop_level=3,
+		max_drop_level=4,
 		groupcaps={
-			cracky = {times={[1]=2.0, [2]=1.0, [3]=0.50}, uses=300, maxlevel=3},
+			cracky = {times={[1]=2.0, [2]=1.0, [3]=0.50}, uses=300, maxlevel=4},
 		},
 		damage_groups = {fleshy=5},
 	},
