@@ -1,6 +1,10 @@
+-- NO KILL AREA INSIDE SPAWN by disableclouds, optimized by rnd
+dofile(minetest.get_modpath("dctest").."/peacearea.lua")
+
 -- MOB BREEDER
 -- purpose: define nodes that spawn specific mobs if there are not too many around yet
 -- from https://forum.minetest.net/viewtopic.php?p=57231#p57231
+
 function mob_breeder(pos, mob_name)
 	local objects = minetest.get_objects_inside_radius(pos, 8) -- radius
 	local mob_count = 0
@@ -47,3 +51,4 @@ minetest.register_craft({
 		{"mobs:chicken", "mobs:chicken","mobs:chicken"}
 	}
 })
+
