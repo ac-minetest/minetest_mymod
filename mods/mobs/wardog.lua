@@ -7,7 +7,7 @@ mobs:register_mob("mobs:wardog", {
 	visual = "mesh",
 	mesh = "mobs_wardog.x",
 	makes_footstep_sound = true,
-	view_range = 1000,
+	view_range = 100,
 	monsterrange = 30,
 	owner = "",
 	monsterdetect = false,
