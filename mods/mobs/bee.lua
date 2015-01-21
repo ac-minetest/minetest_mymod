@@ -2,7 +2,7 @@
 -- Bee
 
 mobs:register_mob("mobs:bee", {
-	type = "animal",
+	type = "monster",
 	hp_min = 1,
 	hp_max = 2,
 	collisionbox = {-0.2, -0.01, -0.2, 0.2, 0.2, 0.2},
@@ -12,7 +12,9 @@ mobs:register_mob("mobs:bee", {
 	makes_footstep_sound = false,
 	monsterdetect = false,
 	walk_velocity = 1,
-	armor = 200,
+	view_range = 4,
+	armor = 100,
+	damage = 4,
 	drops = {
 		{name = "mobs:med_cooked",
 		chance = 1,
