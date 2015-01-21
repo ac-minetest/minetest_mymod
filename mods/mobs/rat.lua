@@ -2,27 +2,31 @@
 -- Rat
 
 mobs:register_mob("mobs:rat", {
-	type = "animal",
-	hp_min = 1,
-	hp_max = 4, -- 1
+	type = "monster",
+	hp_min = 10,
+	hp_max = 10, -- 1
 	collisionbox = {-0.2, -0.01, -0.2, 0.2, 0.2, 0.2},
 	visual = "mesh",
 	mesh = "mobs_rat.x",
 	textures = {"mobs_rat.png"},
 	makes_footstep_sound = false,
-	walk_velocity = 1,
-	armor = 200,
+	view_range = 30,
+	walk_velocity = 2,
+	run_velocity = 4,
+	armor = 100,
+	damage = 3,
+	attack_type = "dogfight",
 	drops = {
 	{name = "default:wood", -- rnd
 		chance = 2,
 		min = 1,
 		max = 1,},
 	{name = "farming:seed_wheat",
-		chance = 60,
+		chance = 100,
 		min = 1,
 		max = 3,},
 	{name = "farming:seed_cotton",
-		chance = 60,
+		chance = 100,
 		min = 1,
 		max = 3,},
 	},
@@ -32,7 +36,7 @@ mobs:register_mob("mobs:rat", {
 	light_damage = 0,
 jump = true,
 step = 1,
-passive = true,
+--passive = true,
 	
 	on_rightclick = function(self, clicker)
 		if clicker:is_player() and clicker:get_inventory() then
