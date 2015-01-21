@@ -43,8 +43,8 @@ minetest.register_globalstep(function(dtime)
 		end
 		end
 
-	end,
-}) 
+	end
+) 
 
 
 function is_inside_spawn(pos) -- rnd
