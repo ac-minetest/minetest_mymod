@@ -14,7 +14,7 @@ mobs:register_mob("mobs:sand_monster", {
 	view_range = 15,
 	walk_velocity = 1.5,
 	run_velocity = 4,
-	damage = 1,
+	damage = 5,
 	drops = {
 		{name = "default:desert_sand",
 		chance = 1,
@@ -55,7 +55,10 @@ mobs:register_mob("mobs:sand_monster", {
 	water_damage = 3,
 	lava_damage = 1,
 	light_damage = 0,
-	attack_type = "dogfight",
+	--attack_type = "dogfight",
+	attack_type = "shoot",
+	arrow = "mobs:sand_arrow",
+	shoot_interval = 2,
 	animation = {
 		speed_normal = 15,
 		speed_run = 15,
@@ -73,3 +76,23 @@ mobs:register_mob("mobs:sand_monster", {
 	blood_texture = "mobs_blood.png",
 })
 mobs:register_spawn("mobs:sand_monster", {"default:stone","default:desert_sand", "default:sand"}, 15, -1, 1400, 4, 31000)
+
+mobs:register_arrow("mobs:sand_arrow", {
+	visual = "sprite",
+	visual_size = {x=.5, y=.5},
+	textures = {"default_mese_crystal_fragment.png"},
+	velocity = 15,
+	
+	hit_player = function(self, player)
+		local s = self.object:getpos()
+		local p = player:getpos()
+
+		player:punch(self.object, 1.0,  {
+			full_punch_interval=1.0,
+			damage_groups = {fleshy=1},
+		}, {x=s.x-p.x, y=s.y-p.y, z=s.z-p.z})
+	end,
+	
+	hit_node = function(self, pos, node)
+	end
+}) 

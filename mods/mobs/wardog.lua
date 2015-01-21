@@ -1,5 +1,6 @@
 mobs:register_mob("mobs:wardog", {
 	type = "warpet",
+	hp_min = 50,
 	hp_max = 50,
 	collisionbox = {-0.4, -0.01, -0.4, 0.4, 1, 0.4},
 	textures = {"mobs_wardog.png"},
