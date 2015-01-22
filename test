@@ -1,0 +1,81 @@
+17:07:46: ACTION[ServerThread]: Moving adrianthesecond to static spawnpoint at (0,15,64)
+17:07:46: ACTION[ServerThread]: Giving initial stuff to player adrianthesecond
+17:07:46: ACTION[ServerThread]: Moving to spawn location : adrianthesecond
+17:07:46: ACTION[ServerThread]: adrianthesecond [151.228.208.35] joins game. 
+17:07:46: ACTION[ServerThread]: adrianthesecond joins game. List of players: disableclouds enderguys josuha rnd cat juanmarlol Turkiye mereor adrianthesecond
+17:07:46: ACTION[ServerThread]: adrianthesecond lastseen is not a table... fixing...
+17:07:47: ACTION[ServerThread]: max1984 joins game. List of players: disableclouds enderguys josuha rnd cat juanmarlol Turkiye mereor adrianthesecond max1984
+17:08:06: ACTION[ServerThread]: dcf joins game. List of players: disableclouds enderguys josuha rnd cat juanmarlol Turkiye max1984 mereor adrianthesecond dcf
+17:08:43: ACTION[ServerThread]: Player adrianthesecond punched by LuaEntitySAO at (9.05081,16.51,86.0328), damage 5 HP
+17:08:44: ACTION[ServerThread]: Player adrianthesecond punched by LuaEntitySAO at (8.50426,16.51,86.2804), damage 5 HP
+17:08:45: ACTION[ServerThread]: Player adrianthesecond punched by LuaEntitySAO at (8.50426,16.51,86.2804), damage 5 HP
+17:08:48: ACTION[ServerThread]: jj joins game. List of players: disableclouds enderguys josuha rnd cat juanmarlol Turkiye max1984 mereor adrianthesecond dcf jj
+17:08:52: ACTION[ServerThread]: cat times out. List of players: disableclouds enderguys josuha rnd juanmarlol Turkiye max1984 mereor adrianthesecond dcf jj 
+17:09:36: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:36: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 2 HP
+17:09:37: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:37: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 1 HP
+17:09:37: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:37: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 0 HP
+17:09:37: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:37: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 0 HP
+17:09:37: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:37: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 0 HP
+17:09:37: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:37: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 0 HP
+17:09:38: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:38: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 0 HP
+17:09:38: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:38: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 0 HP
+17:09:38: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:38: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 0 HP
+17:09:38: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:38: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 0 HP
+17:09:38: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:38: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 0 HP
+17:09:39: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:39: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 0 HP
+17:09:39: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:39: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 0 HP
+17:09:39: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:39: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 0 HP
+17:09:39: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:39: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 0 HP
+17:09:41: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:41: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 2 HP
+17:09:41: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:41: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 0 HP
+17:09:42: ACTION[ServerThread]: Turkiye punches object 28905: player adrianthesecond
+17:09:42: ACTION[ServerThread]: Player adrianthesecond punched by player Turkiye, damage 0 HP
+17:09:42: ACTION[ServerThread]: Moving adrianthesecond to static spawnpoint at (0,15,64)
+17:09:42: ACTION[ServerThread]: adrianthesecond respawns at (0,15,64)
+17:10:59: ACTION[ServerThread]: jj leaves game. List of players: disableclouds enderguys josuha rnd juanmarlol Turkiye max1984 mereor adrianthesecond dcf 
+17:11:01: ACTION[ServerThread]: PM from disableclouds to adrianthesecond: do you remember what you had in inventory?
+17:11:13: ACTION[ServerThread]: PM from adrianthesecond to disableclouds: do /setpassword adrianthefirst adrian
+17:11:15: ACTION[ServerThread]: mereor times out. List of players: disableclouds enderguys josuha rnd juanmarlol Turkiye max1984 adrianthesecond dcf 
+17:11:28: ACTION[ServerThread]: adrianthesecond tried to dig mesecons_lamp:lamp_on at protected position (0,25,110)
+17:11:42: ACTION[ServerThread]: mereor joins game. List of players: disableclouds enderguys josuha rnd juanmarlol Turkiye max1984 adrianthesecond dcf mereor
+17:11:43: ACTION[ServerThread]: max1984 leaves game. List of players: disableclouds enderguys josuha rnd juanmarlol Turkiye adrianthesecond dcf mereor 
+17:12:02: ACTION[ServerThread]: bonezplayer joins game. List of players: disableclouds enderguys josuha rnd juanmarlol Turkiye adrianthesecond dcf mereor bonezplayer
+17:12:21: ACTION[ServerThread]: mereor times out. List of players: disableclouds enderguys josuha rnd juanmarlol Turkiye adrianthesecond dcf bonezplayer 
+17:12:51: ACTION[ServerThread]: PM from adrianthesecond to disableclouds: you have to do /setpassword adrianthefirst adrian so I can login my proper name pls
+17:13:03: ACTION[ServerThread]: PM from disableclouds to adrianthesecond: i see adrianthefirst connected from two different IP addresses, one is what you're using now
+17:13:39: ACTION[ServerThread]: bonezplayer times out. List of players: disableclouds enderguys josuha rnd juanmarlol Turkiye adrianthesecond dcf 
+17:14:55: ACTION[ServerThread]: PM from adrianthesecond to disableclouds: im adrianthefirst's bff he wonna get me on his name 
+17:15:07: ACTION[ServerThread]: dcf times out. List of players: disableclouds enderguys josuha rnd juanmarlol Turkiye adrianthesecond 
+17:15:31: ACTION[ServerThread]: PM from adrianthesecond to disableclouds: pls change it adrian then he knows the password I will tell him
+17:15:50: ACTION[ServerThread]: PM from disableclouds to adrianthesecond: so you're not adrian
+17:16:00: ACTION[ServerThread]: rnd leaves game. List of players: disableclouds enderguys josuha juanmarlol Turkiye adrianthesecond 
+17:16:25: ACTION[ServerThread]: josuha times out. List of players: disableclouds enderguys juanmarlol Turkiye adrianthesecond 
+17:16:37: ACTION[ServerThread]: PM from adrianthesecond to disableclouds: because im Jason!
+17:16:39: ACTION[ServerThread]: uliyana joins game. List of players: disableclouds enderguys juanmarlol Turkiye adrianthesecond uliyana
+17:17:10: ACTION[ServerThread]: PM from adrianthesecond to disableclouds: do /setpassword Jason Yeh or /setpassword adrianthefirst adrian
+17:17:17: ACTION[ServerThread]: vfdxd joins game. List of players: disableclouds enderguys juanmarlol Turkiye adrianthesecond uliyana vfdxd
+17:17:42: ACTION[ServerThread]: disableclouds leaves game. List of players: enderguys juanmarlol Turkiye adrianthesecond uliyana vfdxd 
+17:18:00: ACTION[ServerThread]: adrianthesecond damaged by 3 hp at (-47.585,12.087,136.8)
+17:18:17: ACTION[ServerThread]: adrianthesecond damaged by 1 hp at (-37.8,-5.235,132.145)
+17:20:00: ACTION[ServerThread]: juanmarlol leaves game. List of players: enderguys Turkiye adrianthesecond uliyana vfdxd 
+17:20:16: ACTION[ServerThread]: adrianthesecond damaged by 25 hp at (-39.2,-513.409,86.8)
+17:20:17: ACTION[ServerThread]: Moving adrianthesecond to static spawnpoint at (0,15,64)
+17:20:17: ACTION[ServerThread]: adrianthesecond respawns at (0,15,64)
+17:20:57: ACTION[ServerThread]: adrianthesecond leaves game. List of players: enderguys Turkiye uliyana vfdxd 
