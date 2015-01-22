@@ -116,7 +116,8 @@ mobs:register_arrow("mobs:fireball", {
 			if (obj:is_player()) then
 				local obj_pos = obj:getpos()
 				local dist = vector.distance(obj_pos, pos)
-				local damage = 8 
+				local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
+				local damage = 8 *(1+vector.distance(obj_pos, static_spawnpoint)/500);
 				if dist > 0 then -- and obj:get_hp()>1 then -- no damage if hp<=1
 					--obj:set_physics_override({speed =  0.5}); --slows player
 					obj:punch(obj, 1.0, {

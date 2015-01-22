@@ -557,9 +557,16 @@ function mobs:register_mob(name, def)
 							if self.sounds and self.sounds.attack then
 								minetest.sound_play(self.sounds.attack, {object = self.object})
 							end
+							
+							local static_spawnpoint = core.setting_get_pos("static_spawnpoint")  --rnd
+							local distance = get_distance(static_spawnpoint,p) 
+							if distance < 500 then distance = (1+distance/500)
+								else distance = (1+distance/100) -- 5x more powerful mobs below 500
+							end
+							
 							self.attack.player:punch(self.object, 1.0,  {
 								full_punch_interval=1.0,
-								damage_groups = {fleshy=self.damage}
+								damage_groups = {fleshy=self.damage*distance} -- rnd: damage done here, enhance it?
 							}, vec)
 							if self.attack.player:get_hp() <= 0 then
 								self.state = "stand"
@@ -892,11 +899,7 @@ function mobs:register_spawn(name, nodes, max_light, min_light, chance, active_o
 				local new_armor = math.max(mob.armor*mult,1);
 				mob.object:set_armor_groups({fleshy=new_armor})
 				
-				-- ERROR: how to make this work?
-				if mob.damage~=nil then -- safety check
-					mob.damage = mob.damage* (1+distance_rating/500 )
-				end
-				
+
 				--TO DO: MAKE DIFFERENT DAMAGE & DROPS
 				
 				-- rnd DOESNT SEEM TO WORK CORRECTLY! drops everything ??

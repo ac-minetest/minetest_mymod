@@ -73,7 +73,6 @@ mobs:register_arrow("mobs:bullet", {
 		local vec = {x =s.x-p.x, y =s.y-p.y, z =s.z-p.z}
 		player:punch(self.object, 1.0,  {
 			full_punch_interval= 1.0,
-			damage_groups = {fleshy = 5},
 			damage_groups = {fleshy = 5*(1+distance/500)}, -- rnd
 		}, vec)
 		local pos = self.object:getpos()
