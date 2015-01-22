@@ -290,7 +290,7 @@ dofile(minetest.get_modpath("mymod").."/landmine.lua")
 dofile(minetest.get_modpath("mymod").."/extractor.lua")
 dofile(minetest.get_modpath("mymod").."/freezing.lua")
 
--- players walk slower away from spawn
+-- players walk slower away from spawn, mana regenerates
 local time = 0
 MYMOD_UPDATE_TIME = 2
 
@@ -308,7 +308,7 @@ minetest.register_globalstep(function(dtime)
 	
 		for _,player in ipairs(minetest.get_connected_players()) do 
 			pos = player:getpos()
-			
+			local name = player:get_player_name();
 			-- SPEED ADJUSTMENT
 			
 			dist = math.sqrt((pos.x-spawnpoint.x)^2+(pos.z-spawnpoint.z)^2)
@@ -319,7 +319,7 @@ minetest.register_globalstep(function(dtime)
 				mult = 1.
 			end
 			-- check whether speed was already affected
-			if playerdata[player:get_player_name()].speed == false then 
+			if playerdata[name].speed == false then 
 				player:set_physics_override({speed =  mult});
 			end
 			--minetest.chat_send_player(player:get_player_name(), "speed factor "..mult) --debug only
@@ -334,16 +334,25 @@ minetest.register_globalstep(function(dtime)
 			
 			-- SURVIVABILITY CHECK
 			
-			if pos.y>0 and dist>500 and playerdata[player:get_player_name()].xp<1000 then
+			if pos.y>0 and dist>500 and playerdata[name].xp<1000 then
 				if minetest.get_node_light(pos) ~= nil then -- crashed once, safety
 				if minetest.get_node_light(pos)>LIGHT_MAX*0.9 then
 					if player:get_hp()==20 then
-						minetest.chat_send_player(player:get_player_name(),"You are exhausted from the sun, find shelter or get at least 1000 experience or return closer to spawn.")
+						minetest.chat_send_player(name,"You are exhausted from the sun, find shelter or get at least 1000 experience or return closer to spawn.")
 					end
 					player:set_hp(player:get_hp()-0.25)
 				end
 				end
 			end
+			
+			-- MANA REGENERATION
+			if playerdata[name].mana ~= nil then
+				if playerdata[name].mana < playerdata[name].max_mana then -- every 100 magic skill extra level, 0.1 mana regen
+					playerdata[name].mana = playerdata[name].mana + (math.floor(playerdata[name].magic/100)+1)*0.1;
+					if playerdata[name].mana>playerdata[name].max_mana then playerdata[name].mana = playerdata[name].max_mana end
+				end
+			end
+			
 			-- CHEAT CHECK: gets node at player position... works like crap :P
 		
 			-- local here = minetest.get_node(pos);

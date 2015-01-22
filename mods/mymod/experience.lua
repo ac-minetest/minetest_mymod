@@ -218,53 +218,62 @@ end
 
 --initialize record for new player: experience, dig skill
 minetest.register_on_newplayer(function(player)
-	local file = io.open(minetest.get_worldpath().."/players/"..player:get_player_name().."_experience", "w")
-	file:write("0\n0")
-	file:close()
+	write_experience(player)
 end) 
 
-
-minetest.register_on_joinplayer(function(player)
-	local name = player:get_player_name(); if name == nil then return end
-	local file = io.open(minetest.get_worldpath().."/players/"..name.."_experience", "r")
-	if not file then -- not yet existing record
-		file = io.open(minetest.get_worldpath().."/players/"..name.."_experience", "w")
-		file:write("0\n0");file:close()
-		file = io.open(minetest.get_worldpath().."/players/"..name.."_experience", "r")
-	end
-	local xp = tonumber(file:read("*line")); if xp == nil then xp = 0 end
-	playerdata[name].xp  = xp
-	local dig = tonumber(file:read("*line")); if dig == nil then dig = 0 end
-	playerdata[name].dig = dig
-	file:close();
-	apply_stats(player)
-end)
+function init_write_experience(player)
+	local file = io.open(minetest.get_worldpath().."/players/"..player:get_player_name().."_experience", "w")
+	file:write("0\n0\n0\n0") -- experience, dig skill, magic, max_mana
+	file:close()
+end
 
 function init_experience(player)
 	local name = player:get_player_name(); if name == nil then return end
 	playerdata[name].xp = 0
 	playerdata[name].dig = 0;
+	playerdata[name].magic = 0;
+	playerdata[name].max_mana = data;	
 end
 
-minetest.register_on_leaveplayer(function(player) -- save data when player leaves server
+minetest.register_on_joinplayer(function(player) -- read data from file or create one
+	local name = player:get_player_name(); if name == nil then return end
+	local file = io.open(minetest.get_worldpath().."/players/"..name.."_experience", "r")
+	if not file then -- not yet existing record
+		init_write_experience(player)
+		file = io.open(minetest.get_worldpath().."/players/"..name.."_experience", "r")
+		if not file then return end-- ERROR!
+	end
+	local data = tonumber(file:read("*line")); if data == nil then data = 0 end
+	playerdata[name].xp  = data
+	data = tonumber(file:read("*line")); if data == nil then data = 0 end
+	playerdata[name].dig = data
+	data = tonumber(file:read("*line")); if data == nil then data = 0 end
+	playerdata[name].magic = data
+	data = tonumber(file:read("*line")); if data == nil then data = 0 end
+	playerdata[name].max_mana = data
+	file:close();
+	
+	--temporary characteristics
+	playerdata[name].mana = 0 -- this regenerates
+	
+	--apply_stats(player)
+end)
+
+function write_experience(player)
 	local name = player:get_player_name(); if name == nil then return end
 	local file =  io.open(minetest.get_worldpath().."/players/"..name.."_experience", "w")
 	if playerdata[name].dig==nil then init_experience(player) end
-	file:write(playerdata[name].xp .. "\n"..playerdata[name].dig);
+	file:write(playerdata[name].xp .."\n".. playerdata[name].dig .."\n".. playerdata[name].magic .."\n".. playerdata[name].max_mana );
 	file:close()
+end
+
+minetest.register_on_leaveplayer(function(player) -- save data when player leaves server
+	write_experience(player)
 end)
 
 -- warning: this does not get called in the event of a crash so data is lost, dont want to continually save though
 minetest.register_on_shutdown(function()
     for _,player in ipairs(minetest.get_connected_players()) do 
-			local name = player:get_player_name();
-			local file
-			if name ~= nil then
-				file =  io.open(minetest.get_worldpath().."/players/"..name.."_experience", "w")
-				if playerdata[name].xp==nil then init_experience(player) end
-				file:write(playerdata[name].xp .. "\n"..playerdata[name].dig);
-				end
-				file:close()
-			end
-	--minetest.chat_send_all("Server shutting down")
+				write_experience(player)
+	end
 end)
