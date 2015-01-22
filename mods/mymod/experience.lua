@@ -229,6 +229,7 @@ end
 
 function init_experience(player)
 	local name = player:get_player_name(); if name == nil then return end
+	if playerdata[name]==nil then playerdata[name]={} end
 	playerdata[name].xp = 0
 	playerdata[name].dig = 0;
 	playerdata[name].magic = 0;
