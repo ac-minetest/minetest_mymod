@@ -444,7 +444,7 @@ function mobs:register_mob(name, def)
 				end
 			end
 
-			local yaw = 0 -- rnd
+			--local yaw = 0 -- rnd
 			
 			if self.state == "stand" then
 				-- randomly turn
@@ -675,10 +675,10 @@ function mobs:register_mob(name, def)
 			process_weapon(hitter,tflp,tool_capabilities)
 
 			local pos = self.object:getpos()
-			if self.object:get_hp() <= 0 then
+			if self.object:get_hp() <= 0 then -- rnd comment: monster dead: do drops and experience
 				if hitter and hitter:is_player() and hitter:get_inventory() then
 					for _,drop in ipairs(self.drops) do
-						if math.random(1, drop.chance) == 1 then
+						if math.random(1, drop.chance) == 1 then -- here drops
 							local d = ItemStack(drop.name.." "..math.random(drop.min, drop.max))
 --							default.drop_item(pos,d)
 							local pos2 = pos
@@ -688,11 +688,11 @@ function mobs:register_mob(name, def)
 					end
 
 					--rnd 
-					local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
-					local distance =  math.sqrt(math.abs(static_spawnpoint.x-pos.x)^2+math.abs(static_spawnpoint.y-pos.y)^2+math.abs(static_spawnpoint.z-pos.z)^2)
-					distance = math.ceil(distance/100*100)/100
 					local name = hitter:get_player_name();
-					playerdata[name].xp = playerdata[name].xp + distance
+					local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
+					local distance = get_distance(static_spawnpoint,pos) 
+					playerdata[name].xp = playerdata[name].xp + 0.1*self.hp_max*(1+distance/100)
+					playerdata[name].xp = math.ceil(playerdata[name].xp*10)/10
 					
 --					if self.sounds.death ~= nil then
 --						minetest.sound_play(self.sounds.death,{
@@ -873,10 +873,12 @@ function mobs:register_spawn(name, nodes, max_light, min_light, chance, active_o
 			local mob = minetest.add_entity(pos, name)
 
 			-- setup the hp, armor, drops, etc... for this specific mob
-			local distance_rating = ( ( get_distance({x=0,y=0,z=0},pos) ) / 15000 )	
+			
+			local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
+			local distance_rating = get_distance(static_spawnpoint,pos) 	
 			if mob then
 				mob = mob:get_luaentity()
-				local newHP = mob.hp_min + math.floor( mob.hp_max * distance_rating )
+				local newHP = mob.hp_min + math.floor( mob.hp_max * distance_rating/500 )
 				mob.object:set_hp( newHP )
 				-- rnd change: make monsters with tougher armor away from spawn or deeper:)
 				local spawnpoint = core.setting_get_pos("static_spawnpoint")
@@ -889,6 +891,9 @@ function mobs:register_spawn(name, nodes, max_light, min_light, chance, active_o
 				end
 				local new_armor = math.max(mob.armor*mult,1);
 				mob.object:set_armor_groups({fleshy=new_armor})
+				mob.damage = mob.damage* (1+distance_rating/500 )
+				
+				--TO DO: MAKE DIFFERENT DAMAGE & DROPS
 				
 				-- rnd DOESNT SEEM TO WORK CORRECTLY! drops everything ??
 				-- local dropst = mob.drops;

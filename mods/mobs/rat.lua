@@ -10,11 +10,11 @@ mobs:register_mob("mobs:rat", {
 	mesh = "mobs_rat.x",
 	textures = {"mobs_rat.png"},
 	makes_footstep_sound = false,
-	view_range = 20,
-	walk_velocity = 2,
-	run_velocity = 3,
+	view_range = 16,
+	walk_velocity = 1,
+	run_velocity = 2,
 	armor = 100,
-	damage = 2,
+	damage = 1,
 	attack_type = "dogfight",
 	drops = {
 	{name = "default:wood", -- rnd
@@ -68,7 +68,7 @@ minetest.register_craftitem("mobs:rat_cooked", {
 	description = "Cooked Rat",
 	inventory_image = "mobs_cooked_rat.png",
 	
-	on_use = minetest.item_eat(3),
+	on_use = minetest.item_eat(4),
 })
 
 minetest.register_craft({

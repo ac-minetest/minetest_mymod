@@ -10,7 +10,7 @@ mobs:register_mob("mobs:aggressormob", {
 	textures = {"aggressormob.png"},
 	visual_size = {x=1, y=1},
 	makes_footstep_sound = true,
-	view_range = 30,
+	view_range = 16,
 	walk_velocity = 5.8,
 	run_velocity = 9,
 	damage = 4,
@@ -23,7 +23,11 @@ mobs:register_mob("mobs:aggressormob", {
 		{name = "farming:bread",
 		chance = 2,
 		min = 1,
-		max = 1,},
+		max = 2,},
+		{name = "farming:cotton",
+		chance = 3,
+		min = 2,
+		max = 4,},
 	},
 	light_resistant = true,
 	armor = 100,
@@ -35,7 +39,7 @@ mobs:register_mob("mobs:aggressormob", {
 	},
 	attack_type = "shoot",
 	arrow = "mobs:bullet",
-	shoot_interval = 0.13,
+	shoot_interval = 0.15,
 	sounds = {
 		attack = "mmobs_bullet",
 	},
@@ -52,7 +56,7 @@ mobs:register_mob("mobs:aggressormob", {
 		punch_end = 198,
 	}
 })
-mobs:register_spawn("mobs:aggressormob", {"default:dirt_with_grass","default:sand", "default:desert_stone", "default:stone", "default:mossycobble"}, 10, -1, 7000, 11, 30000)
+mobs:register_spawn("mobs:aggressormob", {"default:cobble"}, 10, -1, 2000, 11, 30000) -- 3rd last number is spawn probability
 
 mobs:register_arrow("mobs:bullet", {
 	visual = "sprite",
@@ -62,10 +66,14 @@ mobs:register_arrow("mobs:bullet", {
 	hit_player = function(self, player)
 		local s = self.object:getpos()
 		local p = player:getpos()
+		--rnd
+		local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
+		local distance = get_distance(static_spawnpoint,p) 
+		
 		local vec = {x =s.x-p.x, y =s.y-p.y, z =s.z-p.z}
 		player:punch(self.object, 1.0,  {
 			full_punch_interval= 1.0,
-			damage_groups = {fleshy = 4},
+			damage_groups = {fleshy = 5*(1+distance/500)}, -- rnd
 		}, vec)
 		local pos = self.object:getpos()
 		for dx = -1, 1 do
