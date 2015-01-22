@@ -10,7 +10,7 @@ mobs:register_mob("mobs:aggressormob", {
 	textures = {"aggressormob.png"},
 	visual_size = {x=1, y=1},
 	makes_footstep_sound = true,
-	view_range = 30,
+	view_range = 16,
 	walk_velocity = 5.8,
 	run_velocity = 9,
 	damage = 4,
