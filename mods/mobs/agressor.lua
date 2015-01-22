@@ -66,10 +66,18 @@ mobs:register_arrow("mobs:bullet", {
 	hit_player = function(self, player)
 		local s = self.object:getpos()
 		local p = player:getpos()
+		--rnd
+		local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
+		local distance = get_distance(static_spawnpoint,p) 
+		
 		local vec = {x =s.x-p.x, y =s.y-p.y, z =s.z-p.z}
 		player:punch(self.object, 1.0,  {
 			full_punch_interval= 1.0,
+<<<<<<< HEAD
 			damage_groups = {fleshy = 5},
+=======
+			damage_groups = {fleshy = 5*(1+distance/500)}, -- rnd
+>>>>>>> d54df5f1283249d1191b3bb938c05047c6fe373c
 		}, vec)
 		local pos = self.object:getpos()
 		for dx = -1, 1 do

@@ -1,7 +1,7 @@
 -- add experience and skill points on various events
 -- 2 kinds of experience for now: experience and dig skill
 local experience = {}
-experience.dig_levels = {[2]=80,[3]=160,[4]=320,[5]=640,[6]=1280,[7]=2560,[8]=5120,[9]=10240,[10]=20480}
+experience.dig_levels = {[2]=40,[3]=160,[4]=320,[5]=640,[6]=1280,[7]=2560,[8]=5120,[9]=10240,[10]=20480}
 experience.dig_levels_text = ""; for i,v in pairs(experience.dig_levels) do experience.dig_levels_text = experience.dig_levels_text .. i .."/".. v .. "," end
 
 experience.xp ={
