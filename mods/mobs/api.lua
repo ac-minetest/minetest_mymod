@@ -893,7 +893,9 @@ function mobs:register_spawn(name, nodes, max_light, min_light, chance, active_o
 				mob.object:set_armor_groups({fleshy=new_armor})
 				
 				-- ERROR: how to make this work?
-				--mob.damage = mob.damage* (1+distance_rating/500 )
+				if mob.damage~=nil then -- safety check
+					mob.damage = mob.damage* (1+distance_rating/500 )
+				end
 				
 				--TO DO: MAKE DIFFERENT DAMAGE & DROPS
 				
