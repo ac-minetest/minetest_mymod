@@ -232,7 +232,8 @@ function init_experience(player)
 	playerdata[name].xp = 0
 	playerdata[name].dig = 0;
 	playerdata[name].magic = 0;
-	playerdata[name].max_mana = data;	
+	playerdata[name].max_mana = 0;
+	playerdata[name].mana = 0;
 end
 
 minetest.register_on_joinplayer(function(player) -- read data from file or create one

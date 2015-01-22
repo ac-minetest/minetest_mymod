@@ -60,16 +60,16 @@ local function overwrite(name, hunger_change, replace_with_item, poisen, heal)
 	minetest.registered_items[name] = tab
 end
 
-overwrite("default:apple", 2)
-if minetest.get_modpath("farming") ~= nil then
-	overwrite("farming:bread", 4)
-end
+-- overwrite("default:apple", 2)
+-- if minetest.get_modpath("farming") ~= nil then
+	-- overwrite("farming:bread", 4)
+-- end
 
-if minetest.get_modpath("mobs") ~= nil then
-	overwrite("mobs:meat", 6)
-	overwrite("mobs:meat_raw", 3)
-	overwrite("mobs:rat_cooked", 5)
-end
+-- if minetest.get_modpath("mobs") ~= nil then
+	-- overwrite("mobs:meat", 6)
+	-- overwrite("mobs:meat_raw", 3)
+	-- overwrite("mobs:rat_cooked", 5)
+-- end
 
 if minetest.get_modpath("moretrees") ~= nil then
 	overwrite("moretrees:coconut_milk", 1)
@@ -263,33 +263,33 @@ if minetest.get_modpath("ethereal") then
    overwrite("ethereal:sashimi", 4)
 end
 
-if minetest.get_modpath("farming") and farming.mod == "redo" then
-   overwrite("farming:bread", 6)
-   overwrite("farming:potato", 1)
-   overwrite("farming:baked_potato", 6)
-   overwrite("farming:cucumber", 4)
-   overwrite("farming:tomato", 4)
-   overwrite("farming:carrot", 3)
-   overwrite("farming:carrot_gold", 6, "", nil, 8)
-   overwrite("farming:corn", 3)
-   overwrite("farming:corn_cob", 5)
-   overwrite("farming:melon_slice", 2)
-   overwrite("farming:pumpkin_slice", 1)
-   overwrite("farming:pumpkin_bread", 9)
-   overwrite("farming:coffee_cup", 2, "farming:drinking_cup")
-   overwrite("farming:coffee_cup_hot", 3, "farming:drinking_cup", nil, 2)
-   overwrite("farming:cookie", 2)
-   overwrite("farming:chocolate_dark", 3)
-   overwrite("farming:donut", 4)
-   overwrite("farming:donut_chocolate", 6)
-   overwrite("farming:donut_apple", 6)
-   overwrite("farming:raspberries", 1)
-   if minetest.get_modpath("vessels") then
-	overwrite("farming:smoothie_raspberry", 2, "vessels:drinking_glass")
-   end
-   overwrite("farming:rhubarb", 1)
-   overwrite("farming:rhubarb_pie", 6)
-end
+-- if minetest.get_modpath("farming") and farming.mod == "redo" then
+   -- overwrite("farming:bread", 6)
+   -- overwrite("farming:potato", 1)
+   -- overwrite("farming:baked_potato", 6)
+   -- overwrite("farming:cucumber", 4)
+   -- overwrite("farming:tomato", 4)
+   -- overwrite("farming:carrot", 3)
+   -- overwrite("farming:carrot_gold", 6, "", nil, 8)
+   -- overwrite("farming:corn", 3)
+   -- overwrite("farming:corn_cob", 5)
+   -- overwrite("farming:melon_slice", 2)
+   -- overwrite("farming:pumpkin_slice", 1)
+   -- overwrite("farming:pumpkin_bread", 9)
+   -- overwrite("farming:coffee_cup", 2, "farming:drinking_cup")
+   -- overwrite("farming:coffee_cup_hot", 3, "farming:drinking_cup", nil, 2)
+   -- overwrite("farming:cookie", 2)
+   -- overwrite("farming:chocolate_dark", 3)
+   -- overwrite("farming:donut", 4)
+   -- overwrite("farming:donut_chocolate", 6)
+   -- overwrite("farming:donut_apple", 6)
+   -- overwrite("farming:raspberries", 1)
+   -- if minetest.get_modpath("vessels") then
+	-- overwrite("farming:smoothie_raspberry", 2, "vessels:drinking_glass")
+   -- end
+   -- overwrite("farming:rhubarb", 1)
+   -- overwrite("farming:rhubarb_pie", 6)
+-- end
 
 if minetest.get_modpath("kpgmobs") ~= nil then
 	overwrite("kpgmobs:uley", 3)
