@@ -44,7 +44,7 @@ if dump(minetest.hud_replace_builtin) ~= "nil" then
 	HUD_ARMOR_OFFSET = {x=-262, y=-110}
 end
 
-HUD_TICK = 0.1
+HUD_TICK = 0.5
 
 --Some hunger settings
 hud.exhaustion = {} -- Exhaustion is experimental!
