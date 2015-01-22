@@ -13,7 +13,7 @@ mobs:register_mob("mobs:sand_monster", {
 	makes_footstep_sound = true,
 	view_range = 15,
 	walk_velocity = 1.5,
-	run_velocity = 5,
+	run_velocity = 4,
 	damage = 5,
 	drops = {
 		{name = "default:desert_sand",
