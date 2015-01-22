@@ -891,7 +891,9 @@ function mobs:register_spawn(name, nodes, max_light, min_light, chance, active_o
 				end
 				local new_armor = math.max(mob.armor*mult,1);
 				mob.object:set_armor_groups({fleshy=new_armor})
-				mob.damage = mob.damage* (1+distance_rating/500 )
+				
+				-- ERROR: how to make this work?
+				--mob.damage = mob.damage* (1+distance_rating/500 )
 				
 				--TO DO: MAKE DIFFERENT DAMAGE & DROPS
 				
