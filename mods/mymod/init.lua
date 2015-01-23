@@ -260,11 +260,13 @@ minetest.register_chatcommand("free", {
 			return
 		end
 		
-		if playerdata[name].xp < 100 then
-			minetest.chat_send_player(name, "You dont have enough experience to do that, need more than 100."); return
+		local privs = minetest.get_player_privs(name);
+		
+		if playerdata[name].xp < 100 and not privs.kick then
+			minetest.chat_send_player(name, "You dont have enough (100) experience or dont have kick privilege to do that."); return
 		end
 		
-		if playerdata[param].jail==0 then 
+		if playerdata[param].jail<=0 then 
 			minetest.chat_send_player(name, param.. " is not in jail."); return
 		end
 				
