@@ -68,8 +68,9 @@ minetest.register_on_dieplayer(
 		if name == nil then return end
 		playerdata[name].xp = playerdata[name].xp*0.9
 		playerdata[name].dig = playerdata[name].dig*0.9
+		playerdata[name].magic = playerdata[name].magic*0.9
 		playerdata[name].jail = 0
-		minetest.chat_send_player(name,"You loose 10% of your experience and skill because you died.");
+		minetest.chat_send_player(name,"You loose 10% of your experience and skills because you died.");
 	end
 )
 

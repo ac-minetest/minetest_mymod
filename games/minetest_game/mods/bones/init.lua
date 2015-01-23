@@ -68,13 +68,16 @@ minetest.register_node("bones:bones", {
 		local meta = minetest.get_meta(pos)
 		local ownername = meta:get_string("owner");
 		if playerdata[ownername]~=nil then
-			local xpadd = playerdata[ownername].xp*0.05
+			local xpadd = playerdata[ownername].xp*0.1
 			local name = player:get_player_name()
 			playerdata[name].xp=math.ceil(10*(playerdata[name].xp+xpadd))/10
 			minetest.chat_send_player(player:get_player_name(), "Received ".. xpadd .. " experience from players bones");
-			xpadd= playerdata[ownername].dig*0.05
+			xpadd= playerdata[ownername].dig*0.1
 			playerdata[name].dig=math.ceil(10*(playerdata[name].dig+xpadd))/10
 			minetest.chat_send_player(player:get_player_name(), "Received ".. xpadd .. " dig skill from players bones");
+			xpadd= playerdata[ownername].magic*0.1
+			playerdata[name].magic=math.ceil(10*(playerdata[name].magic+xpadd))/10
+			minetest.chat_send_player(player:get_player_name(), "Received ".. xpadd .. " magic skill from players bones");
 		end
 		
 		local inv = minetest.get_meta(pos):get_inventory()
