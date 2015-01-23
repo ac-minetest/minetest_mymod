@@ -35,7 +35,7 @@ mobs:register_mob("mobs:spider", {
 	attack_type = "dogfight",
 	
 	on_rightclick = function(self, clicker)
-		tool = clicker:get_wielded_item()
+		local tool = clicker:get_wielded_item()
 		if tool:get_name() == "mobs:bee" then
 			clicker:get_inventory():remove_item("main", "mobs:bee")
 			minetest.add_entity(self.object:getpos(), "mobs:warspider")
