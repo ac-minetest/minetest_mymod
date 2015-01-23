@@ -2,7 +2,7 @@
 -- 2 kinds of experience for now: experience and dig skill
 local experience = {}
 
--- level requirements swords: 2:stone, 3:steel, 4:bronze, 5:silver, 7:mese, 8:diamond, 10: mithril
+-- level requirements swords: 2:stone, 3:steel, 4:bronze, 5:silver, 7:mese or guns, 8:diamond, 10: mithril
 experience.levels = {[2]=40,[3]=100,[4]=200,[5]=400,[6]=1000,[7]=2000,[8]=4000, [9] = 8000, [10] = 16000}
 experience.levels_text = ""; for i,v in pairs(experience.levels) do experience.levels_text = experience.levels_text .. i .."/".. v .. "," end
 
