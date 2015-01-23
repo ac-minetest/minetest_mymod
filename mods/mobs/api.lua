@@ -444,7 +444,7 @@ function mobs:register_mob(name, def)
 				end
 			end
 
-			--local yaw = 0 -- rnd
+			local yaw = 0 -- rnd
 			
 			if self.state == "stand" then
 				-- randomly turn

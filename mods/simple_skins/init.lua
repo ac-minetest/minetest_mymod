@@ -80,6 +80,9 @@ minetest.register_chatcommand("setrace", { -- RND
 	privs = {},
 	func = function(name, param)
 		if param == "" then
+			-- how to use formspec?
+			--local ret = minetest.show_formspec( name, true ,skins.formspec.main(name) );
+			
 			return false, "Invalid usage, use setrace 1 or 2. then reconnect server"
 		end 
 		
