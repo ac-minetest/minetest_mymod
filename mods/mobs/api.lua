@@ -963,8 +963,59 @@ local weapon = player:get_wielded_item()
 			wear = 65535/(tool_capabilities.groupcaps.snappy.uses)
 			else wear = 65535/50
 		end
+		
+				
 		weapon:add_wear(wear)
 		player:set_wielded_item(weapon)
+		
+		
+		-- rnd: level requirements for swords
+		-- level requirements swords: 2:stone, 3:steel, 4:bronze, 5:silver, 7:mese, 8:diamond, 10: mithril
+	-- tool level requirements: steel_pick: level 3, bronze_pick: level 4, diamond_pick: level 6, mithril pick: level 10
+	
+	local name = player:get_player_name();
+	if name==nil then return end -- ERROR
+	local level  = get_level(playerdata[name].xp)
+	local tp = weapon:get_name()
+	if level < 2 and tp == "default:sword_stone" then
+		weapon:add_wear(65535/4);player:set_wielded_item(weapon)
+		player:set_hp(player:get_hp()-2)
+		minetest.chat_send_player(name, " Your inexperience damages the stone sword and you cut yourself. Need at least level 2, check level with /xp")
+	end
+	
+	if level < 3 and tp == "default:sword_steel" then
+		weapon:add_wear(65535/4);player:set_wielded_item(weapon)
+		minetest.chat_send_player(name, " Your inexperience damages the steel sword and you cut yourself. Need at least level 3, check level with /xp")
+	end
+	
+	if level < 4 and tp == "default:sword_bronze" then
+		weapon:add_wear(65535/4);player:set_wielded_item(weapon)
+		minetest.chat_send_player(name, " Your inexperience damages the bronze sword and you cut yourself. Need at least level 4, check level with /xp")
+	end
+	
+	if level < 5 and tp == "moreores:sword_silver" then
+		weapon:add_wear(65535/4);player:set_wielded_item(weapon)
+		minetest.chat_send_player(name, " Your inexperience damages the silver sword and you cut yourself. Need at least level 5, check level with /xp")
+	end
+	
+	if level < 7 and tp == "default:sword_mese" then
+		weapon:add_wear(65535/4);player:set_wielded_item(weapon)
+		minetest.chat_send_player(name, " Your inexperience damages the mese sword and you cut yourself. Need at least level 7, check level with /xp")
+	end
+	
+	if level < 8 and tp == "default:sword_diamond" then
+		weapon:add_wear(65535/4);player:set_wielded_item(weapon)
+		minetest.chat_send_player(name, " Your inexperience damages the diamond sword and you cut yourself. Need at least level 8, check level with /xp")
+	end
+	
+	if level < 10 and tp == "moreores:sword_mithril" then
+		weapon:add_wear(65535/4);player:set_wielded_item(weapon)
+		minetest.chat_send_player(name, " Your inexperience damages the mithril sword and you cut yourself. Need at level 10, check level with /xp")
+	end
+		
+		
+		
+		
 	end
 	
 --	if weapon:get_definition().sounds ~= nil then

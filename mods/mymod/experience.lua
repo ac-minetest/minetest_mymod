@@ -1,21 +1,40 @@
 -- add experience and skill points on various events
 -- 2 kinds of experience for now: experience and dig skill
 local experience = {}
+
+-- level requirements swords: 2:stone, 3:steel, 4:bronze, 5:silver, 7:mese, 8:diamond, 10: mithril
+experience.levels = {[2]=40,[3]=100,[4]=200,[5]=400,[6]=1000,[7]=2000,[8]=4000, [9] = 8000, [10] = 16000}
+experience.levels_text = ""; for i,v in pairs(experience.levels) do experience.levels_text = experience.levels_text .. i .."/".. v .. "," end
+
+-- level requirements picks: 2:stone, 3:steel, 4:bronze, 5:silver, 7:mese: 8:diamond, 10 mithril
 experience.dig_levels = {[2]=40,[3]=160,[4]=320,[5]=640,[6]=1280,[7]=2560,[8]=5120,[9]=10240,[10]=20480}
 experience.dig_levels_text = ""; for i,v in pairs(experience.dig_levels) do experience.dig_levels_text = experience.dig_levels_text .. i .."/".. v .. "," end
 
+
 experience.xp ={
-["default:stone"]=0.01,
-["default:stone_with_coal"]=1,
-["default:stone_with_iron"]=4,
+["default:stone"]=0.1,
+["default:stone_with_coal"] = 1,
+["moreores:mineral_tin"] = 2,
 ["default:stone_with_copper"]= 4,
-["default:stone_with_gold"] = 16,
-["default:stone_with_mese"] = 32,
-["default:stone_with_diamond"] = 64,
-["moreores:mineral_mithril"] = 128
+["default:stone_with_iron"]= 4,
+["moreores:mineral_silver"] = 6,
+["default:stone_with_gold"] = 8,
+["default:stone_with_mese"] = 16,
+["default:stone_with_diamond"] = 24,
+["moreores:mineral_mithril"] = 32
 }
 
 function get_level(xp) -- given xp, it returns level
+local i
+local v
+local j=1
+	for i,v in pairs(experience.levels) do -- maybe it doesnt go through table in presented order???
+		if xp>v and i>j then j = i end
+	end
+	return j
+end
+
+function get_dig_level(xp) -- given xp, it returns level
 local i
 local v
 local j=1
@@ -37,8 +56,9 @@ minetest.register_chatcommand("xp", {
         end
 		
 		if playerdata[name] == nil or playerdata[name].dig==nil then return end		
-		minetest.chat_send_player(name, name .." has ".. playerdata[name].xp  .. " experience points, skill points: dig ".. playerdata[name].dig.. ", level ".. get_level(playerdata[name].dig ) )
-		minetest.chat_send_player(name, "level/dig skill: "..experience.dig_levels_text);
+		minetest.chat_send_player(name, name .." has ".. playerdata[name].xp  .. " XP points/level ".. get_level(playerdata[name].xp).. ", SKILL points: dig ".. playerdata[name].dig.. "/level ".. get_dig_level(playerdata[name].dig ) )
+		minetest.chat_send_player(name, "LEVELS: experience: "..experience.levels_text);
+		minetest.chat_send_player(name, "LEVELS: dig skill: "..experience.dig_levels_text);
 end,	
 })
 
@@ -102,7 +122,7 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 	
 	for i,v in pairs(experience.dig_levels) do -- check if levelup
 		if oldxp<v and newxp>=v then
-			minetest.chat_send_player(name, "You have reached level "..get_level(newxp).." in mining.")
+			minetest.chat_send_player(name, "You have reached level "..get_dig_level(newxp).." in mining.")
 		end
 	end
 	
@@ -114,7 +134,7 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 	local dig = newxp;
 	
 	
-	local level = get_level(newxp)
+	local level = get_dig_level(newxp)
 	local enhance = -0.5*level+4.5; -- pick wear will be multiplied by this+1	: 5, ....,0.5 at level 10
 	
 	if level>=10 then 
@@ -218,6 +238,7 @@ end
 
 --initialize record for new player: experience, dig skill
 minetest.register_on_newplayer(function(player)
+	init_experience(player)
 	write_experience(player)
 end) 
 
@@ -264,6 +285,10 @@ end)
 function write_experience(player)
 	local name = player:get_player_name(); if name == nil then return end
 	local file =  io.open(minetest.get_worldpath().."/players/"..name.."_experience", "w")
+	if playerdata[name].dig==nil then 
+		minetest.chat_send_all("ERROR WRITING EXPERIENCE!")
+		return 
+	end
 	if playerdata[name].dig==nil then init_experience(player) end
 	file:write(playerdata[name].xp .."\n".. playerdata[name].dig .."\n".. playerdata[name].magic .."\n".. playerdata[name].max_mana );
 	file:close()
