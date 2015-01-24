@@ -345,6 +345,14 @@ minetest.register_globalstep(function(dtime)
 			end
 			player:set_physics_override({gravity =  mult});
 			
+			--JAIL CHECK
+			
+			if playerdata[name].jail > 0 then -- what you doing out of jail? go back :P
+				if pos.y > spawnpoint.y-3 or pos.y < spawnpoint.y-7 then
+					player:setpos( {x=spawnpoint.x, y=spawnpoint.y-5, z=spawnpoint.z} )
+				end
+			end
+			
 			-- SURVIVABILITY CHECK
 			
 			if pos.y>0 and dist>500 and playerdata[name].xp<1000 then
