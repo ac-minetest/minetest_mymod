@@ -403,11 +403,13 @@ function shooter:blast(pos, radius, fleshy, distance, user)
 				obj_pos.y = obj_pos.y + 1.7
 				blast_pos = {x=pos.x, y=pos.y + 4, z=pos.z}
 				if minetest.line_of_sight(obj_pos, blast_pos, 1) then
-					if damage~=nil and obj~=nil then -- rnd: extra safety check. is it enough?
-						obj:punch(obj, 1.0, {
-							full_punch_interval = 1.0,
-							damage_groups = {fleshy=damage},
-						})
+					-- BUG HAPPENS HERE: occurs when player aims turret directly down and shoots k
+					if obj:get_hp()~=nil then -- rnd: extra safety check. is it enough? 
+						obj:set_hp(obj:get_hp()-fleshy) -- alternative damage, ignores armor
+						-- obj:punch(obj, 1.0, {
+							-- full_punch_interval = 1.0,
+							-- damage_groups = {fleshy=damage},
+						-- })
 					end
 				end
 			end

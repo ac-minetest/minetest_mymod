@@ -138,7 +138,7 @@ minetest.register_entity("shooter:turret_entity", {
 				elseif ctrl.right then
 					yaw = yaw - 0.025 * step
 				end
-				if pitch < 0 then
+				if pitch < 0 then 
 					pitch = 0
 				elseif pitch > 90 then 
 					pitch = 90
