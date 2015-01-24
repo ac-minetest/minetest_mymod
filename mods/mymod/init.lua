@@ -266,6 +266,8 @@ minetest.register_chatcommand("free", {
             return
         end
 		
+		if playerdata[param].jail== nil then return end --ERROR!
+		
 		if name==param and playerdata[param].jail>0 then
 			minetest.chat_send_all("Prisoner " .. name .. " wishes to get out of jail. You can help him with /free")
 			return
@@ -280,8 +282,11 @@ minetest.register_chatcommand("free", {
 		if playerdata[param].jail<=0 then 
 			minetest.chat_send_player(name, param.. " is not in jail."); return
 		end
-				
-		playerdata[name].xp = playerdata[name].xp-100;
+		
+		if not privs.kick then
+			playerdata[name].xp = playerdata[name].xp-100;
+		end
+		
 		playerdata[param].jail = playerdata[param].jail -1;
 		minetest.chat_send_all(param .. " was given pardon by " .. name .. ". ".. playerdata[param].jail " jail points left. " )
 		
@@ -304,12 +309,12 @@ minetest.register_chatcommand("jail", {
     func = function(name, param)
         local player = minetest.env:get_player_by_name(name)
 		local prisoner = minetest.env:get_player_by_name(param)
-		
-		if player == nil or prisoner == nil then
+	
+		if player == nil or prisoner == nil or playerdata[param].jail == nil then
             return
         end
 		playerdata[param].jail = playerdata[param].jail + 5
-		minetest.chat_send_player(name, param .. " gets extra jail sentence, now at " .. playerdata[param].jail)
+		minetest.chat_send_all(name .. " gives extra jail sentence to " .. param .. ", now at " .. playerdata[param].jail)
 end,	
 })
 
