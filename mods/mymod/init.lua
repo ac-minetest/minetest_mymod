@@ -298,6 +298,21 @@ minetest.register_chatcommand("free", {
 end,	
 })
 
+minetest.register_chatcommand("jail", {
+    description = "/jail NAME adds +5 to jail sentence for NAME",
+    privs = {privs = true},
+    func = function(name, param)
+        local player = minetest.env:get_player_by_name(name)
+		local prisoner = minetest.env:get_player_by_name(param)
+		
+		if player == nil or prisoner == nil then
+            return
+        end
+		playerdata[param].jail = playerdata[param].jail + 5
+		minetest.chat_send_player(name, param .. " gets extra jail sentence, now at " .. playerdata[param].jail)
+end,	
+})
+
 dofile(minetest.get_modpath("mymod").."/experience.lua")
 dofile(minetest.get_modpath("mymod").."/landmine.lua")
 dofile(minetest.get_modpath("mymod").."/extractor.lua")
