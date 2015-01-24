@@ -99,7 +99,7 @@ function mesecon:receiver_get_pos_from_rcpt(pos, param2)
 	elseif param2 == 0 then
 		rules = mesecon:rotate_rules_right(rules)
 	end
-	np = {
+	local np = {
 	x = pos.x + rules[1].x,
 	y = pos.y + rules[1].y,
 	z = pos.z + rules[1].z}

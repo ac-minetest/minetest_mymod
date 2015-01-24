@@ -41,8 +41,8 @@ exchange.chest.check_privilege = function(listname,playername,meta)
 end
 
 exchange.chest.update_formspec = function(meta)
-	formspec = exchange.chest.formspec.main
-	pl_formspec = function (n)
+	local formspec = exchange.chest.formspec.main
+	local pl_formspec = function (n)
 		if meta:get_int(n.."step")==0 then
 			formspec = formspec .. exchange.chest.formspec[n].start
 		else
@@ -103,7 +103,7 @@ minetest.register_node("exchange:chest", {
 	end,
 	on_receive_fields = function(pos, formname, fields, sender)
 		local meta = minetest.env:get_meta(pos)
-		pl_receive_fields = function(n)
+		local pl_receive_fields = function(n)
 			if fields[n.."_start"] and meta:get_string(n) == "" then
 				meta:set_string(n,sender:get_player_name())
 			end

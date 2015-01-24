@@ -58,7 +58,7 @@ protector.generate_formspec = function (meta)
 		.."label[0,0;-- Protector interface --]"
 		.."label[0,1;Punch the node to show the protected area.]"
 		.."label[0,2;Current members:]"
-	members = protector.get_member_list(meta)
+	local members = protector.get_member_list(meta)
 	
 	local npp = 15 -- names per page, for the moment is 4*4 (-1 for the + button)
 	local s = 0

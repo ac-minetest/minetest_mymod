@@ -69,7 +69,7 @@ function get_gate(pos)
 end
 
 function gate_state(pos)
-	name = minetest.get_node(pos).name
+	local name = minetest.get_node(pos).name
 	return string.find(name, "_on") ~= nil
 end
 
