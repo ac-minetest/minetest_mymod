@@ -288,7 +288,7 @@ minetest.register_chatcommand("free", {
 		end
 		
 		playerdata[param].jail = playerdata[param].jail -1;
-		minetest.chat_send_all(param .. " was given pardon by " .. name .. ". ".. playerdata[param].jail " jail points left. " )
+		minetest.chat_send_all(param .. " was given pardon by " .. name .. ". ".. playerdata[param].jail .. " jail points left. " )
 		
 		if playerdata[param].jail<=0 then 
 			minetest.chat_send_player(name, param.. " freed from jail.")
