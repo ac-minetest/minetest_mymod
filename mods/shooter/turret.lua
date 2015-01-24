@@ -43,7 +43,9 @@ minetest.register_entity("shooter:tnt_entity", {
 			local pos = self.object:getpos()
 			if minetest.get_node(pos).name ~= "air" then
 				self.object:remove()
-				shooter:blast(pos, 4, 80, 10, self.player)
+				if self.player~= nil then -- rnd safety
+					shooter:blast(pos, 4, 80, 10, self.player)
+				end
 			end
 			self.timer = 0
 		end
