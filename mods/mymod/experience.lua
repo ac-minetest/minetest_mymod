@@ -55,20 +55,59 @@ minetest.register_chatcommand("xp", {
             return false
         end
 		
-		if playerdata[name] == nil or playerdata[name].dig==nil then return end		
-		minetest.chat_send_player(name, name .." has ".. playerdata[name].xp  .. " XP points/level ".. get_level(playerdata[name].xp).. ", SKILL points: dig ".. playerdata[name].dig.. "/level ".. get_dig_level(playerdata[name].dig ) )
-		minetest.chat_send_player(name, "LEVELS: experience: "..experience.levels_text);
-		minetest.chat_send_player(name, "LEVELS: dig skill: "..experience.dig_levels_text);
+		if playerdata[name] == nil or playerdata[name].dig==nil then return end	
+		-- TO DO: paste form here..
+		
+		local text = "Experience: points " ..playerdata[name].xp .. "/level " ..get_level(playerdata[name].xp) .."\n"..
+		"SKILLS\ndig skill points " .. playerdata[name].dig .. "/level " ..get_dig_level(playerdata[name].dig) ..
+		"\nmagic skill points " .. playerdata[name].magic .. ", maximum mana " ..playerdata[name].max_mana .."\n"..
+		"\nLEVELS for experience: " ..experience.levels_text.."\n"..
+		"LEVELS for dig skill: " ..experience.dig_levels_text..
+		"\n\nmana regenerated per tick equals 1+(magic skill/100)"
+		local form  = 
+		"size[8,3.5]" ..  -- width, height
+		"textarea[0,0;8.5,3.5;text1;Player "..name.. " STATISTICS;".. text.."]"..
+		"button[0,3;3.5,1;button1;Convert 1 XP to 1 magic skill]"..
+		"button[3.5,3;3.7,1;button2;Convert 100 XP to 1 max_mana]"
+		
+		minetest.show_formspec(name, "mymod:form_experience", form) -- displays form
 end,	
 })
+
+-- process form output
+minetest.register_on_player_receive_fields(function(player, formname, fields) -- this gets called if text sent from form or form exit
+    if formname == "mymod:form_experience" then -- Replace this with your form name
+		--minetest.chat_send_all("Player "..player:get_player_name().." submitted fields "..dump(fields))
+		
+		if fields["button1"]~=nil then 
+			local name = player:get_player_name(); if name == nil then return end
+			local t = playerdata[name].xp; if t>100 then playerdata[name].xp = t-100;t=100	end
+			playerdata[name].magic = playerdata[name].magic+t; playerdata[name].xp = playerdata[name].xp-t
+			minetest.chat_send_player(name,"Converted " .. t .. " xp to magic skill ");
+		end
+		
+		if fields["button2"]~=nil then 
+			local name = player:get_player_name(); if name == nil then return end
+			local t = playerdata[name].xp; 
+			if t>100 then  playerdata[name].xp =  playerdata[name].xp-100; t=100 end
+			playerdata[name].xp = playerdata[name].xp-t; t = math.ceil(t/100*10)/10
+			playerdata[name].max_mana = playerdata[name].max_mana+t; 
+			minetest.chat_send_player(name,"Converted xp to "..t.." additional maximum mana");
+		end
+		
+		
+	end
+end)
+
+
 
 minetest.register_on_dieplayer(
 	function(player)
 		local name = player:get_player_name()
 		if name == nil then return end
-		playerdata[name].xp = playerdata[name].xp*0.9
-		playerdata[name].dig = playerdata[name].dig*0.9
-		playerdata[name].magic = playerdata[name].magic*0.9
+		playerdata[name].xp = math.ceil(10*playerdata[name].xp*0.9)/10
+		playerdata[name].dig = math.ceil(10*playerdata[name].dig*0.9)/10
+		playerdata[name].magic = math.ceil(10*playerdata[name].magic*0.9)/10
 		playerdata[name].jail = 0
 		minetest.chat_send_player(name,"You loose 10% of your experience and skills because you died.");
 	end
@@ -256,7 +295,7 @@ function init_experience(player)
 	playerdata[name].dig = 0;
 	playerdata[name].magic = 0;
 	playerdata[name].max_mana = 0;
-	playerdata[name].mana = 0;
+	playerdata[name].mana = 0.;
 end
 
 minetest.register_on_joinplayer(function(player) -- read data from file or create one
@@ -305,3 +344,33 @@ minetest.register_on_shutdown(function()
 				write_experience(player)
 	end
 end)
+
+-- MAGIC SPELLS
+
+minetest.register_craft({
+	output = "mymod:spell_heal_beginner",
+	recipe = {
+		{"bones:bones", "bones:bones","bones:bones"},
+		{"bones:bones", "default:diamond","bones:bones"},
+		{"bones:bones", "bones:bones","bones:bones"}
+	}
+})
+
+
+minetest.register_node("mymod:spell_heal_beginner", {
+	description = "beginner healing spell",
+	tiles = {"health.png"},
+	groups = {oddly_breakable_by_hand=1},
+	on_use = function(itemstack, user, pointed_thing)
+		local name = user:get_player_name(); if name == nil then return end
+		if playerdata[name].mana<1 then
+			minetest.chat_send_player(name,"Need at least 1 mana"); return
+		end
+		if user:get_hp()<20 then
+			playerdata[name].mana = playerdata[name].mana-1
+			user:set_hp(user:get_hp()+5)
+			minetest.chat_send_player(name,"Healed 5 hp.")	
+		end
+	end
+	,
+})

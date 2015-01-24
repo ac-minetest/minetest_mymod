@@ -149,7 +149,7 @@ end)
 
 minetest.register_on_placenode(function (pos, node)
 	if string.find(node.name, "mesecons:wire_") ~=nil then
-		rules = mesecon:get_rules("receiver_pos_all")
+		local rules = mesecon:get_rules("receiver_pos_all")
 		local i = 1
 		while rules[i] ~= nil do
 			np = {

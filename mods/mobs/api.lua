@@ -502,7 +502,7 @@ function mobs:register_mob(name, def)
 				end
 			elseif self.state == "attack" and self.attack_type == "dogfight" then
 				if not self.attack.player or not self.attack.player:getpos() then
-					print("stop attacking")
+					--print("stop attacking") -- rnd mob stops attack
 					self.state = "stand"
 					self:set_animation("stand")
 					return

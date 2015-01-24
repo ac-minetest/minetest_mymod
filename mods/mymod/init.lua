@@ -240,8 +240,19 @@ minetest.register_on_joinplayer(function(player) -- init stuff on player join
 	
 	playerdata[name] = {}
 	playerdata[name] = {xp=0,dig=0,speed=false, jail = 0}; -- jail >0 means player is in jail
-	
+
+	playerdata[name].manahud = init_mana_hud(player)
+	end
+)
+
+minetest.register_on_newplayer(
+function(player)
+	local name = player:get_player_name();
+	playerdata[name] = {}
+	playerdata[name].manahud = init_mana_hud(player)
 end)
+
+
 
 
 minetest.register_chatcommand("free", {
@@ -355,6 +366,14 @@ minetest.register_globalstep(function(dtime)
 				end
 			end
 			
+			-- HUD UPDATE
+			
+			t = playerdata[name].max_mana;
+			if t~=nil then
+				if t~=0 then t = 20*playerdata[name].mana/playerdata[name].max_mana else t = 0 end
+				player:hud_change(playerdata[name].manahud, "number", t)
+			end
+
 			-- CHEAT CHECK: gets node at player position... works like crap :P
 		
 			-- local here = minetest.get_node(pos);
@@ -363,3 +382,56 @@ minetest.register_globalstep(function(dtime)
 			-- end
 		end
 end)
+
+-- MY FORMSPEC INTRODUCTORY EXAMPLE:
+
+minetest.register_chatcommand("form", {
+    description = "testing formspec",
+    privs = {},
+    func = function(name, param)
+		local text = "sample text, test. hello!\nyes? no?" -- bad idea to include weird chars here
+		local form  = 
+		"size[8,9]" ..  -- width, height
+		--"list[context;main;0,0;8,4;]" .. -- creates empty click sensitive window 
+		"textarea[0,0;8,4;text1;TEXTAREA1;"..text.."]".. -- writable area that can be used to send text
+		"button[0,4;2,1;button1;OK]"..
+		"field[1,6;8,1;field1;FIELD1;"..text.."]"..
+		"label[1,7;"..text.."]"
+		--"list[current_player;main;0,5;8,4;]" -- adds player inventory
+		
+		
+		minetest.show_formspec(name, "TEST_FORM", form) -- displays form
+	end,	
+})
+
+minetest.register_on_player_receive_fields(function(player, formname, fields) -- this gets called if text sent from form or form exit
+    if formname == "TEST_FORM" then -- Replace this with your form name
+		minetest.chat_send_all("Player "..player:get_player_name().." submitted fields "..dump(fields))
+		
+		if fields["text1"]~=nil then -- without this server crash when button not pressed - when you exit form for example
+			minetest.chat_send_all("Player "..player:get_player_name().." pressed the button and sent textarea ".. fields["text1"] )
+		end
+		
+		if fields["field1"]~=nil then -- without this server crash when button not pressed - when you exit form for example
+			minetest.chat_send_all("Player "..player:get_player_name().." pressed the button and sent field ".. fields["field1"] )
+		end
+	
+    end
+end)
+
+-- MY HUD INTRODUCTORY EXAMPLE:
+
+function init_mana_hud(player)
+local name = player:get_player_name();
+	return player:hud_add({
+    hud_elem_type = "statbar",
+    position = {x=0.305,y=0.88},
+    size = "",
+    text = "mana.png",
+    number = 0,
+    alignment = {x=0,y=1},
+    offset = {x=0, y=0},
+	size = { x=24, y=24 },
+	}
+	)
+end

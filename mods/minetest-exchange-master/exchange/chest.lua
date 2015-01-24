@@ -59,7 +59,7 @@ exchange.chest.update_formspec = function(meta)
 end
 
 exchange.chest.give_inventory = function(inv,list,playername)
-	player = minetest.env:get_player_by_name(playername)
+	local player = minetest.env:get_player_by_name(playername)
 	if player then
 		for k,v in ipairs(inv:get_list(list)) do
 			player:get_inventory():add_item("main",v)
