@@ -568,6 +568,9 @@ function mobs:register_mob(name, def)
 							if self.object== nil or self.attack.player==nil or self.damage==nil then
 								return -- PREVENT ERROR??
 							end
+							
+							if not self.attack.player.is_player() return end -- will this help?
+							
 							self.attack.player:punch(self.object, 1.0,  {
 								full_punch_interval=1.0,
 								damage_groups = {fleshy=self.damage*distance} -- rnd: damage done here, enhance it?
