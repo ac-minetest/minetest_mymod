@@ -569,7 +569,7 @@ function mobs:register_mob(name, def)
 								return -- PREVENT ERROR??
 							end
 							
-							if not self.attack.player.is_player() then return end -- will this help?
+							--if 1==1 then return end only way to prevent next line crash..
 							
 							self.attack.player:punch(self.object, 1.0,  {
 								full_punch_interval=1.0,
