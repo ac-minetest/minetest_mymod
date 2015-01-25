@@ -371,7 +371,7 @@ minetest.register_craft({
 
 
 minetest.register_node("mymod:spell_heal_beginner", {
-	description = "beginner healing spell: heal 5 hp for 1 mana",
+	description = "beginner healing spell: heal 5 hp for 1 mana, removes basic ill effects",
 	wield_image = "health.png",
 	wield_scale = {x=0.8,y=2.5,z=1.3}, 
 	tiles = {"health.png"},

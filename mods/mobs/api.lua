@@ -305,11 +305,13 @@ function mobs:register_mob(name, def)
 				do_env_damage(self)
 			end
 			
+			local player; -- rnd
+			
 			-- FIND SOMEONE TO ATTACK
 			if ( self.type == "monster" or self.type == "barbarian" ) and minetest.setting_getbool("enable_damage") and self.state ~= "attack" then
 				local s = self.object:getpos()
 				local inradius = minetest.get_objects_inside_radius(s,self.view_range)
-				local player = nil
+				player = nil
 				local type = nil
 				for _,oir in ipairs(inradius) do
 					if oir:is_player() then
