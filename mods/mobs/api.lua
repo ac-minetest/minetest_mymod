@@ -924,23 +924,58 @@ function mobs:register_arrow(name, def)
 		velocity = def.velocity,
 		hit_player = def.hit_player,
 		hit_node = def.hit_node,
+		hit_object = def.hit_object, -- rnd
+		owner = def.owner, -- rnd
+		damage = def.damage, -- rnd
+		timer = def.timer, -- rnd
 		collisionbox = {0,0,0,0,0,0}, -- remove box around arrows
 
 		on_step = function(self, dtime)
 			local pos = self.object:getpos()
-			if minetest.get_node(self.object:getpos()).name ~= "air" then
+			local node = minetest.get_node(self.object:getpos())
+			if node.name ~= "air" then
 				self.hit_node(self, pos, node)
 				self.object:remove()
 				return
 			end
-			-- pos.y = pos.y-1.0
+			
+			-- rnd: WHY PROBLEM HERE?  attempt to perform arithmetic on field 'timer' (a nil value)
+			-- self.timer = self.timer - dtime -- rnd
+			-- if self.timer < 0 then 
+				-- self.object:remove()
+				-- return
+			-- end
+			
+		
 			for _,player in pairs(minetest.get_objects_inside_radius(pos, 2)) do
 				if player:is_player() then
-					self.hit_player(self, player)
-					self.object:remove()
+					if self.object:get_luaentity().owner~=player:get_player_name() then -- rnd: dont hit yourself
+						self.hit_player(self, player)
+						self.object:remove()
+					end
 					return
 				end
+		
+				if player then -- rnd: make object get punched by arrow too
+					local s = self.object:getpos() -- arrow
+					local p = player:getpos() -- target
+					local dist = get_distance(s,p) 
+					if dist~=0 then -- dont hit itself..
+						local owner = self.object:get_luaentity().owner; 
+						--minetest.chat_send_all("BAM OBJECT")
+						if owner~=nil then
+							--minetest.chat_send_all("BAM MONSTER BY ".. owner)
+							owner=minetest.env:get_player_by_name(owner)
+							if owner~=nil then
+								self.hit_object(self,owner, player)
+							end
+							self.object:remove()
+						end
+					end
+				end
 			end
+				
+				
 		end
 	})
 end
@@ -963,11 +998,9 @@ local weapon = player:get_wielded_item()
 			wear = 65535/(tool_capabilities.groupcaps.snappy.uses)
 			else wear = 65535/50
 		end
-		
 				
 		weapon:add_wear(wear)
 		player:set_wielded_item(weapon)
-		
 		
 		-- rnd: level requirements for swords
 		-- level requirements swords: 2:stone, 3:steel, 4:bronze, 5:silver, 7:mese, 8:diamond, 10: mithril
@@ -1013,9 +1046,6 @@ local weapon = player:get_wielded_item()
 		minetest.chat_send_player(name, " Your inexperience damages the mithril sword and you cut yourself. Need at level 10, check level with /xp")
 	end
 		
-		
-		
-		
 	end
 	
 --	if weapon:get_definition().sounds ~= nil then
@@ -1031,3 +1061,77 @@ local weapon = player:get_wielded_item()
 end
 
 
+-- RND: offensive spells
+
+minetest.register_node("mobs:spell_fireball", {
+	description = "fireball spell: 13+2*magic skill/100 damage for 1 mana",
+	wield_image = "fireball_spell.png", -- TO DO : change texture
+	wield_scale = {x=0.8,y=2.5,z=1.3}, 
+	tiles = {"fireball_spell.png"},
+	groups = {oddly_breakable_by_hand=1},
+	on_use = function(itemstack, user, pointed_thing)
+		local name = user:get_player_name(); if name == nil then return end
+		if playerdata[name].mana<1 then
+			minetest.chat_send_player(name,"Need at least 1 mana"); return
+		end
+		local pos  = user:getpos()
+		pos.y = pos.y + 1.5
+		local view = user:get_look_dir() 
+		pos.x = pos.x + 2.1*view.x;pos.y = pos.y + 2.1*view.y;pos.z = pos.z + 2.1*view.z
+		
+		--minetest.chat_send_all(" x " .. view.x  .. " y " .. view.y .. " z " .. view.z) -- debug
+		
+		local obj = minetest.add_entity(pos, "mobs:fireball_spell_projectile")
+		local v = obj:get_luaentity().velocity
+		obj:get_luaentity().owner = name 
+		obj:get_luaentity().timer =  10
+		obj:get_luaentity().damage = 13+2*playerdata[name].magic/100;
+		view.x = view.x*v;view.y = view.y*v;view.z = view.z*v
+		obj:setvelocity(view)
+		playerdata[name].mana = playerdata[name].mana -1
+		minetest.sound_play("shooter_flare_fire", {pos=pos,gain=1.0,max_hear_distance = 64,})
+	end,
+})
+
+mobs:register_arrow("mobs:fireball_spell_projectile", {
+	visual = "sprite",
+	visual_size = {x=1, y=1},
+	textures = {"fireball_spell.png"},
+	velocity = 10,
+	damage = 0,
+	owner = "",
+	timer = 10,
+
+	hit_player = function(self, player)
+		local s = self.object:getpos()
+		local p = player:getpos()
+		
+		local dist = get_distance(s,p) 
+		--minetest.chat_send_all("BAM PLAYER!")
+
+		player:punch(self.object, 1.0,  {
+			full_punch_interval=1.0,
+			damage_groups = {fleshy=self.damage},
+		}, nil)
+	end,
+	
+	hit_node = function(self, pos, node)
+			--minetest.chat_send_all("BAM NODE!")
+	end,
+	hit_object = function(self,puncher, target)
+			--minetest.chat_send_all("BAM NODE!")
+			target:punch(puncher, 1.0,  {
+				full_punch_interval=1.0,
+				damage_groups = {fleshy=self.damage},
+				}, nil)
+	end,
+})
+
+minetest.register_craft({
+	output = "mobs:spell_fireball",
+	recipe = {
+		{"bones:bones", "bones:bones","bones:bones"},
+		{"bones:bones", "bucket:bucket_lava","bones:bones"},
+		{"bones:bones", "bones:bones","bones:bones"}
+	}
+})

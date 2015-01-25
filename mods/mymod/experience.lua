@@ -46,14 +46,20 @@ end
 
 -- chat command to see experience
 minetest.register_chatcommand("xp", {
-    description = "Displays your experience",
+    description = "Displays your experience, /xp NAME displays other players experience",
     privs = {},
-    func = function(name)
+    func = function(name,param)
         local player = minetest.env:get_player_by_name(name)
 		if player == nil then
             -- just a check to prevent the server crashing
             return false
         end
+		if param~="" and param~=nil then -- display others xp
+			if playerdata[param] == nil or playerdata[param].dig==nil then return end	
+			minetest.chat_send_player(name,"XP ".. playerdata[param].xp .."/level ".. get_level(playerdata[param].xp) .. ", dig skill " ..playerdata[param].dig .. "/level " ..get_dig_level(playerdata[param].dig) )
+			minetest.chat_send_player(name,"magic "..playerdata[param].magic .. ", max_mana ".. playerdata[param].max_mana)
+		return
+		end
 		
 		if playerdata[name] == nil or playerdata[name].dig==nil then return end	
 		-- TO DO: paste form here..
@@ -63,12 +69,19 @@ minetest.register_chatcommand("xp", {
 		"\nmagic skill points " .. playerdata[name].magic .. ", maximum mana " ..playerdata[name].max_mana .."\n"..
 		"\nLEVELS for experience: " ..experience.levels_text.."\n"..
 		"LEVELS for dig skill: " ..experience.dig_levels_text..
-		"\n\nmana regenerated per tick equals 1+(magic skill/100)"
+		"\nRULES: To use good weapons you need enough experience. To use good "..
+		"\n tools you need enough dig skill. To cast magic you need mana points" .. 
+		"\n(max_mana) and magic skill. Mana regenerates on its own, each 100"..
+		"\nmagic skill adds 0.1 mana regenerated per step. When you kill monster"..
+		"\nyou get experience, it depends on monster health and how away from"..
+		"\nspawn you are. You get dig skill by digging ores. Better ores give"..
+		"\nmore skill"
+		
 		local form  = 
 		"size[8,3.5]" ..  -- width, height
 		"textarea[0,0;8.5,3.5;text1;Player "..name.. " STATISTICS;".. text.."]"..
-		"button[0,3;3.5,1;button1;Convert 1 XP to 1 magic skill]"..
-		"button[3.5,3;3.7,1;button2;Convert 100 XP to 1 max_mana]"
+		"button[0,3;4,1;button1;Convert 100 XP to 100 magic skill]"..
+		"button[4,3;3.7,1;button2;Convert 100 XP to 1 max_mana]"
 		
 		minetest.show_formspec(name, "mymod:form_experience", form) -- displays form
 end,	
@@ -359,6 +372,8 @@ minetest.register_craft({
 
 minetest.register_node("mymod:spell_heal_beginner", {
 	description = "beginner healing spell: heal 5 hp for 1 mana",
+	wield_image = "health.png",
+	wield_scale = {x=0.8,y=2.5,z=1.3}, 
 	tiles = {"health.png"},
 	groups = {oddly_breakable_by_hand=1},
 	on_use = function(itemstack, user, pointed_thing)
@@ -368,9 +383,14 @@ minetest.register_node("mymod:spell_heal_beginner", {
 		end
 		if user:get_hp()<20 then
 			playerdata[name].mana = playerdata[name].mana-1
+			playerdata[name].speed = false -- remove ill speed effect
 			user:set_hp(user:get_hp()+5)
 			minetest.chat_send_player(name,"Healed 5 hp.")	
+		else minetest.chat_send_player(name,"Full health already.")	
 		end
 	end
 	,
 })
+
+
+

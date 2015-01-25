@@ -313,7 +313,7 @@ minetest.register_chatcommand("jail", {
 		if player == nil or prisoner == nil or playerdata[param].jail == nil then
             return
         end
-		playerdata[param].jail = playerdata[param].jail + 5
+		playerdata[param].jail = playerdata[param].jail + 1
 		minetest.chat_send_all(name .. " gives extra jail sentence to " .. param .. ", now at " .. playerdata[param].jail)
 end,	
 })

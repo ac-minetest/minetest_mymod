@@ -37,31 +37,31 @@ armor = {
 	default_skin = "character",
 }
 
-if inventory_plus then
-	armor.formspec = "size[8,8.5]button[0,0;2,0.5;main;Back]"
-		.."list[detached:player_name_armor;armor;0,1;2,3;]"
-		.."image[2.5,0.75;2,4;armor_preview]"
-		.."label[5,1;Level: armor_level]"
-		.."label[5,1.5;Heal:  armor_heal]"
-		.."list[current_player;main;0,4.5;8,4;]"
-elseif unified_inventory then
-	unified_inventory.register_button("armor", {
-		type = "image",
-		image = "inventory_plus_armor.png",
-	})
-	unified_inventory.register_page("armor", {
-		get_formspec = function(player)
-			local name = player:get_player_name()
-			local formspec = "background[0.06,0.99;7.92,7.52;3d_armor_ui_form.png]"
-				.."label[0,0;Armor]"
-				.."list[detached:"..name.."_armor;armor;0,1;2,3;]"
-				.."image[2.5,0.75;2,4;"..armor.textures[name].preview.."]"
-				.."label[5,1;Level: "..armor.def[name].level.."]"
-				.."label[5,1.5;Heal:  "..armor.def[name].heal.."]"
-			return {formspec=formspec}
-		end,
-	})
-end
+-- if inventory_plus then
+	-- armor.formspec = "size[8,8.5]button[0,0;2,0.5;main;Back]"
+		-- .."list[detached:player_name_armor;armor;0,1;2,3;]"
+		-- .."image[2.5,0.75;2,4;armor_preview]"
+		-- .."label[5,1;Level: armor_level]"
+		-- .."label[5,1.5;Heal:  armor_heal]"
+		-- .."list[current_player;main;0,4.5;8,4;]"
+-- elseif unified_inventory then
+	-- unified_inventory.register_button("armor", {
+		-- type = "image",
+		-- image = "inventory_plus_armor.png",
+	-- })
+	-- unified_inventory.register_page("armor", {
+		-- get_formspec = function(player)
+			-- local name = player:get_player_name()
+			-- local formspec = "background[0.06,0.99;7.92,7.52;3d_armor_ui_form.png]"
+				-- .."label[0,0;Armor]"
+				-- .."list[detached:"..name.."_armor;armor;0,1;2,3;]"
+				-- .."image[2.5,0.75;2,4;"..armor.textures[name].preview.."]"
+				-- .."label[5,1;Level: "..armor.def[name].level.."]"
+				-- .."label[5,1.5;Heal:  "..armor.def[name].heal.."]"
+			-- return {formspec=formspec}
+		-- end,
+	-- })
+-- end
 
 armor.def = {
 	state = 0,
@@ -298,11 +298,11 @@ default.player_register_model("3d_armor_character.x", {
 
 minetest.register_on_player_receive_fields(function(player, formname, fields)
 	local name = player:get_player_name()
-	if inventory_plus and fields.armor then
-		local formspec = armor:get_armor_formspec(name)
-		inventory_plus.set_inventory_formspec(player, formspec)
-		return
-	end
+	-- if inventory_plus and fields.armor then
+		-- local formspec = armor:get_armor_formspec(name)
+		-- inventory_plus.set_inventory_formspec(player, formspec)
+		-- return
+	-- end
 	for field, _ in pairs(fields) do
 		if string.find(field, "skins_set") then
 			minetest.after(0, function(player)
