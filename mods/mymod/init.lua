@@ -1,4 +1,3 @@
-core.clear_objects() -- cleanup on server restart
 -- give playes stuff
 minetest.register_on_newplayer(
 function(player)

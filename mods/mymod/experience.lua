@@ -94,7 +94,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields) --
 		
 		if fields["button1"]~=nil then 
 			local name = player:get_player_name(); if name == nil then return end
-			local t = playerdata[name].xp; if t>100 then playerdata[name].xp = t-100;t=100	end
+			local t = playerdata[name].xp; if t>100 then t=100	end
 			playerdata[name].magic = playerdata[name].magic+t; playerdata[name].xp = playerdata[name].xp-t
 			minetest.chat_send_player(name,"Converted " .. t .. " xp to magic skill ");
 		end
@@ -102,7 +102,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields) --
 		if fields["button2"]~=nil then 
 			local name = player:get_player_name(); if name == nil then return end
 			local t = playerdata[name].xp; 
-			if t>100 then  playerdata[name].xp =  playerdata[name].xp-100; t=100 end
+			if t>100 then t=100 end
 			playerdata[name].xp = playerdata[name].xp-t; t = math.ceil(t/100*10)/10
 			playerdata[name].max_mana = playerdata[name].max_mana+t; 
 			minetest.chat_send_player(name,"Converted xp to "..t.." additional maximum mana");
