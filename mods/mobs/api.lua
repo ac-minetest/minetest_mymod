@@ -565,7 +565,9 @@ function mobs:register_mob(name, def)
 							if distance < 500 then distance = (1+distance/500)
 								else distance = (1+distance/100) -- 5x more powerful mobs below 500
 							end
-							
+							if self.object== nil or self.attack.player==nil or self.damage==nil then
+								return -- PREVENT ERROR??
+							end
 							self.attack.player:punch(self.object, 1.0,  {
 								full_punch_interval=1.0,
 								damage_groups = {fleshy=self.damage*distance} -- rnd: damage done here, enhance it?
