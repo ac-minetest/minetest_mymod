@@ -13,6 +13,7 @@ end
 function stairsplus:register_all(modname, subname, recipeitem, fields)
 	fields = fields or {}
 	fields.groups = fields.groups or {}
+	fields.groups.not_in_craft_guide = 1 -- disableclouds test
 	if not moreblocks.config.stairsplus_in_creative_inventory then
 		fields.groups.not_in_creative_inventory = 1
 	end
