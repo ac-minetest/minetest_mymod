@@ -1078,6 +1078,8 @@ minetest.register_node("mobs:spell_fireball", {
 	groups = {oddly_breakable_by_hand=1},
 	on_use = function(itemstack, user, pointed_thing)
 		local name = user:get_player_name(); if name == nil then return end
+		local t = minetest.get_gametime();if t-playerdata[name].spelltime<1 then return end;playerdata[name].spelltime = t;
+		
 		if playerdata[name].mana<1 then
 			minetest.chat_send_player(name,"Need at least 1 mana"); return
 		end
@@ -1090,6 +1092,8 @@ minetest.register_node("mobs:spell_fireball", {
 		
 		local obj = minetest.add_entity(pos, "mobs:fireball_spell_projectile")
 		local v = obj:get_luaentity().velocity
+		
+		
 		obj:get_luaentity().owner = name 
 		obj:get_luaentity().timer =  10
 		obj:get_luaentity().damage = 13+2*playerdata[name].magic/100;
@@ -1097,6 +1101,7 @@ minetest.register_node("mobs:spell_fireball", {
 		obj:setvelocity(view)
 		playerdata[name].mana = playerdata[name].mana -1
 		minetest.sound_play("shooter_flare_fire", {pos=pos,gain=1.0,max_hear_distance = 64,})
+		
 	end,
 })
 
@@ -1120,10 +1125,26 @@ mobs:register_arrow("mobs:fireball_spell_projectile", {
 			full_punch_interval=1.0,
 			damage_groups = {fleshy=self.damage},
 		}, nil)
+		minetest.sound_play("tnt_explode", {pos=pos,gain=1.0,max_hear_distance = 64,})
 	end,
 	
 	hit_node = function(self, pos, node)
+			minetest.sound_play("tnt_explode", {pos=pos,gain=1.0,max_hear_distance = 64,})
 			--minetest.chat_send_all("BAM NODE!")
+			-- ice melts
+			if node.name=="default:ice" then 
+				if minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z}).name=="air" then
+					minetest.set_node(pos, {name="default:water_source"}) 
+				end
+			end 
+			
+			--furnace gets fuel for 5 secs 
+			if node.name == "default:furnace" or node.name == "default:furnace_active" then
+				local meta = minetest.get_meta(pos) 
+				local fuel_totaltime = meta:get_float("fuel_totaltime") or 0; fuel_totaltime = fuel_totaltime +5;
+				meta:set_float("fuel_totaltime", fuel_totaltime) 
+			end
+			
 	end,
 	hit_object = function(self,puncher, target)
 			--minetest.chat_send_all("BAM NODE!")
@@ -1131,6 +1152,7 @@ mobs:register_arrow("mobs:fireball_spell_projectile", {
 				full_punch_interval=1.0,
 				damage_groups = {fleshy=self.damage},
 				}, nil)
+			minetest.sound_play("tnt_explode", {pos=pos,gain=1.0,max_hear_distance = 64,})
 	end,
 })
 

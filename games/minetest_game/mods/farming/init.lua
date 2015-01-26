@@ -32,7 +32,7 @@ minetest.register_craftitem("farming:bread", {
 				playerdata[user:get_player_name()].speed = false
 				minetest.chat_send_player(user:get_player_name(),"<HEAL> speed returned to normal.")
 			end
-		return  ItemStack("")
+		return itemstack:take_item(itemstack:get_count()-1) --ItemStack("")
 		end
 	end,
 

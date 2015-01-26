@@ -313,6 +313,12 @@ end
 
 minetest.register_on_joinplayer(function(player) -- read data from file or create one
 	local name = player:get_player_name(); if name == nil then return end
+	
+	--temporary characteristics
+	playerdata[name].mana = 0 -- this regenerates
+	playerdata[name].spelltime = minetest.get_gametime();
+	
+	-- read saved characteristics
 	local file = io.open(minetest.get_worldpath().."/players/"..name.."_experience", "r")
 	if not file then -- not yet existing record
 		init_write_experience(player)
@@ -328,9 +334,6 @@ minetest.register_on_joinplayer(function(player) -- read data from file or creat
 	data = tonumber(file:read("*line")); if data == nil then data = 0 end
 	playerdata[name].max_mana = data
 	file:close();
-	
-	--temporary characteristics
-	playerdata[name].mana = 0 -- this regenerates
 	
 	--apply_stats(player)
 end)
@@ -378,6 +381,8 @@ minetest.register_node("mymod:spell_heal_beginner", {
 	groups = {oddly_breakable_by_hand=1},
 	on_use = function(itemstack, user, pointed_thing)
 		local name = user:get_player_name(); if name == nil then return end
+		local t = minetest.get_gametime();if t-playerdata[name].spelltime<2 then return end;playerdata[name].spelltime = t; -- only heal every 2 seconds
+		
 		if playerdata[name].mana<1 then
 			minetest.chat_send_player(name,"Need at least 1 mana"); return
 		end

@@ -2,7 +2,7 @@ ARMOR_INIT_TIMES = 1
 ARMOR_BONES_DELAY = 1
 ARMOR_INIT_DELAY = 1
 ARMOR_UPDATE_TIME = 1
-ARMOR_DROP = false -- minetest.get_modpath("bones") ~= nil -- RND
+ARMOR_DROP = true -- minetest.get_modpath("bones") ~= nil -- RND
 ARMOR_DESTROY = false
 ARMOR_LEVEL_MULTIPLIER = 1
 ARMOR_HEAL_MULTIPLIER = 1
@@ -419,6 +419,10 @@ end)
 if ARMOR_DROP == true or ARMOR_DESTROY == true then
 	minetest.register_on_dieplayer(function(player)
 		local name = player:get_player_name()
+		-- rnd: armor only drops for experienced players
+		if name == nil then return end;	local data = playerdata[name]; if data == nil then return end ;	if data.xp == nil then return end
+		if data.xp < 4000 then return end -- no drop if unexperienced player
+		
 		local pos = player:getpos()
 		if name and pos then
 			local drop = {}
