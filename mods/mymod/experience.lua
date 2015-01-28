@@ -322,6 +322,8 @@ minetest.register_on_joinplayer(function(player) -- read data from file or creat
 	--temporary characteristics
 	playerdata[name].mana = 0 -- this regenerates
 	playerdata[name].spelltime = minetest.get_gametime();
+	playerdata[name].slow = {time=0.,mag=0.}; 
+	playerdata[name].poison = {time=0.,mag=0.};
 	
 	-- read saved characteristics
 	local file = io.open(minetest.get_worldpath().."/players/"..name.."_experience", "r")
