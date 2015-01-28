@@ -1070,6 +1070,7 @@ end
 
 -- RND: offensive spells
 
+-- FIREBALL
 minetest.register_node("mobs:spell_fireball", {
 	description = "fireball spell: 13+2*magic skill/100 damage for 1 mana",
 	wield_image = "fireball_spell.png", -- TO DO : change texture

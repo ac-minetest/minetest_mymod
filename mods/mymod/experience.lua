@@ -309,7 +309,12 @@ function init_experience(player)
 	playerdata[name].magic = 0;
 	playerdata[name].max_mana = 0;
 	playerdata[name].mana = 0.;
-end
+
+	playerdata[name].slow = {time=0.,mag=0.}; -- 1st number duration, 2nd magnitude, if 0 no effect, otherwise duration
+	playerdata[name].poison = {time=0.,mag=0.}; -- if 0 no effect, otherwise duration in seconds
+
+	
+	end
 
 minetest.register_on_joinplayer(function(player) -- read data from file or create one
 	local name = player:get_player_name(); if name == nil then return end
@@ -363,6 +368,8 @@ end)
 
 -- MAGIC SPELLS
 
+-- HEALING
+
 minetest.register_craft({
 	output = "mymod:spell_heal_beginner",
 	recipe = {
@@ -388,7 +395,7 @@ minetest.register_node("mymod:spell_heal_beginner", {
 		end
 		if user:get_hp()<20 then
 			playerdata[name].mana = playerdata[name].mana-1
-			playerdata[name].speed = false -- remove ill speed effect
+			playerdata[name].speed = false -- neutralize ill speed effect
 			user:set_hp(user:get_hp()+5)
 			minetest.chat_send_player(name,"Healed 5 hp.")	
 		else minetest.chat_send_player(name,"Full health already.")	
@@ -396,6 +403,44 @@ minetest.register_node("mymod:spell_heal_beginner", {
 	end
 	,
 })
+
+-- SLOW
+
+minetest.register_craft({
+	output = "mymod:spell_slow",
+	recipe = {
+		{"bones:bones", "bones:bones","bones:bones"},
+		{"bones:bones", "mobs:cobweb","bones:bones"},
+		{"bones:bones", "bones:bones","bones:bones"}
+	}
+})
+
+
+minetest.register_node("mymod:spell_slow", {
+	description = "slow spell: slow 50% for 3 seconds",
+	wield_image = "slow.png",
+	wield_scale = {x=0.8,y=2.5,z=1.3}, 
+	tiles = {"slow.png"},
+	groups = {oddly_breakable_by_hand=1},
+	on_use = function(itemstack, user, pointed_thing)
+		local name = user:get_player_name(); if name == nil then return end
+		local t = minetest.get_gametime();if t-playerdata[name].spelltime<5 then return end;playerdata[name].spelltime = t; -- only at least 5s after last spell
+
+		if playerdata[name].mana<2 then
+			minetest.chat_send_player(name,"Need at least 2 mana"); return
+		end
+		
+		if pointed_thing.type ~= "object" then return end -- only slow objects
+		local object = pointed_thing.ref
+		if not object:is_player() then return end
+		local name = object:get_player_name(); if name == nil then return end
+		playerdata[name].slow.time = playerdata[name].slow.time + 3
+		playerdata[name].slow.mag  = 0.5		
+		minetest.sound_play("magic", {pos=target:getpos(),gain=1.0,max_hear_distance = 32,})
+	end
+	,
+})
+
 
 
 

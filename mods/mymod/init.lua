@@ -351,10 +351,35 @@ minetest.register_globalstep(function(dtime)
 			else
 				mult = 1.
 			end
-			-- check whether speed was already affected
-			if playerdata[name].speed == false then 
-				player:set_physics_override({speed =  mult});
+			-- slow effect:
+			
+			if playerdata[name].speed == true then -- active speed effects
+
+				if playerdata[name].slow~=nil then
+					if playerdata[name].slow.time>0 then
+						playerdata[name].slow.time = playerdata[name].slow.time - dtime
+						player:set_physics_override({speed =  playerdata[name].slow.mag});
+						else 
+						playerdata[name].slow.time = 0;
+						
+					end
+				end
+				else player:set_physics_override({speed =  mult});-- if speed was not already affected by something else do enviroment change
 			end
+			
+			-- poison effect
+
+			if playerdata[name].poison~=nil then
+				if playerdata[name].poison.time>0 then
+					playerdata[name].poison.time = playerdata[name].poison.time - dtime
+					player:set_hp(player:get_hp()-playerdata[name].poison.mag);
+					if player:get_hp()<=0 then playerdata[name].poison.time = 0 end
+					else 
+					playerdata[name].poison.time = 0;
+				end
+			end
+			
+
 			--minetest.chat_send_player(player:get_player_name(), "speed factor "..mult) --debug only
 				
 			--GRAVITY ADJUSTMENT above y = 50
