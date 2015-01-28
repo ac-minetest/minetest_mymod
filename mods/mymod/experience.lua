@@ -316,6 +316,7 @@ function init_experience(player)
 	
 	end
 
+	
 minetest.register_on_joinplayer(function(player) -- read data from file or create one
 	local name = player:get_player_name(); if name == nil then return end
 	
@@ -440,7 +441,7 @@ minetest.register_node("mymod:spell_slow", {
 		playerdata[name].slow.time = playerdata[name].slow.time + 3 -- ERROR READING table entry
 		playerdata[name].slow.mag  = 0.5
 		--playerdata[name].speed = true
-		minetest.sound_play("magic", {pos=target:getpos(),gain=1.0,max_hear_distance = 32,})
+		minetest.sound_play("magic", {pos=user:getpos(),gain=1.0,max_hear_distance = 32,})
 	end
 	,
 })
