@@ -121,6 +121,8 @@ minetest.register_on_dieplayer(
 		playerdata[name].xp = math.ceil(10*playerdata[name].xp*0.9)/10
 		playerdata[name].dig = math.ceil(10*playerdata[name].dig*0.9)/10
 		playerdata[name].magic = math.ceil(10*playerdata[name].magic*0.9)/10
+		playerdata[name].slow = {time=0, mag = 0}
+		playerdata[name].poison = {time=0, mag = 0}
 		playerdata[name].jail = 0
 		minetest.chat_send_player(name,"You loose 10% of your experience and skills because you died.");
 	end
