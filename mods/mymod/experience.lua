@@ -440,7 +440,7 @@ minetest.register_node("mymod:spell_slow", {
 		local name = object:get_player_name(); if name == nil then return end
 		playerdata[name].slow.time = playerdata[name].slow.time + 3 -- ERROR READING table entry
 		playerdata[name].slow.mag  = 0.5
-		--playerdata[name].speed = true
+		playerdata[name].speed = true
 		minetest.sound_play("magic", {pos=user:getpos(),gain=1.0,max_hear_distance = 32,})
 	end
 	,
