@@ -70,12 +70,12 @@ minetest.register_chatcommand("xp", {
 		"\nLEVELS for experience: " ..experience.levels_text.."\n"..
 		"LEVELS for dig skill: " ..experience.dig_levels_text..
 		"\nRULES: To use good weapons you need enough experience. To use good "..
-		"\n tools you need enough dig skill. To cast magic you need mana points" .. 
-		"\n(max_mana) and magic skill. Mana regenerates on its own, each 100"..
-		"\nmagic skill adds 0.1 mana regenerated per step. When you kill monster"..
-		"\nyou get experience, it depends on monster health and how away from"..
-		"\nspawn you are. You get dig skill by digging ores. Better ores give"..
-		"\nmore skill"
+		"tools you need enough dig skill. To cast magic you need mana points" .. 
+		"(max_mana) and magic skill. Mana regenerates on its own, each 100"..
+		"magic skill adds 0.1 mana regenerated per step. When you kill monster"..
+		"you get experience, it depends on monster health and how away from"..
+		"spawn you are. You get dig skill by digging ores. Better ores give"..
+		"more skill"
 		
 		local form  = 
 		"size[8,3.5]" ..  -- width, height
