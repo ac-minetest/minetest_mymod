@@ -398,6 +398,7 @@ minetest.register_node("mymod:spell_heal_beginner", {
 			playerdata[name].speed = false -- neutralize ill speed effect
 			user:set_hp(user:get_hp()+5)
 			minetest.chat_send_player(name,"Healed 5 hp.")	
+			minetest.sound_play("magic", {pos=user:getpos(),gain=1.0,max_hear_distance = 32,})
 		else minetest.chat_send_player(name,"Full health already.")	
 		end
 	end
@@ -434,8 +435,9 @@ minetest.register_node("mymod:spell_slow", {
 		local object = pointed_thing.ref
 		if not object:is_player() then return end
 		local name = object:get_player_name(); if name == nil then return end
-		playerdata[name].slow.time = playerdata[name].slow.time + 3
-		playerdata[name].slow.mag  = 0.5		
+		playerdata[name].slow.time = playerdata[name].slow.time + 3 -- ERROR READING table entry
+		playerdata[name].slow.mag  = 0.5
+		--playerdata[name].speed = true
 		minetest.sound_play("magic", {pos=target:getpos(),gain=1.0,max_hear_distance = 32,})
 	end
 	,

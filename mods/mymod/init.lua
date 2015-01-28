@@ -357,7 +357,7 @@ minetest.register_globalstep(function(dtime)
 
 				if playerdata[name].slow~=nil then
 					if playerdata[name].slow.time>0 then
-						playerdata[name].slow.time = playerdata[name].slow.time - dtime
+						playerdata[name].slow.time = playerdata[name].slow.time - dtime -- error reading table entry
 						player:set_physics_override({speed =  playerdata[name].slow.mag});
 						else 
 						playerdata[name].slow.time = 0;
