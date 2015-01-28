@@ -1152,7 +1152,7 @@ mobs:register_arrow("mobs:fireball_spell_projectile", {
 				full_punch_interval=1.0,
 				damage_groups = {fleshy=self.damage},
 				}, nil)
-			minetest.sound_play("tnt_explode", {pos=target:get_pos(),gain=1.0,max_hear_distance = 64,})
+			minetest.sound_play("tnt_explode", {pos=target:getpos(),gain=1.0,max_hear_distance = 64,})
 	end,
 })
 
