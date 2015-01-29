@@ -3,11 +3,11 @@
 local experience = {}
 
 -- level requirements swords: 2:stone, 3:steel, 4:bronze, 5:silver, 7:mese or guns, 8:diamond, 10: mithril
-experience.levels = {[2]=15,[3]=70,[4]=200,[5]=400,[6]=1000,[7]=2000,[8]=4000, [9] = 8000, [10] = 16000}
+experience.levels = {[2]=40,[3]=100,[4]=200,[5]=400,[6]=1000,[7]=2000,[8]=4000, [9] = 8000, [10] = 16000}
 experience.levels_text = ""; for i,v in pairs(experience.levels) do experience.levels_text = experience.levels_text .. i .."/".. v .. "," end
 
 -- level requirements picks: 2:stone, 3:steel, 4:bronze, 5:silver, 7:mese: 8:diamond, 10 mithril
-experience.dig_levels = {[2]=40,[3]=160,[4]=320,[5]=640,[6]=1280,[7]=2560,[8]=5120,[9]=10240,[10]=20480}
+experience.dig_levels = {[2]=15,[3]=120,[4]=320,[5]=640,[6]=1280,[7]=2560,[8]=5120,[9]=10240,[10]=20480}
 experience.dig_levels_text = ""; for i,v in pairs(experience.dig_levels) do experience.dig_levels_text = experience.dig_levels_text .. i .."/".. v .. "," end
 
 
