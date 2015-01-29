@@ -69,7 +69,7 @@ minetest.register_chatcommand("xp", {
 		"\nmagic skill points " .. playerdata[name].magic .. ", maximum mana " ..playerdata[name].max_mana .."\n"..
 		"\nLEVELS for experience: " ..experience.levels_text.."\n"..
 		"LEVELS for dig skill: " ..experience.dig_levels_text..
-		"\nRULES: To use good weapons you need enough experience. To use good "..
+		"\nRULES: To use good weapons you need enough experience. To use good ".. -- removed newlines cause maybe there's autowrap?
 		"tools you need enough dig skill. To cast magic you need mana points" .. 
 		"(max_mana) and magic skill. Mana regenerates on its own, each 100"..
 		"magic skill adds 0.1 mana regenerated per step. When you kill monster"..
@@ -79,7 +79,7 @@ minetest.register_chatcommand("xp", {
 		
 		local form  = 
 		"size[8,3.5]" ..  -- width, height
-		"textarea[0,0;8.5,3.5;text1;Player "..name.. " STATISTICS;".. text.."]"..
+		"textarea[0,0;8.5,3.5;text1;Player "..name.. " STATISTICS;".. text.."]".. -- maybe textlist would enable scroll?
 		"button[0,3;4,1;button1;Convert 100 XP to 100 magic skill]"..
 		"button[4,3;3.7,1;button2;Convert 100 XP to 1 max_mana]"
 		
