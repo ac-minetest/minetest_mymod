@@ -244,7 +244,7 @@ armor.get_player_skin = function(self, name)
 end
 
 armor.get_armor_formspec = function(self, name)
-	if name ~= nil then --disableclouds
+	if name ~= nil and armor.textures[name]~=nil then --disableclouds
 		local formspec = armor.formspec:gsub("player_name", name)
 		formspec = formspec:gsub("armor_preview", armor.textures[name].preview)
 		formspec = formspec:gsub("armor_level", armor.def[name].level)
