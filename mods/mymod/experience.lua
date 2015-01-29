@@ -3,7 +3,7 @@
 local experience = {}
 
 -- level requirements swords: 2:stone, 3:steel, 4:bronze, 5:silver, 7:mese or guns, 8:diamond, 10: mithril
-experience.levels = {[2]=40,[3]=100,[4]=200,[5]=400,[6]=1000,[7]=2000,[8]=4000, [9] = 8000, [10] = 16000}
+experience.levels = {[2]=15,[3]=70,[4]=200,[5]=400,[6]=1000,[7]=2000,[8]=4000, [9] = 8000, [10] = 16000}
 experience.levels_text = ""; for i,v in pairs(experience.levels) do experience.levels_text = experience.levels_text .. i .."/".. v .. "," end
 
 -- level requirements picks: 2:stone, 3:steel, 4:bronze, 5:silver, 7:mese: 8:diamond, 10 mithril
@@ -423,7 +423,7 @@ minetest.register_craft({
 
 
 minetest.register_node("mymod:spell_slow", {
-	description = "slow spell: slow 50% for 3 seconds",
+	description = "slow spell: slow 50% for 3+magic skill/500 seconds",
 	wield_image = "slow.png",
 	wield_scale = {x=0.8,y=2.5,z=1.3}, 
 	tiles = {"slow.png"},
@@ -436,11 +436,14 @@ minetest.register_node("mymod:spell_slow", {
 			minetest.chat_send_player(name,"Need at least 2 mana"); return
 		end
 		
+		local skill = playerdata[name].magic;
+		
 		if pointed_thing.type ~= "object" then return end -- only slow objects
 		local object = pointed_thing.ref
 		if not object:is_player() then return end
-		local name = object:get_player_name(); if name == nil then return end
-		playerdata[name].slow.time = playerdata[name].slow.time + 3 -- ERROR READING table entry
+		name = object:get_player_name(); if name == nil then return end
+		playerdata[name].slow.time = playerdata[name].slow.time + 3+skill/500 -- ERROR READING table entry
+		minetest.chat_send_player(name,"<EFFECT> slowed for ".. playerdata[name].slow.time .. " seconds.")
 		playerdata[name].slow.mag  = 0.5
 		playerdata[name].speed = true
 		minetest.sound_play("magic", {pos=user:getpos(),gain=1.0,max_hear_distance = 32,})
