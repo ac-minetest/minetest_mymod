@@ -357,7 +357,7 @@ minetest.register_globalstep(function(dtime)
 
 				if playerdata[name].slow~=nil then
 					if playerdata[name].slow.time>0 then
-						playerdata[name].slow.time = playerdata[name].slow.time - dtime -- error reading table entry
+						playerdata[name].slow.time = playerdata[name].slow.time - MYMOD_UPDATE_TIME -- error reading table entry
 						player:set_physics_override({speed =  playerdata[name].slow.mag});
 						else 
 						playerdata[name].slow.time = 0; playerdata[name].speed = false;
@@ -371,7 +371,7 @@ minetest.register_globalstep(function(dtime)
 
 			if playerdata[name].poison~=nil then
 				if playerdata[name].poison.time>0 then
-					playerdata[name].poison.time = playerdata[name].poison.time - dtime
+					playerdata[name].poison.time = playerdata[name].poison.time - MYMOD_UPDATE_TIME
 					player:set_hp(player:get_hp()-playerdata[name].poison.mag);
 					if player:get_hp()<=0 then playerdata[name].poison.time = 0 end
 					else 
