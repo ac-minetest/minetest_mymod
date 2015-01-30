@@ -1,5 +1,5 @@
 -- add experience and skill points on various events
--- 2 kinds of experience for now: experience and dig skill
+-- 3 kinds of experience for now: experience (fighting), dig skill, magic skill & max_mana
 local experience = {}
 
 -- level requirements swords: 2:stone, 3:steel, 4:bronze, 5:silver, 7:mese or guns, 8:diamond, 10: mithril
@@ -443,7 +443,7 @@ minetest.register_node("mymod:spell_slow", {
 		
 		if object:is_player() then
 			name = object:get_player_name(); if name == nil then return end
-			playerdata[name].slow.time = playerdata[name].slow.time + 3+skill/500 
+			playerdata[name].slow.time = playerdata[name].slow.time + 3+math.ceil(10*skill/500)/10
 			minetest.chat_send_player(user:get_player_name(),"<SPELL> target slowed 50% for ".. playerdata[name].slow.time .. " seconds.")
 			minetest.chat_send_player(name,"<EFFECT> slowed 50% for ".. playerdata[name].slow.time .. " seconds.")
 			playerdata[name].slow.mag  = 0.5
@@ -455,7 +455,7 @@ minetest.register_node("mymod:spell_slow", {
 		if object:get_luaentity() == nil then return end
 		if object:get_luaentity().type == "monster" then
 			object = object:get_luaentity();
-			object.slow.time = object.slow.time+3+skill/500
+			object.slow.time = object.slow.time+3+math.ceil(10*skill/500)/10
 			object.slow.mag = 0.5
 			minetest.chat_send_player(user:get_player_name(),"<SPELL> target slowed 50% for ".. object.slow.time .. " seconds.")
 			minetest.sound_play("magic", {pos=user:getpos(),gain=1.0,max_hear_distance = 32,})
