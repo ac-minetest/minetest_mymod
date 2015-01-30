@@ -54,6 +54,7 @@ function mobs:register_mob(name, def)
 		
 		stimer = 0,
 		timer = 0,
+		slow = {time=0,mag=0}, --rnd
 		env_damage_timer = 0, -- only if state = "attack"
 		attack = {player=nil, dist=nil},
 		state = "stand",
@@ -536,17 +537,25 @@ function mobs:register_mob(name, def)
 					yaw = yaw+math.pi
 				end
 				self.object:setyaw(yaw)
+				
+				-- rnd slow effect
+				local mult = 1;
+				if self.slow.time>0 then
+					self.slow.time = self.slow.time - dtime; mult = self.slow.mag;					
+					else self.slow.time = 0;
+				end --
+				
 				if self.attack.dist > 2 then
 					if not self.v_start then
 						self.v_start = true
-						self.set_velocity(self, self.run_velocity)
+						self.set_velocity(self, self.run_velocity*mult) --rnd
 					else
 						if self.jump and self.get_velocity(self) <= 0.5 and self.object:getvelocity().y == 0 then
 							local v = self.object:getvelocity()
 							v.y = 6
 							self.object:setvelocity(v)
 						end
-						self.set_velocity(self, self.run_velocity)
+						self.set_velocity(self, self.run_velocity*mult) --rnd
 					end
 					self:set_animation("run")
 				else
