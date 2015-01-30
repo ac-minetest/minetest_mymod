@@ -438,6 +438,9 @@ minetest.register_node("mymod:spell_slow", {
 		
 		local skill = playerdata[name].magic;
 		
+		if pointed_thing.type ~= "object" then return end -- only slow objects
+		local object = pointed_thing.ref
+		
 		if object:is_player() then
 			name = object:get_player_name(); if name == nil then return end
 			playerdata[name].slow.time = playerdata[name].slow.time + 3+skill/500 
@@ -448,11 +451,6 @@ minetest.register_node("mymod:spell_slow", {
 			minetest.sound_play("magic", {pos=user:getpos(),gain=1.0,max_hear_distance = 32,})
 			return
 		end
-		
-		
-		
-		if pointed_thing.type ~= "object" then return end -- only slow objects
-		local object = pointed_thing.ref
 		
 		if object:get_luaentity() == nil then return end
 		if object:get_luaentity().type == "monster" then
