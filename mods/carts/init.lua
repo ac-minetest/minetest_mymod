@@ -506,18 +506,18 @@ minetest.register_node("carts:powerrail", {
 	
 	after_place_node = function(pos, placer, itemstack)
 		if not mesecon then
-			minetest.env:get_meta(pos):set_string("cart_acceleration", "0.5")
+			minetest.env:get_meta(pos):set_string("cart_acceleration", "1") --rnd
 		end
 	end,
 	
 	mesecons = {
 		effector = {
 			action_on = function(pos, node)
-				minetest.env:get_meta(pos):set_string("cart_acceleration", "0.5")
+				minetest.env:get_meta(pos):set_string("cart_acceleration", "1") -- rnd
 			end,
 			
 			action_off = function(pos, node)
-				minetest.env:get_meta(pos):set_string("cart_acceleration", "0")
+				minetest.env:get_meta(pos):set_string("cart_acceleration", "1") -- rnd
 			end,
 		},
 	},
