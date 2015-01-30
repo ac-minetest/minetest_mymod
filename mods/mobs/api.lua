@@ -66,7 +66,11 @@ function mobs:register_mob(name, def)
 		
 		do_attack = function(self, player, dist)
 			      if self.state ~= "attack" then
---					if self.sounds.war_cry then
+					--rnd attack
+					if self.hp_max>10 then -- small monsters are quiet
+						minetest.sound_play("spotted", {pos=self.object:getpos(),gain=1.0,max_hear_distance = 32,})
+					end
+				  --					if self.sounds.war_cry then
 --						if math.random(0,100) < 90 then
 --							minetest.sound_play(self.sounds.war_cry,{ object = self.object })
 --						end
@@ -575,6 +579,11 @@ function mobs:register_mob(name, def)
 								full_punch_interval=1.0,
 								damage_groups = {fleshy=self.damage*distance} -- rnd: damage done here, enhance it?
 							}, vec)
+							
+							
+							-- rnd: extra attack effects here...
+							minetest.sound_play("bite", {pos=p,gain=1.0,max_hear_distance = 32,})
+							
 							if self.attack.player:get_hp() <= 0 then
 								self.state = "stand"
 								self:set_animation("stand")
