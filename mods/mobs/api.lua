@@ -723,7 +723,7 @@ function mobs:register_mob(name, def)
 					local name = hitter:get_player_name();
 					local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
 					local distance = get_distance(static_spawnpoint,pos) 
-					playerdata[name].xp = playerdata[name].xp + 0.1*self.hp_max*(1+distance/100)
+					playerdata[name].xp = playerdata[name].xp + 0.15*self.hp_max*(1+distance/100)
 					playerdata[name].xp = math.ceil(playerdata[name].xp*10)/10
 					
 --					if self.sounds.death ~= nil then
