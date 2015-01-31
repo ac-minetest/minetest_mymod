@@ -1160,13 +1160,13 @@ mobs:register_arrow("mobs:fireball_spell_projectile", {
 				end
 			end 
 			
-			if node.name=="mymod:acid_source" then -- changes acid source to flowing
+			if node.name=="mymod:acid_source_active" then -- changes acid source to flowing
 				if minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z}).name=="air" then
-					minetest.set_node(pos, {name="mymod:acid_flowing"}) 
+					minetest.set_node(pos, {name="mymod:acid_flowing_active"}) 
 				end
 			end 
 			
-			if node.name=="mymod:acid_flowing" then -- changes acid source to flowing
+			if node.name=="mymod:acid_flowing_active" then -- changes acid source to flowing
 				if minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z}).name=="air" then
 					minetest.set_node(pos, {name="air"}) 
 				end
