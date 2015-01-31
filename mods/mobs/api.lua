@@ -1092,9 +1092,12 @@ end
 minetest.register_node("mobs:spell_fireball", {
 	description = "fireball spell: 13+2*magic skill/100 damage for 1 mana",
 	wield_image = "fireball_spell.png", -- TO DO : change texture
-	wield_scale = {x=0.8,y=2.5,z=1.3}, 
+	wield_scale = {x=0.6,y=2.,z=1.}, 
+	drawtype = "allfaces",
+	paramtype = "light",
+	light_source = 10,
 	tiles = {"fireball_spell.png"},
-	groups = {oddly_breakable_by_hand=1},
+	groups = {oddly_breakable_by_hand=3},
 	on_use = function(itemstack, user, pointed_thing)
 		local name = user:get_player_name(); if name == nil then return end
 		local t = minetest.get_gametime();if t-playerdata[name].spelltime<1 then return end;playerdata[name].spelltime = t;
@@ -1154,6 +1157,12 @@ mobs:register_arrow("mobs:fireball_spell_projectile", {
 			if node.name=="default:ice" then 
 				if minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z}).name=="air" then
 					minetest.set_node(pos, {name="default:water_source"}) 
+				end
+			end 
+			
+			if node.name=="mymod:acid_source" then -- changes acid source to flowing
+				if minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z}).name=="air" then
+					minetest.set_node(pos, {name="mymod:acid_flowing"}) 
 				end
 			end 
 			

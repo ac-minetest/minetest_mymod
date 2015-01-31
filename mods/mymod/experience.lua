@@ -376,7 +376,7 @@ end)
 -- HEALING
 
 minetest.register_craft({
-	output = "mymod:spell_heal_beginner",
+	output = "mymod:spell_heal",
 	recipe = {
 		{"bones:bones", "bones:bones","bones:bones"},
 		{"bones:bones", "default:diamond","bones:bones"},
@@ -385,7 +385,7 @@ minetest.register_craft({
 })
 
 
-minetest.register_node("mymod:spell_heal_beginner", {
+minetest.register_node("mymod:spell_heal", {
 	description = "beginner healing spell: heal 5 hp for 1 mana, removes basic ill effects",
 	wield_image = "health.png",
 	wield_scale = {x=0.8,y=2.5,z=1.3}, 

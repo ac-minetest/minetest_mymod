@@ -322,6 +322,7 @@ dofile(minetest.get_modpath("mymod").."/experience.lua")
 dofile(minetest.get_modpath("mymod").."/landmine.lua")
 dofile(minetest.get_modpath("mymod").."/extractor.lua")
 dofile(minetest.get_modpath("mymod").."/freezing.lua")
+dofile(minetest.get_modpath("mymod").."/acid.lua")
 
 -- players walk slower away from spawn, mana regenerates
 local time = 0
