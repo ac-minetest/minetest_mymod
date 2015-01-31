@@ -12,7 +12,7 @@ mobs:register_mob("mobs:bee", {
 	makes_footstep_sound = false,
 	monsterdetect = false,
 	walk_velocity = 1,
-	view_range = 4,
+	view_range = 6,
 	armor = 100,
 	damage = 4,
 	drops = {
@@ -42,7 +42,7 @@ mobs:register_mob("mobs:bee", {
 	end,
 jump = true,
 step = 1,
-passive = true,
+passive = false,
 })
 mobs:register_spawn("mobs:bee", {"group:flower", "default:dirt_with_grass","default:dirt"}, 20, -1, 700, 10, 31000)
 
@@ -69,7 +69,7 @@ minetest.register_craftitem("mobs:honey", {
 
 minetest.register_craft({
 	type = "cooking",
-	output = "mobs:med_cooked",
+	output = "mobs:honey", --rnd "mobs:med_cooked",
 	recipe = "mobs:bee",
 	cooktime = 5,
 })

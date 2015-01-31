@@ -1,6 +1,6 @@
 -- code borrowed from carbone mod by Calinou
 
-minetest.register_node("mymod:acid_flowing", {
+minetest.register_node("mymod:acid_flowing_active", {
 	description = "Flowing Acid",
 	inventory_image = minetest.inventorycube("mymod_acid.png"),
 	drawtype = "flowingliquid",
@@ -19,6 +19,7 @@ minetest.register_node("mymod:acid_flowing", {
 	},
 	alpha = WATER_ALPHA,
 	paramtype = "light",
+	param1 = 3,
 	light_source = 8,
 	paramtype2 = "flowingliquid",
 	walkable = false,
@@ -28,15 +29,16 @@ minetest.register_node("mymod:acid_flowing", {
 	drop = "",
 	drowning = 2,
 	liquidtype = "flowing",
-	liquid_alternative_flowing = "mymod:acid_flowing",
-	liquid_alternative_source = "mymod:acid_source",
+	liquid_alternative_flowing = "mymod:acid_flowing_active",
+	liquid_alternative_source = "mymod:acid_source_active",
 	liquid_viscosity = WATER_VISC,
 	damage_per_second = 2,
 	post_effect_color = {a = 120, r = 50, g = 90, b = 30},
 	groups = {water = 3, acid = 3, liquid = 3, puts_out_fire = 1, not_in_creative_inventory = 1},
 })
 
-minetest.register_node("mymod:acid_source", {
+
+minetest.register_node("mymod:acid_source_active", {
 	description = "Acid Source",
 	inventory_image = minetest.inventorycube("mymod_acid.png"),
 	drawtype = "liquid",
@@ -53,6 +55,7 @@ minetest.register_node("mymod:acid_source", {
 	},
 	alpha = WATER_ALPHA,
 	paramtype = "light",
+	param1 = 3,
 	light_source = 8,
 	walkable = false,
 	pointable = false,
@@ -61,13 +64,58 @@ minetest.register_node("mymod:acid_source", {
 	drop = "",
 	drowning = 2,
 	liquidtype = "source",
-	liquid_alternative_flowing = "mymod:acid_flowing",
-	liquid_alternative_source = "mymod:acid_source",
+	liquid_alternative_flowing = "mymod:acid_flowing_active",
+	liquid_alternative_source = "mymod:acid_source_active",
 	liquid_viscosity = WATER_VISC,
 	damage_per_second = 2, 
 	post_effect_color = {a = 120, r = 50, g = 90, b = 30},
 	groups = {water = 3, acid = 3, liquid = 3, puts_out_fire = 1},
 })
+
+--  duplicate active source/flowing but make it passive
+
+-- minetest.register_node("mymod:acid_source_passive", minetest.registered_nodes["mymod:acid_source_active"])
+-- minetest.register_node("mymod:acid_flowing_passive", minetest.registered_nodes["mymod:acid_flowing_active"])
+
+
+-- minetest.register_abm({ -- water polution
+	-- nodenames = {"mymod:acid_source_active"},
+	-- neighbors = {""},
+	-- interval = 20,
+	-- chance = 1,
+	-- action = function(pos, node, active_object_count, active_object_count_wider)
+		
+		-- local meta = minetest.get_meta(pos);--if meta == nil then return end
+		-- local life_count = node.param1;
+		-- if life_count <= 0  then  minetest.set_node(pos, {name="mymod:acid_source_passive"})  return end -- spreads 3 around
+		-- local meta_new,p,neighbor
+		
+		-- minetest.chat_send_all("debug count "..life_count)
+		
+		-- -- check neighbors
+		-- local dir = {
+		-- {x=-1,y=0,z=0},
+		-- {x=1,y=0,z=0},
+		-- {x=0,y=-1,z=0},
+		-- {x=0,y=1,z=0},
+		-- {x=0,y=0,z=-1},
+		-- {x=0,y=0,z=1}		
+		-- }; 
+		
+		-- for i=1,6 do
+			-- p ={x=pos.x+dir[i].x,y=pos.y+dir[i].y,z=pos.z+dir[i].z};
+			-- neighbor = minetest.get_node(p);
+			
+			-- if neighbor.name == "default:water_source" then
+				-- minetest.set_node(p, {name="mymod:acid_source_active", param1 = life_count-1 })
+			-- end
+		-- end
+
+	-- end,
+-- }) 
+
+
+-- DIGGING MAKES ACID WITH SMALL PROBABILITY
 
 -- when stones digged under -10 they turn to acid source with small probability
 local function overwrite(name)
@@ -86,12 +134,11 @@ local function overwrite(name)
 		--math.randomseed(pos.y)
 		local i = math.random(100) -- probability if spawns acid
 		if i == 1 then
-			minetest.set_node(pos, {name="mymod:acid_source"})
+			minetest.set_node(pos, {name="mymod:acid_source_active"})
 		end
 	end
 	
 	
 	minetest.register_node(":"..name, table2)
 end 
-
 overwrite("default:stone")

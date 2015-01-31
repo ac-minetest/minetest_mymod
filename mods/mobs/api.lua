@@ -1166,6 +1166,12 @@ mobs:register_arrow("mobs:fireball_spell_projectile", {
 				end
 			end 
 			
+			if node.name=="mymod:acid_flowing" then -- changes acid source to flowing
+				if minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z}).name=="air" then
+					minetest.set_node(pos, {name="air"}) 
+				end
+			end 
+			
 			--furnace gets fuel for 5 secs 
 			if node.name == "default:furnace" or node.name == "default:furnace_active" then
 				local meta = minetest.get_meta(pos) 
