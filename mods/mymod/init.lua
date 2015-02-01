@@ -65,10 +65,10 @@ end,
 
 
 
-minetest.register_abm({ -- lava destroyes bones (every?) after 5 minutes
+minetest.register_abm({ -- lava destroyes bones (every?) after 10 minutes
 	nodenames = {"bones:bones"},
 	neighbors = {"default:lava_flowing","default:lava_source"},
-	interval = 300,
+	interval = 600,
 	chance = 1,
 	action = function(pos, node, active_object_count, active_object_count_wider)
 		minetest.set_node(pos, {name="default:lava_source"})
@@ -77,157 +77,12 @@ minetest.register_abm({ -- lava destroyes bones (every?) after 5 minutes
 
 
 
--- rnd : CRAFTING DIRT FROM BONES
-
-minetest.register_craft({
-	output = "default:dirt",
-	recipe = {
-		{"bones:bones", "bones:bones","bones:bones"},
-		{"bones:bones", "bones:bones","bones:bones"},
-		{"bones:bones", "bones:bones","bones:bones"}
-	}
-})
-
-minetest.register_craft({
-	output = "default:sand",
-	recipe = {
-		{"bones:bones", "bones:bones"},
-		{"bones:bones", "bones:bones"}
-	}
-})
-
-minetest.register_craft({
-	output = "bones:bones",
-	recipe = {
-		{"default:stone", "default:tree","default:stone"},
-	}
-})
-
-minetest.register_craft({
-	output = "default:desert_cobble",
-	recipe = {
-		{"default:stone", "default:sandstone","default:stone"},
-	}
-})
-
-minetest.register_craft({
-	output = "default:clay",
-	recipe = {
-		{"bones:bones 4"},
-	}
-})
-
-
-
-minetest.register_craft({
-	output = "default:sapling",
-	recipe = {
-		{"default:dirt", "bones:bones"}
-	}
-})
-
-
-minetest.register_craft({
-	output = "default:papyrus",
-	recipe = {
-		{"default:dirt","default:leaves"},
-		}
-})
-
-minetest.register_craft({
-	output = "default:cactus",
-	recipe = {
-		{"default:sand","default:leaves"},
-		}
-})
-
-
-minetest.register_craft({
-	output = "farming:seed_wheat",
-	recipe = {
-		{"default:dirt", "papyrus"}
-	}
-})
-
-minetest.register_craft({
-	output = "farming:seed_cotton",
-	recipe = {
-		{"default:dirt", "farming:seed_wheat"}
-	}
-})
-
-minetest.register_craft({
-	output = "default:gravel",
-	recipe = {
-		{"default:stone"},
-	}
-})
-
-minetest.register_craft({
-	output = "default:pine_sapling",
-	recipe = {
-		{"default:dirt","default:cactus"},
-	}
-})
-
-minetest.register_craft({
-	output = "default:junglesapling",
-	recipe = {
-		{"default:dirt","default:pine_sapling"},
-	}
-})
-
---flowers
-minetest.register_craft({
-	output = "flowers:dandelion_white",
-	recipe = {
-		{"default:dirt","default:dirt","default:dirt"},
-		{"default:dirt","default:diamond","default:dirt"},
-		{"default:dirt","default:dirt","default:dirt"},
-	}
-})
-
-minetest.register_craft({
-	output = "flowers:dandelion_yellow",
-	recipe = {
-		{"default:dirt","flowers:dandelion_white","default:gold_ingot"},
-	}
-})
-
-minetest.register_craft({
-	output = "flowers:geranium",
-	recipe = {
-		{"default:dirt","flowers:dandelion_white","moreores:mithril_ingot"},
-	}
-})
-
-
-minetest.register_craft({
-	output = "flowers:flower_rose",
-	recipe = {
-		{"default:dirt","flowers:dandelion_white","default:brick"},
-	}
-})
-
-minetest.register_craft({
-	output = "flowers:tulip",
-	recipe = {
-		{"default:dirt","flowers:dandelion_yellow","flowers:flower_rose"},
-	}
-})
-
-
-minetest.register_craft({
-	output = "flowers:tulip",
-	recipe = {
-		{"default:dirt","flowers:geranium","flowers:	rose"},
-	}
-})
-
-
--- here various player stats are saved
+-- here various player stats are saved (experience, skills, effects)
 playerdata = {};
+
 minetest.register_on_joinplayer(function(player) -- init stuff on player join
+
+	
 	local name = player:get_player_name();
 	if name == nil then return end -- ERROR!!!
 	
@@ -323,8 +178,11 @@ dofile(minetest.get_modpath("mymod").."/landmine.lua")
 dofile(minetest.get_modpath("mymod").."/extractor.lua")
 dofile(minetest.get_modpath("mymod").."/freezing.lua")
 dofile(minetest.get_modpath("mymod").."/acid.lua")
+dofile(minetest.get_modpath("mymod").."/recipes.lua")
 
--- players walk slower away from spawn, mana regenerates
+-- MAIN PROCESSING STEP:
+-- players walk slower away from spawn, mana regenerates, application of various effects
+
 local time = 0
 MYMOD_UPDATE_TIME = 2
 
@@ -437,43 +295,11 @@ minetest.register_globalstep(function(dtime)
 		end
 end)
 
--- MY FORMSPEC INTRODUCTORY EXAMPLE:
 
-minetest.register_chatcommand("form", {
-    description = "testing formspec",
-    privs = {},
-    func = function(name, param)
-		local text = "sample text, test. hello!\nyes? no?" -- bad idea to include weird chars here
-		local form  = 
-		"size[8,9]" ..  -- width, height
-		--"list[context;main;0,0;8,4;]" .. -- creates empty click sensitive window 
-		"textarea[0,0;8,4;text1;TEXTAREA1;"..text.."]".. -- writable area that can be used to send text
-		"button[0,4;2,1;button1;OK]"..
-		"field[1,6;8,1;field1;FIELD1;"..text.."]"..
-		"label[1,7;"..text.."]"
-		--"list[current_player;main;0,5;8,4;]" -- adds player inventory
-		
-		
-		minetest.show_formspec(name, "TEST_FORM", form) -- displays form
-	end,	
-})
 
-minetest.register_on_player_receive_fields(function(player, formname, fields) -- this gets called if text sent from form or form exit
-    if formname == "TEST_FORM" then -- Replace this with your form name
-		minetest.chat_send_all("Player "..player:get_player_name().." submitted fields "..dump(fields))
-		
-		if fields["text1"]~=nil then -- without this server crash when button not pressed - when you exit form for example
-			minetest.chat_send_all("Player "..player:get_player_name().." pressed the button and sent textarea ".. fields["text1"] )
-		end
-		
-		if fields["field1"]~=nil then -- without this server crash when button not pressed - when you exit form for example
-			minetest.chat_send_all("Player "..player:get_player_name().." pressed the button and sent field ".. fields["field1"] )
-		end
-	
-    end
-end)
 
--- MY HUD INTRODUCTORY EXAMPLE:
+ 
+ -- MY HUD INTRODUCTORY EXAMPLE:
 
 function init_mana_hud(player)
 local name = player:get_player_name();

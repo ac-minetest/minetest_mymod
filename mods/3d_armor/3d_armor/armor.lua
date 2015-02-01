@@ -32,7 +32,8 @@ armor = {
 		.."image[2,0.75;2,4;armor_preview]"
     	.."list[current_player;main;0,4.5;8,4;]"
     	.."list[current_player;craft;4,1;3,3;]"
-    	.."list[current_player;craftpreview;7,2;1,1;]",
+    	.."list[current_player;craftpreview;7,2;1,1;]"..
+		"button[0,0;1,1;xp;XP]", -- rnd change for new gui
 	textures = {},
 	default_skin = "character",
 }

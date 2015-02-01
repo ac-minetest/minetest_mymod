@@ -90,6 +90,7 @@ function default.player_set_animation(player, anim_name, speed)
 	player:set_animation(anim, speed or model.animation_speed, animation_blend)
 end
 
+
 -- Update appearance when the player joins
 minetest.register_on_joinplayer(function(player)
 	default.player_attached[player:get_player_name()] = false

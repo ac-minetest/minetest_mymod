@@ -279,6 +279,8 @@ minetest.register_on_player_receive_fields(function(player,formname,fields)
 			return
 		end
 		
+		-- fix here
+		
 		
 		minetest.show_formspec(
 			player:get_player_name(), formname,

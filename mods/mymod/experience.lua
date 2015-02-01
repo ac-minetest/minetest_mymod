@@ -44,26 +44,17 @@ local j=1
 	return j
 end
 
--- chat command to see experience
-minetest.register_chatcommand("xp", {
-    description = "Displays your experience, /xp NAME displays other players experience",
-    privs = {},
-    func = function(name,param)
-        local player = minetest.env:get_player_by_name(name)
-		if player == nil then
-            -- just a check to prevent the server crashing
-            return false
-        end
-		if param~="" and param~=nil then -- display others xp
-			if playerdata[param] == nil or playerdata[param].dig==nil then return end	
-			minetest.chat_send_player(name,"XP ".. playerdata[param].xp .."/level ".. get_level(playerdata[param].xp) .. ", dig skill " ..playerdata[param].dig .. "/level " ..get_dig_level(playerdata[param].dig) )
-			minetest.chat_send_player(name,"magic "..playerdata[param].magic .. ", max_mana ".. playerdata[param].max_mana)
-		return
-		end
-		
-		if playerdata[name] == nil or playerdata[name].dig==nil then return end	
-		-- TO DO: paste form here..
-		
+-- -- rnd : changed gui (inside armor mod)
+
+minetest.register_on_player_receive_fields(function(player, formname, fields) 
+
+	--minetest.chat_send_all("formname " .. formname .. " fields " .. dump(fields))
+	
+	local name = player:get_player_name(); if name==nil then return end;
+	if playerdata[name] == nil or playerdata[name].dig==nil then return end	
+	
+	if formname == "" and fields.xp~=nil then
+		if fields.xp == "XP" then		
 		local text = "Experience: points " ..playerdata[name].xp .. "/level " ..get_level(playerdata[name].xp) .."\n"..
 		"SKILLS\ndig skill points " .. playerdata[name].dig .. "/level " ..get_dig_level(playerdata[name].dig) ..
 		"\nmagic skill points " .. playerdata[name].magic .. ", maximum mana " ..playerdata[name].max_mana .."\n"..
@@ -84,6 +75,25 @@ minetest.register_chatcommand("xp", {
 		"button[4,3;3.7,1;button2;Convert 100 XP to 1 max_mana]"
 		
 		minetest.show_formspec(name, "mymod:form_experience", form) -- displays form
+		end
+	end
+end)
+
+-- chat command to see experience
+minetest.register_chatcommand("xp", {
+    description = "Displays your experience, /xp NAME displays other players experience",
+    privs = {},
+    func = function(name,param)
+        local player = minetest.env:get_player_by_name(name)
+		if player == nil then
+            -- just a check to prevent the server crashing
+            return false
+        end
+		if param=="" or param==nil then param = name end
+		
+		if playerdata[param] == nil or playerdata[param].dig==nil then return end	
+		minetest.chat_send_player(name,"XP ".. playerdata[param].xp .."/level ".. get_level(playerdata[param].xp) .. ", dig skill " ..playerdata[param].dig .. "/level " ..get_dig_level(playerdata[param].dig) )
+		minetest.chat_send_player(name,"magic "..playerdata[param].magic .. ", max_mana ".. playerdata[param].max_mana)
 end,	
 })
 
