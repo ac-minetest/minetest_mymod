@@ -22,10 +22,10 @@ experience.xp ={
 ["default:stone_with_gold"] = 8,
 ["default:stone_with_mese"] = 16,
 ["default:stone_with_diamond"] = 24,
-["moreores:mineral_mithril"] = 32
+["moreores:mineral_mithril"] = 32,
 ["default:mese"] = 32,
 ["default:nyancat_rainbow"] = 32,
-["default:nyancat"] = 64,
+["default:nyancat"] = 64
 }
 
 function get_level(xp) -- given xp, it returns level
