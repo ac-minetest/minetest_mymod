@@ -13,6 +13,7 @@ experience.dig_levels_text = ""; for i,v in pairs(experience.dig_levels) do expe
 
 experience.xp ={
 ["default:stone"]=0.1,
+["default:desert_stone"]=0.5,
 ["default:stone_with_coal"] = 1,
 ["moreores:mineral_tin"] = 2,
 ["default:stone_with_copper"]= 4,
@@ -22,6 +23,9 @@ experience.xp ={
 ["default:stone_with_mese"] = 16,
 ["default:stone_with_diamond"] = 24,
 ["moreores:mineral_mithril"] = 32
+["default:mese"] = 32,
+["default:nyancat_rainbow"] = 32,
+["default:nyancat"] = 64,
 }
 
 function get_level(xp) -- given xp, it returns level
