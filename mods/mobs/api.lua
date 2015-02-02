@@ -67,6 +67,15 @@ function mobs:register_mob(name, def)
 		
 		do_attack = function(self, player, dist)
 			      if self.state ~= "attack" then
+					
+					-- rnd : remove monster if it attacks inside spawn area
+					local pos  = self.object:getpos();
+					local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
+					if ((pos.x-static_spawnpoint.x)^2+(pos.y-static_spawnpoint.y)^2+(pos.z-static_spawnpoint.z)^2)^0.5 < 50 then
+						self.object:remove()
+						return
+					end
+					
 					--rnd attack
 					if self.hp_max>10 then -- small monsters are quiet
 						minetest.sound_play("spotted", {pos=self.object:getpos(),gain=1.0,max_hear_distance = 32,})
