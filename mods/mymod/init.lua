@@ -197,15 +197,15 @@ minetest.register_globalstep(function(dtime)
 	local pos,dist
 	local player
 	local t
-	
 		for _,player in ipairs(minetest.get_connected_players()) do 
 			pos = player:getpos()
 			local name = player:get_player_name();
+			local privs = minetest.get_player_privs(name)
 			-- SPEED ADJUSTMENT
 			
 			dist = math.sqrt((pos.x-spawnpoint.x)^2+(pos.z-spawnpoint.z)^2)
 			mult = dist
-			if mult>200 and pos.y> 0 then -- only on "surface"
+			if mult>200 and pos.y> 0 and privs["privs"] == false then -- only on "surface" and if not admin
 				mult = (7./5)/(mult/500.+1.)  -- starts linearly falling from 200
 			else
 				mult = 1.
