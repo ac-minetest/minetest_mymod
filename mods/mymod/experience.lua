@@ -117,7 +117,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields) --
 			local name = player:get_player_name(); if name == nil then return end
 			local t = playerdata[name].xp; 
 			if t>100 then t=100 end
-			playerdata[name].xp = playerdata[name].xp-t; t = math.ceil(t/100*10)/10
+			playerdata[name].xp = playerdata[name].xp-t; t = math.ceil(0.5*t/100*10)/10
 			playerdata[name].max_mana = playerdata[name].max_mana+t; 
 			minetest.chat_send_player(name,"Converted xp to "..t.." additional maximum mana");
 		end

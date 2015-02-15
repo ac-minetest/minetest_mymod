@@ -1099,7 +1099,7 @@ end
 
 -- FIREBALL
 minetest.register_node("mobs:spell_fireball", {
-	description = "fireball spell: 13+2*magic skill/100 damage for 1 mana",
+	description = "fireball spell: at skill 0 does 15 dmg, does 35 dmg at skill 4000, 45 dmg at skill 16000, in between linear",
 	wield_image = "fireball_spell.png", -- TO DO : change texture
 	wield_scale = {x=0.6,y=2.,z=1.}, 
 	drawtype = "allfaces",
@@ -1127,7 +1127,12 @@ minetest.register_node("mobs:spell_fireball", {
 		
 		obj:get_luaentity().owner = name 
 		obj:get_luaentity().timer =  10
-		obj:get_luaentity().damage = 13+2*playerdata[name].magic/100;
+		local skill = playerdata[name].magic; --  diamond sword 20 dmg/lvl 8 - 4000, mithril 30/lvl 10 - 16000
+		
+		if skill> 4000 then skill = (skill/100-40)/12+20; skill = skill*1.5 -- fireball does 50% more dmg as sword
+			else skill = (10+skill/400)*1.5;
+		end
+		obj:get_luaentity().damage = skill;
 		view.x = view.x*v;view.y = view.y*v;view.z = view.z*v
 		obj:setvelocity(view)
 		playerdata[name].mana = playerdata[name].mana -1

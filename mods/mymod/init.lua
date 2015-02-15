@@ -273,7 +273,7 @@ minetest.register_globalstep(function(dtime)
 			-- MANA REGENERATION
 			if playerdata[name].mana ~= nil then
 				if playerdata[name].mana < playerdata[name].max_mana then -- every 100 magic skill extra level, 0.1 mana regen
-					playerdata[name].mana = playerdata[name].mana + (math.floor(playerdata[name].magic/100)+1)*0.1;
+					playerdata[name].mana = playerdata[name].mana + (math.floor(playerdata[name].magic/200)+1)*0.1; -- at 4000 you get 2 regen per tick
 					if playerdata[name].mana>playerdata[name].max_mana then playerdata[name].mana = playerdata[name].max_mana end
 				end
 			end
