@@ -128,6 +128,13 @@ farming.place_seed = function(itemstack, placer, pointed_thing, plantname)
 	
 	-- add the node and remove 1 item from the itemstack
 	minetest.add_node(pt.above, {name = plantname, param2 = 1})
+	
+	local quality = 0; local name = placer:get_player_name();  --rnd
+	if name ~= nil then quality = playerdata[name].farming or 0 end
+	quality = 3 + quality;
+	--minetest.chat_send_all(" seed placed. quality " .. quality) -- rnd
+	local meta = minetest.get_meta(pt.above); meta:set_int("quality", quality)  -- rnd: here seed is initially planted, replace 1000 with player farm skill
+	
 	if not minetest.setting_getbool("creative_mode") then
 		itemstack:take_item()
 	end
@@ -229,6 +236,8 @@ farming.register_plant = function(name, def)
 		chance = 2,
 		action = function(pos, node)
 			local plant_height = minetest.get_item_group(node.name, pname)
+			local quality -- rnd
+			local meta = minetest.get_meta(pos); quality = meta:get_int("quality") or 3; -- rnd
 
 			-- return if already full grown
 			if plant_height == def.steps then
@@ -251,6 +260,7 @@ farming.register_plant = function(name, def)
 				end
 				if can_grow then
 					minetest.set_node(pos, {name = node.name:gsub("seed_", "") .. "_1"})
+					meta = minetest.get_meta(pos); meta:set_int("quality",quality); -- rnd
 				end
 				return
 			end
@@ -259,6 +269,8 @@ farming.register_plant = function(name, def)
 			pos.y = pos.y - 1
 			local n = minetest.get_node(pos)
 			if minetest.get_item_group(n.name, "soil") < 3 then
+				-- rnd: plants die if not planted on proper dirt
+				pos.y = pos.y+1;minetest.set_node(pos, {name ="air"});				
 				return
 			end
 			pos.y = pos.y + 1
@@ -271,7 +283,20 @@ farming.register_plant = function(name, def)
 			end
 
 			-- grow
+			if quality == nil then quality =  3 end
+			local i = math.random(math.ceil(quality)); 
+			--debug
+			--minetest.chat_send_all(" quality  " .. quality .. " rnd " .. i .. " height " .. plant_height)
+			if i == 1 then plant_height = plant_height-1 end; -- rnd devolve
+			
+			if plant_height<1 then -- plant dies, dirt turns to non farm
+				minetest.set_node(pos, {name ="air"}) 
+				pos.y = pos.y-1; minetest.set_node(pos, {name ="default:dirt"}) 
+				pos.y = pos.y+1; minetest.set_node(pos, {name ="default:grass_1"})				
+				return 
+			end 
 			minetest.set_node(pos, {name = mname .. ":" .. pname .. "_" .. plant_height + 1})
+			meta = minetest.get_meta(pos); meta:set_int("quality",quality); -- rnd	
 		end
 	})
 

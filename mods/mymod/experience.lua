@@ -61,16 +61,19 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		if fields.xp == "XP" then		
 		local text = "Experience: points " ..playerdata[name].xp .. "/level " ..get_level(playerdata[name].xp) .."\n"..
 		"SKILLS\ndig skill points " .. playerdata[name].dig .. "/level " ..get_dig_level(playerdata[name].dig) ..
-		"\nmagic skill points " .. playerdata[name].magic .. ", maximum mana " ..playerdata[name].max_mana .."\n"..
+		"\nmagic skill points " .. playerdata[name].magic .. ", maximum mana " ..playerdata[name].max_mana ..", farming " .. playerdata[name].farming .. "\n"..
 		"\nLEVELS for experience: " ..experience.levels_text.."\n"..
 		"LEVELS for dig skill: " ..experience.dig_levels_text..
 		"\nRULES: To use good weapons you need enough experience. To use good ".. -- removed newlines cause maybe there's autowrap?
-		"tools you need enough dig skill. To cast magic you need mana points" .. 
-		"(max_mana) and magic skill. Mana regenerates on its own, each 100"..
-		"magic skill adds 0.1 mana regenerated per step. When you kill monster"..
-		"you get experience, it depends on monster health and how away from"..
-		"spawn you are. You get dig skill by digging ores. Better ores give"..
-		"more skill"
+		" tools you need enough dig skill. To cast magic you need mana points" .. 
+		" (max_mana) and magic skill. Mana regenerates on its own, each 200"..
+		" magic skill adds 0.1 mana regenerated per 2 seconds. When you kill monster"..
+		" you get experience, it depends on monster health and how away from"..
+		"spawn you are. You get dig skill by digging ores. Better ores give "..
+		"more skill" ..
+		"\n\nfarming: each time plant grows there is 1:farming+3 probability it will "..
+		"devolve one step back to seed. If it devolves completely it changes to grass " ..
+		"and dirt changes to non-farm dirt. Each time you farm fully grown crop you get extra 0.25 farm skill."
 		
 		local form  = 
 		"size[8,3.5]" ..  -- width, height
@@ -179,7 +182,7 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 	local xp = 0;
 	local i,v
 
-	
+		
 	for i,v in pairs(experience.xp) do
 		if name == i then xp = v end
 	end
@@ -265,7 +268,11 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 		minetest.chat_send_player(name, " Your inexperience damages the mithril pick. Need at least mining level 10, check level with /xp")
 	end
 
+	-- farming related
 	
+	if oldnode.name=="farming:wheat_8" or oldnode.name== "farming:cotton_8" then
+		playerdata[name].farming = playerdata[name].farming + 0.25;
+	end
 	
 	-- to do: if player has enough experience it will drop extra items, maybe decrease wear of tool occasionaly,
 	--	increase dig speed (start with low dig speed)
@@ -313,7 +320,7 @@ end)
 
 function init_write_experience(player)
 	local file = io.open(minetest.get_worldpath().."/players/"..player:get_player_name().."_experience", "w")
-	file:write("0\n0\n0\n0") -- experience, dig skill, magic, max_mana
+	file:write("0\n0\n0\n0\n0") -- experience, dig skill, magic, max_mana, farming
 	file:close()
 end
 
@@ -324,6 +331,8 @@ function init_experience(player)
 	playerdata[name].dig = 0;
 	playerdata[name].magic = 0;
 	playerdata[name].max_mana = 0;
+	playerdata[name].farming = 0;
+	
 	playerdata[name].mana = 0.;
 
 	playerdata[name].slow = {time=0.,mag=0.}; -- 1st number duration, 2nd magnitude, if 0 no effect, otherwise duration
@@ -341,6 +350,7 @@ minetest.register_on_joinplayer(function(player) -- read data from file or creat
 	playerdata[name].spelltime = minetest.get_gametime();
 	playerdata[name].slow = {time=0.,mag=0.}; 
 	playerdata[name].poison = {time=0.,mag=0.};
+	playerdata[name].farming = 0;
 	
 	-- read saved characteristics
 	local file = io.open(minetest.get_worldpath().."/players/"..name.."_experience", "r")
@@ -357,6 +367,8 @@ minetest.register_on_joinplayer(function(player) -- read data from file or creat
 	playerdata[name].magic = data
 	data = tonumber(file:read("*line")); if data == nil then data = 0 end
 	playerdata[name].max_mana = data
+	data = tonumber(file:read("*line")); if data == nil then data = 0 end
+	playerdata[name].farming = data;
 	file:close();
 	
 	--apply_stats(player)
@@ -370,7 +382,7 @@ function write_experience(player)
 		return 
 	end
 	if playerdata[name].dig==nil then init_experience(player) end
-	file:write(playerdata[name].xp .."\n".. playerdata[name].dig .."\n".. playerdata[name].magic .."\n".. playerdata[name].max_mana );
+	file:write(playerdata[name].xp .."\n".. playerdata[name].dig .."\n".. playerdata[name].magic .."\n".. playerdata[name].max_mana .."\n".. playerdata[name].farming );
 	file:close()
 end
 

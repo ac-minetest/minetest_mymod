@@ -205,7 +205,7 @@ minetest.register_globalstep(function(dtime)
 			
 			dist = math.sqrt((pos.x-spawnpoint.x)^2+(pos.z-spawnpoint.z)^2)
 			mult = dist
-			if mult>200 and pos.y> 0 and privs["privs"] == false then -- only on "surface" and if not admin
+			if mult>200 and pos.y> 0 and privs.privs == false then -- only on "surface" and if not admin
 				mult = (7./5)/(mult/500.+1.)  -- starts linearly falling from 200
 			else
 				mult = 1.
@@ -259,7 +259,7 @@ minetest.register_globalstep(function(dtime)
 			
 			-- SURVIVABILITY CHECK
 			
-			if pos.y>0 and dist>500 and playerdata[name].xp<1000 and privs["privs"] == false then
+			if pos.y>0 and dist>500 and playerdata[name].xp<1000 and privs.privs == false then
 				if minetest.get_node_light(pos) ~= nil then -- crashed once, safety
 				if minetest.get_node_light(pos)>LIGHT_MAX*0.9 then
 					if player:get_hp()==20 then
