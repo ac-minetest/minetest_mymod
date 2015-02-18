@@ -71,10 +71,10 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		" you get experience, it depends on monster health and how away from"..
 		"spawn you are. You get dig skill by digging ores. Better ores give "..
 		"more skill" ..
-		"\n\nfarming: each time plant grows there is 1:(0.1*farming+2) probability it will "..
+		"\n\nfarming: when seed is planted it has quality = farming+20. each time plant grows there is 1:(0.1*quality) probability it will "..
 		"devolve one step back to seed. If it devolves completely it changes to grass " ..
 		"and dirt changes to non-farm dirt. Each time you farm fully grown crop you get extra 0.2 farm skill."..
-		" Application of hoe on plant during growth increases quality by 0.5."
+		" Application of hoe on plant during growth increases seed quality by 5."
 		
 		local form  = 
 		"size[8,3.5]" ..  -- width, height
@@ -86,6 +86,17 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		end
 	end
 end)
+
+
+function show_help(name)
+
+	local text = "TIPS for new players:\n1. read signs at spawn \n2. kill mobs to get stuff and bones \n3. craft dirt and tree saplings from bones \n4. look in craft guide for recipes \n5. dig to get dig skill, kill monsters to get experience, grow farm plants to get farming skill... read more details in xp menu (inventory screen) \n6. sleep in bed to set home\n\npress escape to close this menu "
+	local form  = 
+			"size[8,3.5]" ..  -- width, height
+			"textarea[0,0;8.5,4;text1;introduction;"..text.."]";
+	minetest.show_formspec(name, "mymod:form_help", form) -- displays form
+end
+
 
 -- chat command to see experience
 minetest.register_chatcommand("xp", {
@@ -371,6 +382,8 @@ minetest.register_on_joinplayer(function(player) -- read data from file or creat
 	data = tonumber(file:read("*line")); if data == nil then data = 0 end
 	playerdata[name].farming = data;
 	file:close();
+		
+	show_help(name)
 	
 	--apply_stats(player)
 end)
