@@ -17,11 +17,11 @@ farming.hoe_on_use = function(itemstack, user, pointed_thing, uses)
 	--rnd
 	
 	if string.find(under.name,"farming:wheat")~=nil or string.find(under.name,"farming:cotton")~=nil then
-	-- each application of hoe on plant increases plant quality by 0.5
+	-- each application of hoe on plant increases plant quality by 5
 		local meta = minetest.get_meta(pt.under);
 		if string.find(meta:get_string("infotext"),"hoe applied")~=nil then return end
 		
-		local quality =  meta:get_int("quality")+0.5
+		local quality =  meta:get_int("quality")+5
 		meta:set_int("quality",quality)
 		meta:set_string("infotext", "hoe applied. new quality ".. quality);
 		
@@ -145,7 +145,7 @@ farming.place_seed = function(itemstack, placer, pointed_thing, plantname)
 	
 	local quality = 0; local name = placer:get_player_name();  --rnd
 	if name ~= nil then quality = playerdata[name].farming or 0 end
-	quality = 2 + quality; -- with quality 2 fail probability is around 0.8, with 3 its around 0.5
+	quality = 20 + quality; -- with quality 20 fail probability is around 0.8, with 3 its around 0.5
 	--minetest.chat_send_all(" seed placed. quality " .. quality) -- rnd
 	local meta = minetest.get_meta(pt.above); meta:set_int("quality", quality)  -- rnd: here seed is initially planted, replace 1000 with player farm skill
 	meta:set_string("infotext", "seed quality " .. quality ..", light level "..  minetest.get_node_light(pt.above))
@@ -252,7 +252,8 @@ farming.register_plant = function(name, def)
 		action = function(pos, node)
 			local plant_height = minetest.get_item_group(node.name, pname)
 			local quality -- rnd
-			local meta = minetest.get_meta(pos); quality = meta:get_int("quality") or 2; -- rnd
+			local meta = minetest.get_meta(pos); quality = meta:get_int("quality"); -- rnd
+			if quality == nil then quality = 20 end
 
 			-- return if already full grown
 			if plant_height == def.steps then
@@ -275,8 +276,8 @@ farming.register_plant = function(name, def)
 				end
 				if can_grow then
 					minetest.set_node(pos, {name = node.name:gsub("seed_", "") .. "_1"})
-					meta = minetest.get_meta(pos); meta:set_int("quality",quality); -- rnd
-					meta:set_string("infotext", "seed quality " .. quality .. ", growth progress "..plant_height+1 .. ", light level "..  minetest.get_node_light(pos))
+					local meta = minetest.get_meta(pos); meta:set_int("quality",quality); -- rnd
+					meta:set_string("infotext", "seed quality " .. quality .. ", growth started.")
 				end
 				return
 			end
@@ -299,11 +300,11 @@ farming.register_plant = function(name, def)
 			end
 
 			-- grow
-			if quality == nil then quality =  2 end
+			if quality == nil then quality =  20 end
 			local i = math.random(math.ceil(quality)); 
 			--debug
 			--minetest.chat_send_all(" quality  " .. quality .. " rnd " .. i .. " height " .. plant_height)
-			if i == 1 then plant_height = plant_height-1 end; -- rnd devolve
+			if i <= 10 then plant_height = plant_height-1 end; -- rnd devolve
 			
 			if plant_height<1 then -- plant dies, dirt turns to non farm
 				minetest.set_node(pos, {name ="air"}) 
@@ -313,6 +314,8 @@ farming.register_plant = function(name, def)
 			end 
 			minetest.set_node(pos, {name = mname .. ":" .. pname .. "_" .. plant_height + 1})
 			meta = minetest.get_meta(pos); meta:set_int("quality",quality); -- rnd	
+			meta:set_string("infotext", "seed quality " .. quality .. ", growth progress "..plant_height+1 .. ", light level "..  minetest.get_node_light(pos))
+			
 		end
 	})
 
