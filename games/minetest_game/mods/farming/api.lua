@@ -9,10 +9,24 @@ farming.hoe_on_use = function(itemstack, user, pointed_thing, uses)
 	if pt.type ~= "node" then
 		return
 	end
-	
+		
 	local under = minetest.get_node(pt.under)
 	local p = {x=pt.under.x, y=pt.under.y+1, z=pt.under.z}
 	local above = minetest.get_node(p)
+	
+	--rnd
+	
+	if string.find(under.name,"farming:wheat")~=nil or string.find(under.name,"farming:cotton")~=nil then
+	-- each application of hoe on plant increases plant quality by 0.5
+		local meta = minetest.get_meta(pt.under);
+		if string.find(meta:get_string("infotext"),"hoe applied")~=nil then return end
+		
+		local quality =  meta:get_int("quality")+0.5
+		meta:set_int("quality",quality)
+		meta:set_string("infotext", "hoe applied. new quality ".. quality);
+		
+	return
+	end
 	
 	-- return if any of the nodes is not registered
 	if not minetest.registered_nodes[under.name] then
@@ -131,7 +145,7 @@ farming.place_seed = function(itemstack, placer, pointed_thing, plantname)
 	
 	local quality = 0; local name = placer:get_player_name();  --rnd
 	if name ~= nil then quality = playerdata[name].farming or 0 end
-	quality = 2 + quality;
+	quality = 2 + quality; -- with quality 2 fail probability is around 0.8, with 3 its around 0.5
 	--minetest.chat_send_all(" seed placed. quality " .. quality) -- rnd
 	local meta = minetest.get_meta(pt.above); meta:set_int("quality", quality)  -- rnd: here seed is initially planted, replace 1000 with player farm skill
 	meta:set_string("infotext", "seed quality " .. quality ..", light level "..  minetest.get_node_light(pt.above))
