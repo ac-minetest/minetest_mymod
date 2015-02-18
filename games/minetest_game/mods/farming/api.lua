@@ -131,7 +131,7 @@ farming.place_seed = function(itemstack, placer, pointed_thing, plantname)
 	
 	local quality = 0; local name = placer:get_player_name();  --rnd
 	if name ~= nil then quality = playerdata[name].farming or 0 end
-	quality = 3 + quality;
+	quality = 2 + quality;
 	--minetest.chat_send_all(" seed placed. quality " .. quality) -- rnd
 	local meta = minetest.get_meta(pt.above); meta:set_int("quality", quality)  -- rnd: here seed is initially planted, replace 1000 with player farm skill
 	
@@ -237,7 +237,7 @@ farming.register_plant = function(name, def)
 		action = function(pos, node)
 			local plant_height = minetest.get_item_group(node.name, pname)
 			local quality -- rnd
-			local meta = minetest.get_meta(pos); quality = meta:get_int("quality") or 3; -- rnd
+			local meta = minetest.get_meta(pos); quality = meta:get_int("quality") or 2; -- rnd
 
 			-- return if already full grown
 			if plant_height == def.steps then
@@ -261,6 +261,7 @@ farming.register_plant = function(name, def)
 				if can_grow then
 					minetest.set_node(pos, {name = node.name:gsub("seed_", "") .. "_1"})
 					meta = minetest.get_meta(pos); meta:set_int("quality",quality); -- rnd
+					meta:set_string("infotext", "plant quality " .. quality .. ", growth progress "..plant_height)
 				end
 				return
 			end
@@ -283,7 +284,7 @@ farming.register_plant = function(name, def)
 			end
 
 			-- grow
-			if quality == nil then quality =  3 end
+			if quality == nil then quality =  2 end
 			local i = math.random(math.ceil(quality)); 
 			--debug
 			--minetest.chat_send_all(" quality  " .. quality .. " rnd " .. i .. " height " .. plant_height)

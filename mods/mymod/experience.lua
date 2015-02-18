@@ -71,9 +71,9 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		" you get experience, it depends on monster health and how away from"..
 		"spawn you are. You get dig skill by digging ores. Better ores give "..
 		"more skill" ..
-		"\n\nfarming: each time plant grows there is 1:farming+3 probability it will "..
+		"\n\nfarming: each time plant grows there is 1:(farming+2) probability it will "..
 		"devolve one step back to seed. If it devolves completely it changes to grass " ..
-		"and dirt changes to non-farm dirt. Each time you farm fully grown crop you get extra 0.25 farm skill."
+		"and dirt changes to non-farm dirt. Each time you farm fully grown crop you get extra 0.1 farm skill."
 		
 		local form  = 
 		"size[8,3.5]" ..  -- width, height
@@ -271,7 +271,7 @@ minetest.register_on_dignode(function(pos, oldnode, digger)
 	-- farming related
 	
 	if oldnode.name=="farming:wheat_8" or oldnode.name== "farming:cotton_8" then
-		playerdata[name].farming = playerdata[name].farming + 0.25;
+		playerdata[name].farming = playerdata[name].farming + 0.1;
 	end
 	
 	-- to do: if player has enough experience it will drop extra items, maybe decrease wear of tool occasionaly,
