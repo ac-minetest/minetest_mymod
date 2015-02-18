@@ -134,6 +134,7 @@ farming.place_seed = function(itemstack, placer, pointed_thing, plantname)
 	quality = 2 + quality;
 	--minetest.chat_send_all(" seed placed. quality " .. quality) -- rnd
 	local meta = minetest.get_meta(pt.above); meta:set_int("quality", quality)  -- rnd: here seed is initially planted, replace 1000 with player farm skill
+	meta:set_string("infotext", "seed quality " .. quality ..", light level "..  minetest.get_node_light(pt.above))
 	
 	if not minetest.setting_getbool("creative_mode") then
 		itemstack:take_item()
@@ -261,7 +262,7 @@ farming.register_plant = function(name, def)
 				if can_grow then
 					minetest.set_node(pos, {name = node.name:gsub("seed_", "") .. "_1"})
 					meta = minetest.get_meta(pos); meta:set_int("quality",quality); -- rnd
-					meta:set_string("infotext", "plant quality " .. quality .. ", growth progress "..plant_height)
+					meta:set_string("infotext", "seed quality " .. quality .. ", growth progress "..plant_height+1 .. ", light level "..  minetest.get_node_light(pos))
 				end
 				return
 			end
