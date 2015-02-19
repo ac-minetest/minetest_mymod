@@ -313,6 +313,8 @@ farming.register_plant = function(name, def)
 				return 
 			end 
 			minetest.set_node(pos, {name = mname .. ":" .. pname .. "_" .. plant_height + 1})
+			
+			quality = quality - 2; -- degrade slowly during growth
 			meta = minetest.get_meta(pos); meta:set_int("quality",quality); -- rnd	
 			meta:set_string("infotext", "seed quality " .. quality .. ", growth progress "..plant_height+1 .. ", light level "..  minetest.get_node_light(pos))
 			

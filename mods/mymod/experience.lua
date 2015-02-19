@@ -71,10 +71,10 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		" you get experience, it depends on monster health and how away from"..
 		"spawn you are. You get dig skill by digging ores. Better ores give "..
 		"more skill" ..
-		"\n\nfarming: when seed is planted it has quality = farming+20. each time plant grows there is 1:(0.1*quality) probability it will "..
-		"devolve one step back to seed. If it devolves completely it changes to grass " ..
-		"and dirt changes to non-farm dirt. Each time you farm fully grown crop you get extra 0.2 farm skill."..
-		" Application of hoe on plant during growth increases seed quality by 5."
+		"\n\nfarming: when seed is planted it has quality = farming+20. Each time plant grows there is 1:(0.1*quality) probability it will "..
+		"devolve one step back to seed. If it devolves completely it changes to grass. Quality decreases by 2 each grow step. " ..
+		"Each time you farm fully grown crop you get extra 0.2 farm skill."..
+		" Application of hoe on plant during growth increases seed quality by 3. Hence to successfuly grow plants you must work on filed with hoe."
 		
 		local form  = 
 		"size[8,3.5]" ..  -- width, height
