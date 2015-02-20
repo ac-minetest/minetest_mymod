@@ -313,6 +313,7 @@ if pipeworks.enable_mese_tube then
 				 end,
 				 on_punch = update_formspec,
 				 on_receive_fields = function(pos, formname, fields, sender)
+					 if not protector.can_dig(5,pos,sender) then return end --rnd
 					 fs_helpers.on_receive_fields(pos, fields)
 					 update_formspec(pos)
 				 end,
@@ -528,6 +529,7 @@ if pipeworks.enable_mese_sand_tube then
 					 meta:set_string("infotext", "Adjustable Vacuuming Pneumatic Tube Segment")
 				 end,
 				 on_receive_fields = function(pos,formname,fields,sender)
+					 if not protector.can_dig(5,pos,sender) then return end --rnd
 					 local meta = minetest.env:get_meta(pos)
 					 local dist
 					 _, dist = pcall(tonumber, fields.dist)

@@ -466,6 +466,16 @@ minetest.register_node(nodename, {
 	node_box = nodebox,
 	on_construct = reset_meta,
 	on_receive_fields = function(pos, formname, fields)
+		--rnd : players cant change fields if protected
+		local objs = minetest.get_objects_inside_radius(pos,4) 
+		local player = nil
+		for _, o in pairs(objs) do
+				if  o:is_player() then player = o end
+		end
+		if player == nil then return end
+		if not protector.can_dig(5,pos,player) then return end
+		-- rnd: end
+		
 		if not fields.program then
 			return
 		end
