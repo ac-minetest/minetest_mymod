@@ -254,7 +254,7 @@ minetest.register_globalstep(function(dtime)
 			
 			--JAIL CHECK
 			
-			if playerdata[name].jail > 0 then -- what you doing out of jail? go back :P
+			if playerdata[name].jail > 1 then -- what you doing out of jail? go back :P
 				if pos.y > spawnpoint.y-3 or pos.y < spawnpoint.y-7 then
 					player:setpos( {x=spawnpoint.x, y=spawnpoint.y-5, z=spawnpoint.z} )
 					minetest.chat_send_player(name,"Prisoner escape detected. Prisoner transported back in jail");
