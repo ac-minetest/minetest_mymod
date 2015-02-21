@@ -95,14 +95,15 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if formname == "" and fields.chatlog~=nil then
 		if fields.chatlog == "chatlog" then
 			local text = "";
-			local i,v
+			local i,v,j
 			
-			for i = 0,chatlog.ind do 
-				text = text..chatlog.msg[chatlog.ind-i].."\n"
+			j = chatlog.ind -1;	if j == -1 then j = chatlog.len-1 end -- cant know if server just started but wth..
+			
+			for i = 0,j do 
+				text = text..chatlog.msg[j-i].."\n"
 			end
 			
-			
-			local j = chatlog.len-chatlog.ind-2;
+			j = chatlog.len-chatlog.ind-2;
 			--if chatlog.ind == chatlog.len-1 then j = -1 end
 			
 			for i = 0,j do 
