@@ -161,7 +161,7 @@ minetest.register_on_dieplayer(function(player)
 		local p = pnode.name;
 		if  p == "air" or p == "default:water_source" or p == "default:water_flowing" or p == "default:lava_source" or p == "default:lava_flowing" then -- rnd fix
 			--minetest.dig_node(pos)
-			minetest.set_node(pos, {name="bones:bones", param2=param2})
+			minetest.set_node(pos, {name="bones:bones"})
 		else return
 		end
 		
