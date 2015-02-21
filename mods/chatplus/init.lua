@@ -135,7 +135,21 @@ function chatplus.register_handler(func,place)
 	end
 end
 
+-- rnd: chatlog
+local chatlog = {};
+chatlog.msg ={}
+chatlog.ind = 0;
+chatlog.len = 100; -- starts looping after that
+
 function chatplus.send(from,msg)
+	
+	local ind = chatlog.ind; --rnd start
+	local time = os.date("*t");
+	chatlog.msg[ind] = time.hour.. ":".. time.min ..":" .. time.sec .." <"..from .. "> " .. msg; 
+	chatlog.ind = math.mod(ind + 1,chatlog.len);--rnd end
+
+
+
 	-- Log chat message
 	if chatplus.log_handle ~= nil then
 		chatplus.log_handle:write(
@@ -167,7 +181,10 @@ function chatplus.send(from,msg)
 	return true
 end
 
+
+
 -- Minetest callbacks
+
 minetest.register_on_chat_message(chatplus.send)
 minetest.register_on_joinplayer(function(player)
 	local _player = chatplus.poke(player:get_player_name(),player)

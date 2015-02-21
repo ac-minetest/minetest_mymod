@@ -50,18 +50,7 @@ end
 
 
 
-local chatlog = {};
-chatlog.msg ={}
-chatlog.ind = 0;
-chatlog.len = 100; -- starts looping after that
 
-minetest.register_on_chat_message(function(name, message)
-	local ind = chatlog.ind; 
-	--local time = os.date("*t")
-	minetest.chat_send_all(" debug " .. message .. " " .. chatlog.ind)
-	chatlog.msg[ind] = "<"..name .. "> " .. message; --time.hour.. ":".. time.min ..":" .. time.sec ..
-	chatlog.ind = math.mod(ind + 1,chatlog.len);
-end)
 
 -- -- rnd : changed gui (inside armor mod)
 
