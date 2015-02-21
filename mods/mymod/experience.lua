@@ -96,9 +96,15 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		if fields.chatlog == "chatlog" then
 			local text = "";
 			local i,v
-			for i,v in pairs(chatlog.msg) do
-				text = text..v.."\n"
+			
+			for i = 0:chatlog.ind do 
+				text = text..chatlog.msg[chatlog.ind-i].."\n"
 			end
+			
+			for i = 0:chatlog.len-chatlog.ind do 
+				text = text..chatlog.msg[chatlog.len+1-i].."\n"
+			end
+			
 			local form  = 
 				"size[9,6.5]" ..  -- width, height
 				"textarea[0,0;9.5,8;text1;chat log;"..text.."]";

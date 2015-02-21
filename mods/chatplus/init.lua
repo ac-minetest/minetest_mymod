@@ -138,8 +138,10 @@ end
 -- rnd: chatlog
 chatlog = {};
 chatlog.msg ={}
+
 chatlog.ind = 0;
 chatlog.len = 100; -- starts looping after that
+for i = 0 : chatlog.len-1 do chatlog.msg = "" end
 
 function chatplus.send(from,msg)
 	
