@@ -123,12 +123,12 @@ minetest.register_chatcommand("free", {
 		
 		if playerdata[param].jail== nil then return end --ERROR!
 		
-		if name==param and playerdata[param].jail>1 then
+		local privs = minetest.get_player_privs(name);
+		
+		if name==param and playerdata[param].jail>1 and not privs.ban then
 			minetest.chat_send_all("Prisoner " .. name .. " wishes to get out of jail. You can help him with /free")
 			return
 		end
-		
-		local privs = minetest.get_player_privs(name);
 		
 		if playerdata[name].xp < 100 and not privs.kick then
 			minetest.chat_send_player(name, "You dont have enough (100) experience or dont have kick privilege to do that."); return
@@ -159,7 +159,7 @@ end,
 })
 
 minetest.register_chatcommand("jail", {
-    description = "/jail NAME adds +5 to jail sentence for NAME",
+    description = "/jail NAME adds +1 to jail sentence for NAME",
     privs = {privs = true},
     func = function(name, param)
         local player = minetest.env:get_player_by_name(name)
@@ -257,6 +257,7 @@ minetest.register_globalstep(function(dtime)
 			if playerdata[name].jail > 0 then -- what you doing out of jail? go back :P
 				if pos.y > spawnpoint.y-3 or pos.y < spawnpoint.y-7 then
 					player:setpos( {x=spawnpoint.x, y=spawnpoint.y-5, z=spawnpoint.z} )
+					minetest.chat_send_player(name,"Prisoner escape detected. Prisoner transported back in jail");
 				end
 			end
 			
