@@ -48,6 +48,33 @@ local j=1
 	return j
 end
 
+
+
+local chatlog = {};
+chatlog.msg ={}
+chatlog.ind = 0;
+chatlog.len = 100; -- starts looping after that
+
+minetest.register_on_chat_message(function(name, message)
+	local ind = chatlog.ind
+	chatlog.msg[ind] = "<"..name .. "> " .. message;
+	chatlog.ind = math.mod(ind + 1,chatlog.len);
+end)
+
+function show_chatlog(name)
+
+	local text = "";
+	for i,v in pairs(chatlog.msg) do
+		text = text..v.."\n"
+	end
+	local form  = 
+		"size[9,6.5]" ..  -- width, height
+		"textarea[0,0;9.5,8;text1;chat log;"..text.."]";
+	minetest.show_formspec(name, "mymod:chatlog", form) -- displays form
+
+end
+
+
 -- -- rnd : changed gui (inside armor mod)
 
 minetest.register_on_player_receive_fields(function(player, formname, fields) 
@@ -57,6 +84,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	local name = player:get_player_name(); if name==nil then return end;
 	if playerdata[name] == nil or playerdata[name].dig==nil then return end	
 	
+	--custom inventory gui defined in armor.lua
 	if formname == "" and fields.xp~=nil then
 		if fields.xp == "XP" then		
 		local text = "Experience: points " ..playerdata[name].xp .. "/level " ..get_level(playerdata[name].xp) .."\n"..
@@ -84,7 +112,23 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		
 		minetest.show_formspec(name, "mymod:form_experience", form) -- displays form
 		end
+		return
 	end
+	
+	if formname == "" and fields.chatlog~=nil then
+		if fields.chatlog == "chatlog" then
+			local text = "";
+			for i,v in pairs(chatlog.msg) do
+				text = text..v.."\n"
+			end
+			local form  = 
+				"size[9,6.5]" ..  -- width, height
+				"textarea[0,0;9.5,8;text1;chat log;"..text.."]";
+			minetest.show_formspec(name, "mymod:chatlog", form) -- displays form
+		end
+		return
+	end
+	
 end)
 
 
@@ -501,8 +545,6 @@ minetest.register_node("mymod:spell_slow", {
 			minetest.sound_play("magic", {pos=user:getpos(),gain=1.0,max_hear_distance = 32,})
 			return
 		end
-		
-		
 	end
 	,
 })

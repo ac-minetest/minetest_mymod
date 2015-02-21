@@ -295,7 +295,6 @@ minetest.register_globalstep(function(dtime)
 			end
 			
 			-- HUD UPDATE
-			
 			t = playerdata[name].max_mana;
 			if t~=nil then
 				if t~=0 then t = 20*playerdata[name].mana/playerdata[name].max_mana else t = 0 end
@@ -311,10 +310,6 @@ minetest.register_globalstep(function(dtime)
 		end
 end)
 
-
-
-
- 
  -- MY HUD INTRODUCTORY EXAMPLE:
 
 function init_mana_hud(player)
