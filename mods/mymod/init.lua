@@ -94,7 +94,7 @@ minetest.register_on_joinplayer(function(player) -- init stuff on player join
 	end
 	
 	playerdata[name] = {}
-	playerdata[name] = {xp=0,dig=0,speed=false,gravity=false jail = 0}; -- jail >0 means player is in jail
+	playerdata[name] = {xp=0,dig=0,speed=false,gravity=false, jail = 0}; -- jail >0 means player is in jail
 
 	playerdata[name].manahud = init_mana_hud(player)
 	end
