@@ -101,7 +101,11 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 				text = text..chatlog.msg[chatlog.ind-i].."\n"
 			end
 			
-			for i = 0,chatlog.len-chatlog.ind-2 do 
+			
+			local j = chatlog.len-chatlog.ind-2;
+			--if chatlog.ind == chatlog.len-1 then j = -1 end
+			
+			for i = 0,j do 
 				text = text..chatlog.msg[chatlog.len-1-i].."\n" 
 			end
 			
