@@ -219,7 +219,8 @@ minetest.register_globalstep(function(dtime)
 						playerdata[name].slow.time = playerdata[name].slow.time - MYMOD_UPDATE_TIME -- error reading table entry
 						player:set_physics_override({speed =  playerdata[name].slow.mag});
 						else 
-						playerdata[name].slow.time = 0; playerdata[name].speed = false;
+						playerdata[name].slow.time = 0
+						playerdata[name].speed = false;
 						
 					end
 				end
@@ -262,7 +263,7 @@ minetest.register_globalstep(function(dtime)
 				end
 				
 				if playerdata[name].jail <=1 then
-					playerdata[name].jail = playerdata[name].jail - 0.25; -- minor transgression
+					playerdata[name].jail = playerdata[name].jail - 0.1; -- minor transgression
 					if playerdata[name].jail<0 then playerdata[name].jail = 0  end
 				else
 					playerdata[name].jail = playerdata[name].jail - 0.01; -- jail time slowly decreases

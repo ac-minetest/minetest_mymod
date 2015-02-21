@@ -123,6 +123,7 @@ protector.can_dig = function(r,pos,digger,onlyowner,infolevel)
 					
 					playerdata[name].slow.time = playerdata[name].slow.time + 10;
 					playerdata[name].slow.mag  = 0.1
+					playerdata[name].speed = true
 					
 					local form  = 
 					"size[4,1]" ..  -- width, height
