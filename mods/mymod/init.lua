@@ -255,10 +255,16 @@ minetest.register_globalstep(function(dtime)
 			--JAIL CHECK
 			
 			if playerdata[name].jail > 0 then 
-				playerdata[name].jail = playerdata[name].jail - 0.01; -- jail time slowly decreases
+				if playerdata[name].jail <=1 then
+					playerdata[name].jail = playerdata[name].jail - 0.25; -- minor transgression
+					if playerdata[name].jail<0 then playerdata[name].jail = 0  end
+				else
+					playerdata[name].jail = playerdata[name].jail - 0.01; -- jail time slowly decreases
+				end
+				
 				if playerdata[name].jail > 1 and (pos.y > spawnpoint.y-3 or pos.y < spawnpoint.y-7) then -- what you doing out of jail? go back :P
 					player:setpos( {x=spawnpoint.x, y=spawnpoint.y-5, z=spawnpoint.z} )
-					minetest.chat_send_player(name,"Prisoner transported in jail, remaining jail sentence ".. MYMOD_UPDATE_TIME*(playerdata[name].jail - 1)/0.01 .. " seconds ");
+					minetest.chat_send_player(name,"Prisoner transported in jail, remaining jail sentence ".. math.ceil(MYMOD_UPDATE_TIME*(playerdata[name].jail - 1)/0.01) .. " seconds ");
 				end
 			end
 			
