@@ -58,23 +58,10 @@ chatlog.len = 100; -- starts looping after that
 minetest.register_on_chat_message(function(name, message)
 	local ind = chatlog.ind; 
 	--local time = os.date("*t")
+	minetest.chat_send_all(" debug " .. message .. " " .. chatlog.ind)
 	chatlog.msg[ind] = "<"..name .. "> " .. message; --time.hour.. ":".. time.min ..":" .. time.sec ..
 	chatlog.ind = math.mod(ind + 1,chatlog.len);
 end)
-
-function show_chatlog(name)
-
-	local text = "";
-	for i,v in pairs(chatlog.msg) do
-		text = text..v.."\n"
-	end
-	local form  = 
-		"size[9,6.5]" ..  -- width, height
-		"textarea[0,0;9.5,8;text1;chat log;"..text.."]";
-	minetest.show_formspec(name, "mymod:chatlog", form) -- displays form
-
-end
-
 
 -- -- rnd : changed gui (inside armor mod)
 
@@ -119,6 +106,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 	if formname == "" and fields.chatlog~=nil then
 		if fields.chatlog == "chatlog" then
 			local text = "";
+			local i,v
 			for i,v in pairs(chatlog.msg) do
 				text = text..v.."\n"
 			end
