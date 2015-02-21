@@ -111,7 +111,7 @@ minetest.register_on_dieplayer(
 		local pos=player:getpos()
 		local suspect_name
 		-- maybe above with spawnpoint.x works???, otherwise it crashes
-		if city_block:in_city(pos) and math.abs(pos.x-spawnpoint.x)<20 and math.abs(pos.y-spawnpoint.y)<20 and math.abs(pos.z-spawnpoint.z)<20 then
+		if city_block:in_city(pos) then --and math.abs(pos.x-spawnpoint.x)<20 and math.abs(pos.y-spawnpoint.y)<20 and math.abs(pos.z-spawnpoint.z)<20 then
 			for _,suspect in pairs(minetest.get_objects_inside_radius(pos, 3.8)) do
 				if suspect:is_player() and suspect:get_player_name()~=player:get_player_name() then
 					suspect_name=suspect:get_player_name()

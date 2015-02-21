@@ -119,14 +119,14 @@ protector.can_dig = function(r,pos,digger,onlyowner,infolevel)
 					-- rnd
 					local text = "Please do not build inside area owned by " .. owner .. " or you will go to jail. Slow down a little :) Thank you."
 					local name = digger:get_player_name(); 
-					if playerdata[name]~=nil then playerdata[name].jail = playerdata[name].jail + 0.6 end
+					if playerdata[name]~=nil then playerdata[name].jail = playerdata[name].jail + 0.55 end
 					
 					playerdata[name].slow.time = playerdata[name].slow.time + 10;
 					playerdata[name].slow.mag  = 0.1
 					
 					local form  = 
-					"size[4,1.5]" ..  -- width, height
-					"textarea[0,0;4.5,2;text1;WARNING;"..text.."]";
+					"size[4,1]" ..  -- width, height
+					"textarea[0,0;4.5,1.5;text1;WARNING;"..text.."]";
 					minetest.show_formspec(name, "mymod:protector_warning", form) -- displays form
 					return false
 					
