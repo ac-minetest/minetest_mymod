@@ -207,9 +207,11 @@ minetest.register_globalstep(function(dtime)
 			mult = dist
 			if mult>200 and pos.y> 0 and not privs.privs then -- only on "surface" and if not admin
 				mult = (7./5)/(mult/500.+1.)  -- starts linearly falling from 200
+				t  = 1-1/(playerdata[name].xp/2000+1); mult = t+(1-t)*mult -- adjust factor with experience
 			else
 				mult = 1.
 			end
+			
 			-- slow effect:
 			
 			if playerdata[name].speed == true then -- active speed effects
@@ -221,7 +223,6 @@ minetest.register_globalstep(function(dtime)
 						else 
 						playerdata[name].slow.time = 0
 						playerdata[name].speed = false;
-						
 					end
 				end
 				else player:set_physics_override({speed =  mult});-- if speed was not already affected by something else do enviroment change
