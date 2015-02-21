@@ -136,7 +136,7 @@ function chatplus.register_handler(func,place)
 end
 
 -- rnd: chatlog
-local chatlog = {};
+chatlog = {};
 chatlog.msg ={}
 chatlog.ind = 0;
 chatlog.len = 100; -- starts looping after that
