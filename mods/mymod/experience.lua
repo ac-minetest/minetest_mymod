@@ -57,8 +57,8 @@ chatlog.len = 100; -- starts looping after that
 
 minetest.register_on_chat_message(function(name, message)
 	local ind = chatlog.ind; 
-	local time = os.date("*t")
-	chatlog.msg[ind] = time.hour.. ":".. time.min ..":" .. time.sec .." <"..name .. "> " .. message;
+	--local time = os.date("*t")
+	chatlog.msg[ind] = minetest.get_timeofday() .. "<"..name .. "> " .. message; --time.hour.. ":".. time.min ..":" .. time.sec ..
 	chatlog.ind = math.mod(ind + 1,chatlog.len);
 end)
 
