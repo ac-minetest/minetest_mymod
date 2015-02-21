@@ -89,7 +89,7 @@ minetest.register_on_joinplayer(function(player) -- init stuff on player join
 	--jail check
 	if playerdata[name]~= nil then
 		if playerdata[name].jail~= nil then
-			if playerdata[name].jail>0 then return end -- dont let player out of jail if in jail :)
+			if playerdata[name].jail>1 then return end -- dont let player out of jail if in jail :)
 		end
 	end
 	
@@ -123,7 +123,7 @@ minetest.register_chatcommand("free", {
 		
 		if playerdata[param].jail== nil then return end --ERROR!
 		
-		if name==param and playerdata[param].jail>0 then
+		if name==param and playerdata[param].jail>1 then
 			minetest.chat_send_all("Prisoner " .. name .. " wishes to get out of jail. You can help him with /free")
 			return
 		end
@@ -134,7 +134,7 @@ minetest.register_chatcommand("free", {
 			minetest.chat_send_player(name, "You dont have enough (100) experience or dont have kick privilege to do that."); return
 		end
 		
-		if playerdata[param].jail<=0 then 
+		if playerdata[param].jail<1 then 
 			minetest.chat_send_player(name, param.. " is not in jail."); return
 		end
 		
@@ -146,9 +146,9 @@ minetest.register_chatcommand("free", {
 		minetest.chat_send_all(param .. " was given pardon by " .. name .. ". ".. playerdata[param].jail .. " jail points left. " )
 		
 		if playerdata[param].jail<=0 then 
+			playerdata[param].jail = 0;
 			minetest.chat_send_player(name, param.. " freed from jail.")
 			local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
-			playerdata[param].jail = 0
 			prisoner:setpos(static_spawnpoint)
 			return
 		end

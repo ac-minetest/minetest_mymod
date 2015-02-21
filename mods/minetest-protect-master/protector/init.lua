@@ -114,7 +114,17 @@ protector.can_dig = function(r,pos,digger,onlyowner,infolevel)
 		if owner ~= digger:get_player_name() then 
 			if onlyowner or not protector.is_member(meta, digger:get_player_name()) then
 				if infolevel == 1 then
+					
 					minetest.chat_send_player(digger:get_player_name(), "This area is owned by "..owner.." !")
+					-- rnd
+					local text = "Please do not dig inside area owned by " .. owner .. " or you will go to jail. Thank you."
+					if playerdata[param]~=nil then playerdata[param].jail = playerdata[param].jail + 0.5 end
+					local form  = 
+					"size[4,1.5]" ..  -- width, height
+					"textarea[0,0;4.5,2;text1;WARNING;"..text.."]";
+					minetest.show_formspec(name, "mymod:protector_warning", form) -- displays form
+					return false
+					
 				elseif infolevel == 2 then
 					minetest.chat_send_player(digger:get_player_name(),"This area is owned by "..meta:get_string("owner")..".")
 					if meta:get_string("members") ~= "" then
