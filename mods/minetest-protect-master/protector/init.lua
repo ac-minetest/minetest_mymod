@@ -118,7 +118,8 @@ protector.can_dig = function(r,pos,digger,onlyowner,infolevel)
 					minetest.chat_send_player(digger:get_player_name(), "This area is owned by "..owner.." !")
 					-- rnd
 					local text = "Please do not dig inside area owned by " .. owner .. " or you will go to jail. Thank you."
-					if playerdata[param]~=nil then playerdata[param].jail = playerdata[param].jail + 0.5 end
+					local name = digger:get_player_name(); 
+					if playerdata[name]~=nil then playerdata[name].jail = playerdata[name].jail + 0.5 end
 					local form  = 
 					"size[4,1.5]" ..  -- width, height
 					"textarea[0,0;4.5,2;text1;WARNING;"..text.."]";
