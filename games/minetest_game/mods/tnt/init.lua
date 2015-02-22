@@ -13,7 +13,7 @@ local loss_prob = {}
 loss_prob["default:cobble"] = 3
 loss_prob["default:dirt"] = 4
 
-local radius = 1 -- RND tonumber(minetest.setting_get("tnt_radius") or 3)
+local radius = 2 -- RND tonumber(minetest.setting_get("tnt_radius") or 3)
 
 -- Fill a list with data for content IDs, after all nodes are registered
 local cid_data = {}
@@ -75,11 +75,14 @@ end
 local fire_node = {name="fire:basic_flame"}
 
 local function destroy(drops, pos, cid)
-	if minetest.is_protected(pos, "") then
-		return
-	end
+	--rnd: make tnt nasty
+	-- if minetest.is_protected(pos, "") then
+		-- return
+	-- end
+	
 	local def = cid_data[cid]
 	if def and def.flammable then
+		--minetest.chat_send_all("tnt, flammable") -- rnd
 		minetest.set_node(pos, fire_node)
 	else
 		minetest.remove_node(pos)
@@ -110,8 +113,8 @@ end
 
 local function entity_physics(pos, radius)
 	-- Make the damage radius larger than the destruction radius
-	radius = radius * 2
-	local objs = minetest.get_objects_inside_radius(pos, radius)
+	local r = 8 -- rnd
+	local objs = minetest.get_objects_inside_radius(pos, r)
 	for _, obj in pairs(objs) do
 		local obj_pos = obj:getpos()
 		local obj_vel = obj:getvelocity()
@@ -119,10 +122,10 @@ local function entity_physics(pos, radius)
 
 		if obj_vel ~= nil then
 			obj:setvelocity(calc_velocity(pos, obj_pos,
-					obj_vel, radius * 10))
+					obj_vel, r * 10))
 		end
 
-		local damage = (4 / dist) * radius
+		local damage = (4 / (1+dist/2)) * r -- rnd
 		obj:set_hp(obj:get_hp() - damage)
 	end
 end
@@ -344,9 +347,9 @@ minetest.register_craft({
 minetest.register_craft({
 	output = "tnt:tnt",
 	recipe = {
-		{"",           "group:wood",    ""},
-		{"group:wood", "tnt:gunpowder", "group:wood"},
-		{"",           "group:wood",    ""}
+		{"default:mese_crystal",           "default:mese_crystal",    "default:mese_crystal"},
+		{"default:mese_crystal", "tnt:gunpowder", "default:mese_crystal"},
+		{"default:mese_crystal",           "default:mese_crystal",    "default:mese_crystal"}
 	}
 })
 
