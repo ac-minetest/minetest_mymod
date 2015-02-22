@@ -518,6 +518,7 @@ minetest.register_node("mymod:spell_slow", {
 		
 		if object:is_player() then
 			name = object:get_player_name(); if name == nil then return end
+			playerdata[name].mana = playerdata[name].mana-2
 			playerdata[name].slow.time = playerdata[name].slow.time + 3+math.ceil(10*skill/500)/10
 			minetest.chat_send_player(user:get_player_name(),"<SPELL> target slowed 50% for ".. playerdata[name].slow.time .. " seconds.")
 			minetest.chat_send_player(name,"<EFFECT> slowed 50% for ".. playerdata[name].slow.time .. " seconds.")
@@ -529,6 +530,7 @@ minetest.register_node("mymod:spell_slow", {
 		
 		if object:get_luaentity() == nil then return end
 		if object:get_luaentity().type == "monster" then
+			playerdata[name].mana = playerdata[name].mana-2
 			object = object:get_luaentity();
 			object.slow.time = object.slow.time+3+math.ceil(10*skill/500)/10
 			object.slow.mag = 0.5

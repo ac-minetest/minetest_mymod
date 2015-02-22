@@ -136,22 +136,49 @@ function chatplus.register_handler(func,place)
 end
 
 -- rnd: chatlog
+
 chatlog = {};
 chatlog.msg ={}
 
 chatlog.ind = 0;
 chatlog.len = 100; -- starts looping after that
 for i = 0 , chatlog.len-1 do chatlog.msg[i] = "" end
+chatlog.badwords = {"cunt","sex","bitch","fuck","fuk","asshole","shit","stfu","anal","anus","tits","dick"}
+chatlog.chars = {"o0","t7","i1","c<k","uv","e3"} -- first char can be replaced by others
+
+for c,i in pairs(chatlog.badwords) do
+	k = i;
+	for _,j in pairs(chatlog.chars) do
+		k=k:gsub("["..j:sub(1,1).."]","["..j.."]")
+	end
+	chatlog.badwords[c] = k
+end
 
 function chatplus.send(from,msg)
 	
-	if minetest.env:get_player_by_name(from)~=nil then --rnd start
+	if minetest.env:get_player_by_name(from)~=nil then --rnd start: chatlog
+		--swear word filter
+		local str = msg:gsub("[^%w]","");str = string.lower(str);
+		local badword = false;
+		for i,v in pairs(chatlog.badwords) do
+			if string.find(str,v) then badword = true end
+		end
+	
+
+		if badword then 
+			minetest.chat_send_player(from,"Keep your language civilized.") ;
+			playerdata[from].jail = playerdata[from].jail + 1.2;
+		end
+
+
+		--chatlog
 		local ind = chatlog.ind; 
 		local time = os.date("*t");
 		chatlog.msg[ind] = time.hour.. ":".. time.min ..":" .. time.sec .." <"..from .. "> " .. msg:gsub("[^%w%s%.%,%!%?%:]", function(w) return "\\"..w end); --msg:gsub("[%[%]]", '')
 		chatlog.ind = math.mod(ind + 1,chatlog.len);--rnd end
 	end
 
+	
 
 
 	-- Log chat message
