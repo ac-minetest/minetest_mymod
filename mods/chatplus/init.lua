@@ -148,7 +148,7 @@ function chatplus.send(from,msg)
 	local ind = chatlog.ind; --rnd start
 	local time = os.date("*t");
 	
-	chatlog.msg[ind] = time.hour.. ":".. time.min ..":" .. time.sec .." <"..from .. "> " .. msg:gsub("%", ''); 
+	chatlog.msg[ind] = time.hour.. ":".. time.min ..":" .. time.sec .." <"..from .. "> " .. msg:gsub("%c", ''); 
 	chatlog.ind = math.mod(ind + 1,chatlog.len);--rnd end
 
 
