@@ -184,6 +184,7 @@ minetest.register_on_dieplayer(
 		playerdata[name].dig = math.ceil(10*playerdata[name].dig*0.9)/10
 		playerdata[name].magic = math.ceil(10*playerdata[name].magic*0.9)/10
 		playerdata[name].slow = {time=0, mag = 0}
+		playerdata[name].float = {time=0, mag = 0}
 		playerdata[name].poison = {time=0, mag = 0}
 		playerdata[name].jail = 0
 		minetest.chat_send_player(name,"You loose 10% of your experience and skills because you died.");
@@ -382,7 +383,7 @@ function init_experience(player)
 
 	playerdata[name].slow = {time=0.,mag=0.}; -- 1st number duration, 2nd magnitude, if 0 no effect, otherwise duration
 	playerdata[name].poison = {time=0.,mag=0.}; -- if 0 no effect, otherwise duration in seconds
-
+	playerdata[name].float = {time=0.,mag=0.};
 	
 	end
 
@@ -393,8 +394,9 @@ minetest.register_on_joinplayer(function(player) -- read data from file or creat
 	--temporary characteristics
 	playerdata[name].mana = 0 -- this regenerates
 	playerdata[name].spelltime = minetest.get_gametime();
-	playerdata[name].slow = {time=0.,mag=0.}; 
+	playerdata[name].slow = {time=0.,mag=0.};  -- speed == true
 	playerdata[name].poison = {time=0.,mag=0.};
+	playerdata[name].float = {time=0.,mag=0.}; -- gravity ==  true
 	playerdata[name].farming = 0;
 	
 	-- read saved characteristics
@@ -534,6 +536,43 @@ minetest.register_node("mymod:spell_slow", {
 			minetest.sound_play("magic", {pos=user:getpos(),gain=1.0,max_hear_distance = 32,})
 			return
 		end
+	end
+	,
+})
+
+-- low gravity
+
+minetest.register_craft({
+	output = "mymod:spell_float",
+	recipe = {
+		{"bones:bones", "bones:bones","bones:bones"},
+		{"bones:bones", "mobs:cobweb","bones:bones"},
+		{"bones:bones", "bones:bones","bones:bones"}
+	}
+})
+
+
+minetest.register_node("mymod:spell_float", {
+	description = "float spell: reduce gravity",
+	wield_image = "gui_furnace_arrow_fg.png",
+	wield_scale = {x=0.8,y=2.5,z=1.3}, 
+	tiles = {"gui_furnace_arrow_fg.png"},
+	groups = {oddly_breakable_by_hand=1},
+	on_use = function(itemstack, user, pointed_thing)
+		local name = user:get_player_name(); if name == nil then return end
+		local t = minetest.get_gametime();if t-playerdata[name].spelltime<10 then return end;playerdata[name].spelltime = t; -- only at least 10s after last spell
+
+		if playerdata[name].mana<2 then
+			minetest.chat_send_player(name,"Need at least 2 mana"); return
+		end
+		
+		local skill = playerdata[name].magic;
+		
+		
+		user:set_physics_override({gravity =  0.5});
+		playerdata[name].float.time = playerdata[name].float.time + 5
+		playerdata[name].gravity = true;
+		minetest.sound_play("magic", {pos=user:getpos(),gain=1.0,max_hear_distance = 32,})
 	end
 	,
 })

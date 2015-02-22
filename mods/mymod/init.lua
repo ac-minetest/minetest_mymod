@@ -250,8 +250,14 @@ minetest.register_globalstep(function(dtime)
 				mult = 1. 
 			end
 			
-			if playerdata[name].speed == false then -- active speed effects
+			if playerdata[name].gravity == false then -- active speed effects
 				player:set_physics_override({gravity =  mult});
+				else 
+				
+				if playerdata[name].float.time >0 then
+					playerdata[name].float.time = playerdata[name].float.time - MYMOD_UPDATE_TIME
+					if playerdata[name].float.time<=0 then playerdata[name].float.time = 0; playerdata[name].gravity = false end
+				end
 			end
 			
 			--JAIL CHECK
