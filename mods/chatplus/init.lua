@@ -145,11 +145,12 @@ for i = 0 , chatlog.len-1 do chatlog.msg[i] = "" end
 
 function chatplus.send(from,msg)
 	
-	local ind = chatlog.ind; --rnd start
-	local time = os.date("*t");
-	
-	chatlog.msg[ind] = time.hour.. ":".. time.min ..":" .. time.sec .." <"..from .. "> " .. msg:gsub("[%[%]]", ''); 
-	chatlog.ind = math.mod(ind + 1,chatlog.len);--rnd end
+	if minetest.env:get_player_by_name(from)~=nil then --rnd start
+		local ind = chatlog.ind; 
+		local time = os.date("*t");
+		chatlog.msg[ind] = time.hour.. ":".. time.min ..":" .. time.sec .." <"..from .. "> " .. msg:gsub("[^%w%s%.%,%!%?%:]", function(w) return "\\"..w end); --msg:gsub("[%[%]]", '')
+		chatlog.ind = math.mod(ind + 1,chatlog.len);--rnd end
+	end
 
 
 
