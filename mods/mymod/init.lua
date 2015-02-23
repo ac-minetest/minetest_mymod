@@ -85,9 +85,7 @@ minetest.register_on_joinplayer(function(player) -- init stuff on player join
 	
 	local name = player:get_player_name();
 	if name == nil then return end -- ERROR!!!
-	
-	player:set_hp(math.max(player:get_hp(),1));
-	
+		
 	--jail check
 	if playerdata[name]~= nil then
 		if playerdata[name].jail~= nil then

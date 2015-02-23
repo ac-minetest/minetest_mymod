@@ -418,6 +418,12 @@ minetest.register_on_joinplayer(function(player) -- read data from file or creat
 	playerdata[name].farming = data;
 	file:close();
 		
+	
+	if player:get_hp()==0 then 
+		player:set_hp(20);
+		player:setpos(static_spawnpoint)
+	end
+	
 	show_help(name)
 	
 	--apply_stats(player)
