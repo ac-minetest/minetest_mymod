@@ -419,8 +419,9 @@ minetest.register_on_joinplayer(function(player) -- read data from file or creat
 	file:close();
 		
 	
-	if player:get_hp()==0 then 
+	if player:get_hp()<=0 then 
 		player:set_hp(20);
+		local static_spawnpoint = core.setting_get_pos("static_spawnpoint") ;
 		player:setpos(static_spawnpoint)
 	end
 	
