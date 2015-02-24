@@ -218,7 +218,7 @@ function shooter:register_weapon(name, def)
 		description = def.description,
 		inventory_image = def.inventory_image,
 		on_use = function(itemstack, user, pointed_thing)
-			if itemstack:get_wear() < max_wear then
+			if itemstack:get_wear()+wear < max_wear then
 				def.spec.name = user:get_player_name()
 				if shots > 1 then
 					local step = def.spec.tool_caps.full_punch_interval
