@@ -232,12 +232,12 @@ function shooter:register_weapon(name, def)
 				end
 				itemstack:add_wear(wear)
 				-- rnd insert level requirements related wear here
-				local name = user:get_player_name()
-				if name ~= nil then
-					local level = get_level(playerdata[name].xp);
+				local uname = user:get_player_name()
+				if uname ~= nil then
+					local level = get_level(playerdata[uname].xp);
 					if level< 5 then
 						itemstack:add_wear(65535/4)
-						minetest.chat_send_player(name, " Your inexperience damages the gun. Need at least experience level 5, check level with /xp")
+						minetest.chat_send_player(uname, " Your inexperience damages the gun. Need at least experience level 5, check level with /xp")
 					end
 				end
 			else
