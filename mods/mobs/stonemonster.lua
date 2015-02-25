@@ -49,7 +49,7 @@ mobs:register_mob("mobs:stone_monster", {
 	armor = 100,
 	drawtype = "front",
 	water_damage = 0,
-	lava_damage = 2,
+	lava_damage = 5,
 	light_damage = 0,
 	attack_type = "dogfight",
 	animation = {

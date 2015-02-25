@@ -52,8 +52,8 @@ mobs:register_mob("mobs:sand_monster", {
 	light_resistant = true,
 	armor = 150,
 	drawtype = "front",
-	water_damage = 3,
-	lava_damage = 1,
+	water_damage = 5,
+	lava_damage = 5,
 	light_damage = 0,
 	attack_type = "dogfight",
 	animation = {

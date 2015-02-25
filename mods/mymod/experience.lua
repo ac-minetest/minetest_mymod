@@ -565,7 +565,7 @@ minetest.register_craft({
 
 
 minetest.register_node("mymod:spell_float", {
-	description = "float spell: reduce gravity to max(0.75-magic_skill/5000,0.25) for 5+min(magic_skill/1000,5) seconds",
+	description = "float spell: enable glitch climbing and reduce gravity to max(0.75-magic_skill/5000,0.25) for 5+min(magic_skill/1000,5) seconds",
 	wield_image = "gui_furnace_arrow_fg.png",
 	wield_scale = {x=0.8,y=2.5,z=1.3}, 
 	drawtype = "allfaces",
