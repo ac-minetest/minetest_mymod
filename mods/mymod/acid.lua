@@ -60,7 +60,7 @@ minetest.register_node("mymod:acid_source_active", {
 	walkable = false,
 	pointable = false,
 	diggable = true,
-	buildable_to = true,
+	buildable_to = false, -- only fireball destroys it
 	drop = "",
 	drowning = 2,
 	liquidtype = "source",
