@@ -151,14 +151,14 @@ for c,i in pairs(chatlog.badwords) do
 	for _,j in pairs(chatlog.chars) do
 		k=k:gsub("["..j:sub(1,1).."]","["..j.."]")
 	end
-	chatlog.badwords[c] = k
+	chatlog.badwords[c] = k.. " "
 end
 
 function chatplus.send(from,msg)
 	
 	if minetest.env:get_player_by_name(from)~=nil then --rnd start: chatlog
 		--swear word filter
-		local str = msg:gsub("[^%w]","");str = string.lower(str);
+		local str = msg:gsub("[^%w%,]","");str = string.lower(str);
 		local badword = false;
 		for i,v in pairs(chatlog.badwords) do
 			if string.find(str,v) then badword = true end
