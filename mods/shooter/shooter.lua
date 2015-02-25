@@ -212,8 +212,8 @@ end
 
 function shooter:register_weapon(name, def)
 	local shots = def.shots or 1
-	local wear = math.ceil(65534 / def.rounds) 
-	local max_wear = (def.rounds - 1) * wear 
+	local wear = math.floor(65534 / def.rounds) 
+	local max_wear = (def.rounds - 1) * wear -- math.ceil(65534 / def.rounds)*(def.rounds - 1)
 	minetest.register_tool(name, {
 		description = def.description,
 		inventory_image = def.inventory_image,

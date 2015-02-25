@@ -1,7 +1,7 @@
 shooter:register_weapon("shooter:pistol", {
 	description = "Pistol",
 	inventory_image = "shooter_pistol.png",
-	rounds = 200,
+	rounds = 150,
 	spec = {
 		range = 100,
 		step = 20,
@@ -15,7 +15,7 @@ shooter:register_weapon("shooter:pistol", {
 shooter:register_weapon("shooter:ak47", {
 	description = "AK-47",
 	inventory_image = "shooter_rifle.png",
-	rounds = 500,
+	rounds = 100,
 	spec = {
 		range = 200,
 		step = 30,
@@ -29,7 +29,7 @@ shooter:register_weapon("shooter:ak47", {
 shooter:register_weapon("shooter:shotgun", {
 	description = "Shotgun",
 	inventory_image = "shooter_shotgun.png",
-	rounds = 200,
+	rounds = 50,
 	spec = {
 		range = 50,
 		step = 15,
@@ -43,7 +43,7 @@ shooter:register_weapon("shooter:shotgun", {
 shooter:register_weapon("shooter:uzi", {
 	description = "UZI",
 	inventory_image = "shooter_smgun.png",
-	rounds = 200,
+	rounds = 100,
 	shots = 4,
 	spec = {
 		range = 100,

@@ -1030,7 +1030,7 @@ local weapon = player:get_wielded_item()
 		local wear
 		if tool_capabilities.groupcaps.snappy~=nil then
 			wear = 65535/(tool_capabilities.groupcaps.snappy.uses)
-			else wear = 65535/50
+			else wear = 0 -- already handled elsewhere, shooter mod for example
 		end
 				
 		weapon:add_wear(wear)
