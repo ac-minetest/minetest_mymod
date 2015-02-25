@@ -151,7 +151,7 @@ for c,i in pairs(chatlog.badwords) do
 	for _,j in pairs(chatlog.chars) do
 		k=k:gsub("["..j:sub(1,1).."]","["..j.."]")
 	end
-	chatlog.badwords[c] = k"
+	chatlog.badwords[c] = k
 end
 
 function chatplus.send(from,msg)
