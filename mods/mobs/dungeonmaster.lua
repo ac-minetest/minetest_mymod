@@ -16,28 +16,22 @@ mobs:register_mob("mobs:dungeon_master", {
 	run_velocity = 3,
 	damage = 15,
 	drops = {
-		{name = "default:tree",
-		chance = 1,
-		min = 1,
-		max = 2,},
-		
 		{name = "default:sapling",
-		chance = 20,
+		chance = 5,
 		min = 1,
 		max = 2,},
-		
 		{name = "default:mese_crystal_fragment",
 		chance = 1,
 		min = 1,
-		max = 3,},
-		{name = "d	efault:diamond",
+		max = 10,},
+		{name = "default:diamond",
 		chance = 4,
 		min = 1,
-		max = 4,},
+		max = 8,},
 		{name = "default:mese_crystal",
-		chance = 2,
+		chance = 5,
 		min = 1,
-		max = 4,},
+		max = 8,},
 		{name = "default:diamond_block",
 		chance = 5,
 		min = 1,
@@ -117,7 +111,7 @@ mobs:register_arrow("mobs:fireball", {
 				local obj_pos = obj:getpos()
 				local dist = vector.distance(obj_pos, pos)
 				local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
-				local damage = 8 *(1+vector.distance(obj_pos, static_spawnpoint)/500);
+				local damage = 8 *(1+vector.distance(obj_pos, static_spawnpoint)/500)*(1-dist/16);
 				if dist > 0 then -- and obj:get_hp()>1 then -- no damage if hp<=1
 					--obj:set_physics_override({speed =  0.5}); --slows player
 					obj:punch(obj, 1.0, {
