@@ -178,14 +178,7 @@ minetest.register_on_player_receive_fields(function(player,formname,fields)
 			skins.update_player_skin(player)
 			--inventory_plus.set_inventory_formspec(player,skins.formspec.main(player:get_player_name()))
 
-			if minetest.get_modpath("3d_armor") then
-				armor.textures[player:get_player_name()].skin = skins.list[index]..".png"
-				minetest.after(0, function(player)
-					local skin = armor:get_player_skin(name)
-					armor.textures[name].skin = skin..".png"
-					armor:set_player_armor(player)
-				end, player)
-			end
+			
 		end
 	end
 end)

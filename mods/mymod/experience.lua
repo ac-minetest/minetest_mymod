@@ -85,7 +85,7 @@ minetest.register_on_player_receive_fields(function(player, formname, fields)
 		"size[8,3.5]" ..  -- width, height
 		"textarea[0,0;8.5,3.5;text1;Player "..name.. " STATISTICS;".. text.."]".. -- maybe textlist would enable scroll?
 		"button[0,3;4,1;button1;Convert 100 XP to 100 magic skill]"..
-		"button[4,3;3.7,1;button2;Convert 100 XP to 1 max_mana]"
+		"button[4,3;3.7,1;button2;Convert 100 XP to 0.5 max_mana]"
 		
 		minetest.show_formspec(name, "mymod:form_experience", form) -- displays form
 		end
@@ -186,6 +186,7 @@ minetest.register_on_dieplayer(
 		playerdata[name].slow = {time=0, mag = 0}
 		playerdata[name].float = {time=0, mag = 0}
 		playerdata[name].poison = {time=0, mag = 0}
+		playerdata[name].gravity = false
 		playerdata[name].jail = 0
 		minetest.chat_send_player(name,"You loose 10% of your experience and skills because you died.");
 	end
@@ -585,11 +586,12 @@ minetest.register_node("mymod:spell_float", {
 		end
 		
 		local skill = playerdata[name].magic;
-		user:set_physics_override({gravity =  math.max(0.75-skill/5000,0.25),sneak_glitch = true});
-		playerdata[name].float.time = playerdata[name].float.time + 5+math.min(skill/1000,5)
+		playerdata[name].float.time = playerdata[name].float.time + 5+math.min(skill/1000,10)
+		playerdata[name].float.mag = math.max(0.75-skill/10000,0.25);
+		user:set_physics_override({gravity = playerdata[name].float.mag, sneak_glitch = true});
 		playerdata[name].gravity = true;
 		minetest.sound_play("magic", {pos=user:getpos(),gain=1.0,max_hear_distance = 32,})
-		minetest.chat_send_player(name,"[EFFECT] ".. math.max(0.75-skill/5000,0.25)  .. " gravity reduction for " .. playerdata[name].float.time .. "s")
+		minetest.chat_send_player(name,"[EFFECT] ".. playerdata[name].float.mag  .. " gravity reduction for " .. playerdata[name].float.time .. "s. Hold shift to safely grab the ledge while falling.")
 	end
 	,
 })

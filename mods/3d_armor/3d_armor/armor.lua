@@ -76,7 +76,7 @@ armor.update_player_visuals = function(self, player)
 	local name = player:get_player_name()
 	if self.textures[name] then
 		default.player_set_textures(player, {
-			self.textures[name].skin,
+			self.textures[name].skin, 
 			self.textures[name].armor,
 			self.textures[name].wielditem,
 		})
@@ -233,15 +233,15 @@ end
 
 armor.get_player_skin = function(self, name)
 	local skin = nil
-	local skins = false -- RND
+	local simpleskins = true -- RND
 	local u_skins = false
 	
-	if skins then
+	if simpleskins then
 		skin = skins.skins[name]
 	elseif u_skins then
 		skin = u_skins.u_skins[name]
-	end
-	return skin or armor.default_skin
+	end	
+	return skin
 end
 
 armor.get_armor_formspec = function(self, name)
