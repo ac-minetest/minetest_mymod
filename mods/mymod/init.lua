@@ -27,13 +27,19 @@ minetest.register_chatcommand("spawn", {
 
 		local pos=player:getpos()
 		local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
-		if math.abs(pos.x-static_spawnpoint.x)<20 and math.abs(pos.y-static_spawnpoint.y)<20 and math.abs(pos.z-static_spawnpoint.z) < 20 then 
-			minetest.chat_send_player(name, "can only teleport to spawn outside spawn area!")
-			return 
-		false end -- no goto spawn inside spawn area
+		if math.abs(pos.x-static_spawnpoint.x)<20 and math.abs(pos.z-static_spawnpoint.z)<20 then 
+			if and pos.y>static_spawnpoint.y)-3 then 
+				minetest.chat_send_player(name, "can only teleport to spawn outside spawn area!")
+				return
+				elseif pos.y>static_spawnpoint.y-10 and playerdata[name].jail<=0 then
+					player:setpos(static_spawnpoint)
+				return 
+		else
+			player:setpos(static_spawnpoint)
+			minetest.chat_send_player(name, "Teleported to spawn")
+		end -- no goto spawn inside spawn area
 
-		player:setpos(static_spawnpoint)
-        minetest.chat_send_player(name, "Teleported to spawn")
+		
 end,	
 })
 
@@ -253,7 +259,6 @@ minetest.register_globalstep(function(dtime)
 			if playerdata[name].gravity == false then -- active speed effects
 				player:set_physics_override({gravity =  mult,sneak_glitch = false});
 				else 
-				
 				if playerdata[name].float.time >0 then
 					playerdata[name].float.time = playerdata[name].float.time - MYMOD_UPDATE_TIME
 					if playerdata[name].float.time<=0 then playerdata[name].float.time = 0; playerdata[name].gravity = false end

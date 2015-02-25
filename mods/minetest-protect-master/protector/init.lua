@@ -298,10 +298,10 @@ minetest.register_on_player_receive_fields(function(player,formname,fields)
 		-- fix here
 		
 		
-		minetest.show_formspec(
-			player:get_player_name(), formname,
-			protector.generate_formspec(meta)
-		)
+		-- minetest.show_formspec(
+			-- player:get_player_name(), formname,
+			-- protector.generate_formspec(meta)
+		-- )
 	end
 end)
 
