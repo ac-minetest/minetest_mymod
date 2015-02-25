@@ -251,7 +251,7 @@ minetest.register_globalstep(function(dtime)
 			end
 			
 			if playerdata[name].gravity == false then -- active speed effects
-				player:set_physics_override({gravity =  mult});
+				player:set_physics_override({gravity =  mult,sneak_glitch = false});
 				else 
 				
 				if playerdata[name].float.time >0 then
