@@ -508,6 +508,9 @@ minetest.register_node("mymod:spell_slow", {
 	description = "slow spell: slow 50% for 3+magic skill/500 seconds",
 	wield_image = "slow.png",
 	wield_scale = {x=0.8,y=2.5,z=1.3}, 
+	drawtype = "allfaces",
+	paramtype = "light",
+	light_source = 10,
 	tiles = {"slow.png"},
 	groups = {oddly_breakable_by_hand=1},
 	on_use = function(itemstack, user, pointed_thing)
@@ -555,16 +558,19 @@ minetest.register_craft({
 	output = "mymod:spell_float",
 	recipe = {
 		{"bones:bones", "bones:bones","bones:bones"},
-		{"bones:bones", "mobs:cobweb","bones:bones"},
+		{"bones:bones", "homedecor:power_crystal","bones:bones"},
 		{"bones:bones", "bones:bones","bones:bones"}
 	}
 })
 
 
 minetest.register_node("mymod:spell_float", {
-	description = "float spell: reduce gravity",
+	description = "float spell: reduce gravity to max(0.75-magic_skill/5000,0.25) for 5+min(magic_skill/1000,5) seconds",
 	wield_image = "gui_furnace_arrow_fg.png",
 	wield_scale = {x=0.8,y=2.5,z=1.3}, 
+	drawtype = "allfaces",
+	paramtype = "light",
+	light_source = 10,
 	tiles = {"gui_furnace_arrow_fg.png"},
 	groups = {oddly_breakable_by_hand=1},
 	on_use = function(itemstack, user, pointed_thing)
@@ -576,12 +582,11 @@ minetest.register_node("mymod:spell_float", {
 		end
 		
 		local skill = playerdata[name].magic;
-		
-		
-		user:set_physics_override({gravity =  0.5});
-		playerdata[name].float.time = playerdata[name].float.time + 5
+		user:set_physics_override({gravity =  math.max(0.75-skill/5000,0.25)});
+		playerdata[name].float.time = playerdata[name].float.time + 5+math.min(skill/1000,5)
 		playerdata[name].gravity = true;
 		minetest.sound_play("magic", {pos=user:getpos(),gain=1.0,max_hear_distance = 32,})
+		minetest.chat_send_player(name,"[EFFECT] ".. math.max(0.75-skill/5000,0.25)  .. " gravity reduction for " .. playerdata[name].float.time .. "s")
 	end
 	,
 })
