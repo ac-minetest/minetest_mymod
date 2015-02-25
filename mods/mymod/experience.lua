@@ -575,7 +575,24 @@ minetest.register_node("mymod:spell_float", {
 	groups = {oddly_breakable_by_hand=1},
 	on_use = function(itemstack, user, pointed_thing)
 		local name = user:get_player_name(); if name == nil then return end
-		local t = minetest.get_gametime();if t-playerdata[name].spelltime<10 then return end;playerdata[name].spelltime = t; -- only at least 10s after last spell
+		
+		
+		
+		local t = minetest.get_gametime();
+		
+		if playerdata[name].gravity then -- already gravity effect, spell now works as  free mid air jump
+			if t-playerdata[name].spelltime<1 then
+					return end
+				else
+				local v = user:getvelocity()
+				v.y = v.y+10 -- rnd increased jump
+				user:setvelocity(v)
+				minetest.sound_play("magic", {pos=user:getpos(),gain=0.5,max_hear_distance = 16,})
+				playerdata[name].spelltime = t
+			end
+		end
+		
+		if t-playerdata[name].spelltime<10 then return end;playerdata[name].spelltime = t; -- only at least 10s after last spell
 
 		if playerdata[name].mana<2 then
 			minetest.chat_send_player(name,"Need at least 2 mana"); return
