@@ -28,18 +28,17 @@ minetest.register_chatcommand("spawn", {
 		local pos=player:getpos()
 		local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
 		if math.abs(pos.x-static_spawnpoint.x)<20 and math.abs(pos.z-static_spawnpoint.z)<20 then 
-			if and pos.y>static_spawnpoint.y)-3 then 
+			if pos.y>static_spawnpoint.y-3 then 
 				minetest.chat_send_player(name, "can only teleport to spawn outside spawn area!")
 				return
 				elseif pos.y>static_spawnpoint.y-10 and playerdata[name].jail<=0 then
 					player:setpos(static_spawnpoint)
 				return 
+			end
 		else
 			player:setpos(static_spawnpoint)
 			minetest.chat_send_player(name, "Teleported to spawn")
 		end -- no goto spawn inside spawn area
-
-		
 end,	
 })
 
@@ -185,6 +184,7 @@ dofile(minetest.get_modpath("mymod").."/extractor.lua")
 dofile(minetest.get_modpath("mymod").."/freezing.lua")
 dofile(minetest.get_modpath("mymod").."/acid.lua")
 dofile(minetest.get_modpath("mymod").."/recipes.lua")
+dofile(minetest.get_modpath("mymod").."/tweaks.lua")
 
 -- MAIN PROCESSING STEP:
 -- players walk slower away from spawn, mana regenerates, application of various effects
