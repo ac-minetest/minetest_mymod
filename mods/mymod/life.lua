@@ -63,7 +63,7 @@ local function init_game(pos)
 			p.x = pos.x+i;p.z=pos.z+j
 			name = minetest.get_node(p).name;
 			if name == "air" then life_table[i][j]=0 else life_table[i][j]=1 end
-			if life_table[i][j]==1 then minetest.set_node(p,{name="default:stone"}) else minetest.set_node(p,{name="air"}) end
+			if life_table[i][j]==1 then minetest.set_node(p,{name="default:stone"}) end
 			
 		end
 	end
@@ -79,6 +79,11 @@ minetest.register_node("mymod:life", {
 	groups = {oddly_breakable_by_hand=3},
 	
 	on_punch = function(pos, node, puncher, pointed_thing)
+		
+		local name = puncher:get_player_name();if name == nil then return end
+		local privs = minetest.get_player_privs(name);
+		if not privs.ban then return end
+		
 		local meta = minetest.get_meta(pos)
 		local infotext = meta:get_string("infotext");
 		if infotext=="RUN" then infotext ="STOP" else infotext="RUN" end
