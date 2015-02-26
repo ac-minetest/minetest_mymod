@@ -45,7 +45,7 @@ minetest.register_abm(
 			life_table[i][j]=table_new[i][j]
 			p.x = pos.x+i;p.z=pos.z+j;
 			if minetest.get_node(p).name=="air" then
-				if life_table[i][j]==1 then minetest.set_node(p,{name="default:stone"}) end
+				if life_table[i][j]==1 then minetest.set_node(p,{name="stairs:slab_stone"}) end
 			else
 				if life_table[i][j]==0 then minetest.set_node(p,{name="air"}) end
 			end
@@ -63,7 +63,7 @@ local function init_game(pos)
 			p.x = pos.x+i;p.z=pos.z+j
 			name = minetest.get_node(p).name;
 			if name == "air" then life_table[i][j]=0 else life_table[i][j]=1 end
-			if life_table[i][j]==1 then minetest.set_node(p,{name="default:stone"}) end
+			if life_table[i][j]==1 then minetest.set_node(p,{name="stairs:slab_stone"}) end
 			
 		end
 	end
