@@ -119,7 +119,7 @@ protector.can_dig = function(r,pos,digger,onlyowner,infolevel)
 					-- rnd
 					local text = "Please do not build inside area owned by " .. owner .. " or you will go to jail. Slow down a little :) Thank you."
 					local name = digger:get_player_name(); 
-					if playerdata[name]~=nil then playerdata[name].jail = playerdata[name].jail + 0.55 end
+					if playerdata[name]~=nil then playerdata[name].jail = playerdata[name].jail + 0.55 else return end
 					
 					playerdata[name].slow.time = playerdata[name].slow.time + 10;
 					playerdata[name].slow.mag  = 0.1
