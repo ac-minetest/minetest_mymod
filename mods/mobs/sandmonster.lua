@@ -72,7 +72,7 @@ mobs:register_mob("mobs:sand_monster", {
 	step = 0.5,
 	blood_texture = "mobs_blood.png",
 })
-mobs:register_spawn("mobs:sand_monster", {"default:stone","default:desert_sand", "default:sand"}, 15, -1, 1400, 4, 31000)
+mobs:register_spawn("mobs:sand_monster", {"default:stone","default:desert_sand", "default:sand"}, 10, -1, 1400, 4, 31000)
 
 mobs:register_arrow("mobs:sand_arrow", {
 	visual = "sprite",
