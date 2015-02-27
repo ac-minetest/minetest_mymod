@@ -870,7 +870,7 @@ function mobs:register_spawn(name, nodes, max_light, min_light, chance, active_o
 			pos.y = pos.y+1
 			--rnd : check if player nearby
 			
-			local objects = minetest.get_objects_inside_radius(pos, 6) -- no mob spawns radius 6 around player
+			local objects = minetest.get_objects_inside_radius(pos, 8) -- no mob spawns radius 6 around player
 			for _,obj in ipairs(objects) do
 				if (obj:is_player()) then return end
 			end
