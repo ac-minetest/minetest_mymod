@@ -1110,7 +1110,7 @@ end
 minetest.register_node("mobs:spell_fireball", {
 	description = "fireball spell: at skill 0 does 15 dmg, does 35 dmg at skill 4000, 45 dmg at skill 16000, in between linear",
 	wield_image = "fireball_spell.png", -- TO DO : change texture
-	wield_scale = {x=0.6,y=2.,z=1.}, 
+	wield_scale = {x=0.8,y=0.8,z=0.8}, 
 	drawtype = "allfaces",
 	paramtype = "light",
 	light_source = 10,

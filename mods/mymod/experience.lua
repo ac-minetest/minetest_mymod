@@ -472,7 +472,7 @@ minetest.register_craft({
 minetest.register_node("mymod:spell_heal", {
 	description = "beginner healing spell: heal 5 hp for 1 mana, removes basic ill effects",
 	wield_image = "health.png",
-	wield_scale = {x=0.8,y=2.5,z=1.3}, 
+	wield_scale = {x=0.8,y=0.8,z=0.8}, 
 	tiles = {"health.png"},
 	groups = {oddly_breakable_by_hand=1},
 	on_use = function(itemstack, user, pointed_thing)
@@ -509,7 +509,7 @@ minetest.register_craft({
 minetest.register_node("mymod:spell_slow", {
 	description = "slow spell: slow 50% for 3+magic skill/500 seconds",
 	wield_image = "slow.png",
-	wield_scale = {x=0.8,y=2.5,z=1.3}, 
+	wield_scale = {x=0.8,y=0.8,z=0.8}, 
 	drawtype = "allfaces",
 	paramtype = "light",
 	light_source = 10,
@@ -569,7 +569,7 @@ minetest.register_craft({
 minetest.register_node("mymod:spell_float", {
 	description = "float spell: enable glitch climbing and reduce gravity to max(0.75-magic_skill/5000,0.25) for 5+min(magic_skill/1000,5) seconds",
 	wield_image = "gui_furnace_arrow_fg.png",
-	wield_scale = {x=0.8,y=2.5,z=1.3}, 
+	wield_scale = {x=0.8,y=0.8,z=0.8}, 
 	drawtype = "allfaces",
 	paramtype = "light",
 	light_source = 10,
