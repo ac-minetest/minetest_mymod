@@ -321,9 +321,8 @@ minetest.register_globalstep(function(dtime)
 			local p = pos;
 			local node1 = minetest.get_node(p).name;p.y=p.y+1;
 			local node2 = minetest.get_node(p).name;
-			if not privs.noclip and node1~="air" and node1~= "default:water_source" and node1~="default:water_flowing"
-			and node2~="air" and node2~= "default:water_source" and node2~="default:water_flowing" then
-				minetest.chat_send_all(name.." was caught walking inside ".. node1.. "and " .. node2)
+			if not privs.noclip and (node1="default:stone" or node1="default:cobble") and (node2="default:stone" or node2="default:cobble") then
+				minetest.chat_send_all(name.. " was caught walking inside walls.")
 				playerdata[name].jail = playerdata[name].jail+1
 			end
 		
