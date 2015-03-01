@@ -20,6 +20,7 @@ experience.xp ={
 ["default:stone_with_iron"]= 4,
 ["moreores:mineral_silver"] = 6,
 ["default:stone_with_gold"] = 8,
+["default:obsidian"] = 16,
 ["default:stone_with_mese"] = 16,
 ["default:stone_with_diamond"] = 24,
 ["moreores:mineral_mithril"] = 32,
