@@ -323,7 +323,7 @@ minetest.register_globalstep(function(dtime)
 			local node2 = minetest.get_node(p).name;
 			if not privs.noclip and node1~="air" and node1~= "default:water_source" and node1~="default:water_flowing"
 			and node2~="air" and node2~= "default:water_source" and node2~="default:water_flowing" then
-				minetest.chat_send_all(name.." is chilling out inside ".. node1.. "and " .. node2)
+				minetest.chat_send_all(name.." was caught walking inside ".. node1.. "and " .. node2)
 				playerdata[name].jail = playerdata[name].jail+1
 			end
 		
