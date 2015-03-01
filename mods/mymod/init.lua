@@ -209,15 +209,6 @@ minetest.register_globalstep(function(dtime)
 			local name = player:get_player_name();
 			local privs = minetest.get_player_privs(name)
 			
-			-- simple noclip check
-			local p = pos;
-			local node1 = minetest.get_node(p).name;p.y=p.y+1;
-			local node2 = minetest.get_node(p).name;
-			if not privs.noclip and node1~="air" and node1~= "default:water_source" and node1~="default:water_flowing"
-			and node2~="air" and node2~= "default:water_source" and node2~="default:water_flowing" then
-				minetest.chat_send_all(name.." is chilling out inside ".. node1.. "and " .. node2)
-			end
-			
 			
 			-- SPEED ADJUSTMENT
 			
@@ -281,6 +272,7 @@ minetest.register_globalstep(function(dtime)
 			
 			if playerdata[name].jail > 0 then 
 				
+				
 				if playerdata[name].jail > 1 and (dist>16 or (pos.y > spawnpoint.y-3 or pos.y < spawnpoint.y-7)) then -- what you doing out of jail? go back :P
 					player:setpos( {x=spawnpoint.x, y=spawnpoint.y-5, z=spawnpoint.z} )
 					minetest.chat_send_player(name,"Prisoner transported to jail, remaining jail sentence ".. math.ceil(MYMOD_UPDATE_TIME*(playerdata[name].jail - 1)/0.01) .. " seconds ");
@@ -324,7 +316,16 @@ minetest.register_globalstep(function(dtime)
 				player:hud_change(playerdata[name].manahud, "number", t)
 			end
 
-			-- CHEAT CHECK: gets node at player position... works like crap :P
+		
+			-- CHEAT CHECK: simple noclip check
+			local p = pos;
+			local node1 = minetest.get_node(p).name;p.y=p.y+1;
+			local node2 = minetest.get_node(p).name;
+			if not privs.noclip and node1~="air" and node1~= "default:water_source" and node1~="default:water_flowing"
+			and node2~="air" and node2~= "default:water_source" and node2~="default:water_flowing" then
+				minetest.chat_send_all(name.." is chilling out inside ".. node1.. "and " .. node2)
+				playerdata[name].jail = playerdata[name].jail+1
+			end
 		
 			-- local here = minetest.get_node(pos);
 			-- if here.name=="default:stone" then 
