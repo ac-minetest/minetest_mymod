@@ -56,10 +56,13 @@ mobs:register_arrow("mobs:ice_arrow", {
 	hit_player = function(self, player)
 		local s = self.object:getpos()
 		local p = player:getpos()
-
+				local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
+				local dist = vector.distance(s, static_spawnpoint)
+				local damage = 2 *(1+dist/100);
+		
 		player:punch(self.object, 1.0,  {
 			full_punch_interval=1.0,
-			damage_groups = {fleshy=1},
+			damage_groups = {fleshy=damage},
 		}, {x=s.x-p.x, y=s.y-p.y, z=s.z-p.z})
 	end,
 	

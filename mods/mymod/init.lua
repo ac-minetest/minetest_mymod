@@ -208,6 +208,17 @@ minetest.register_globalstep(function(dtime)
 			pos = player:getpos()
 			local name = player:get_player_name();
 			local privs = minetest.get_player_privs(name)
+			
+			-- simple noclip check
+			local p = pos;
+			local node1 = minetest.get_node(p).name;p.y=p.y+1;
+			local node2 = minetest.get_node(p).name;
+			if not privs.noclip and node1~="air" and node1~= "default:water_source" and node1~="default:water_flowing"
+			and node2~="air" and node2~= "default:water_source" and node2~="default:water_flowing" then
+				minetest.chat_send_all(name.." is chilling out inside ".. node1.. "and " .. node2)
+			end
+			
+			
 			-- SPEED ADJUSTMENT
 			
 			dist = math.sqrt((pos.x-spawnpoint.x)^2+(pos.z-spawnpoint.z)^2)
