@@ -40,6 +40,7 @@ local function on_mvps_move(moved_nodes)
 end
 
 function mesecon:mvps_process_stack(stack)
+	return --rnd 
 	-- update mesecons for placed nodes ( has to be done after all nodes have been added )
 	for _, n in ipairs(stack) do
 		nodeupdate(n.pos)
@@ -73,35 +74,12 @@ function mesecon:mvps_get_stack(pos, dir, maximum)
 end
 
 function mesecon:mvps_push(pos, dir, maximum) -- pos: pos of mvps; dir: direction of push; maximum: maximum nodes to be pushed
-
---rnd: movestones, pistons cant mess up with protection anymore
-	local player, pos_end
-	pos_end = pos; 
-	pos_end.x = pos_end.x+dir.x*maximum
-	pos_end.y = pos_end.y+dir.y*maximum
-	pos_end.z = pos_end.z+dir.z*maximum
+	return --rnd 
 	
-	for _,player in pairs(minetest.get_objects_inside_radius(pos, 3)) do
-				if player:is_player() then
-					if not protector.can_dig(5,pos_end,player) then 
-						minetest.set_node(pos, {name="air"}) -- bye bye piston or movestone
-						minetest.chat_send_all("trying to move with piston/movestone inside protected area " .. pos.x .. " " .. pos.y .. " " .. pos.z)
-						return 
-					end
-				end
-	end
-
-
-
-
-
-
-
-
 	local nodes = mesecon:mvps_get_stack(pos, dir, maximum)
 
 	if not nodes then return end
-	-- determine if one of the nodes blocks the push --- xxx
+	-- determine if one of the nodes blocks the push
 	for id, n in ipairs(nodes) do
 		if mesecon:is_mvps_stopper(n.node, dir, nodes, id) then
 			return
@@ -218,6 +196,8 @@ function mesecon:mvps_pull_all(pos, direction) -- pos: pos of mvps; direction: d
 end
 
 function mesecon:mvps_move_objects(pos, dir, nodestack)
+	return --rnd 
+	
 	local objects_to_move = {}
 
 	-- Move object at tip of stack
@@ -226,8 +206,7 @@ function mesecon:mvps_move_objects(pos, dir, nodestack)
 		 y = dir.y * #nodestack,
 		 z = dir.z * #nodestack})
 
-	
-		 
+
 	local objects = minetest.get_objects_inside_radius(pushpos, 1)
 	for _, obj in ipairs(objects) do
 		table.insert(objects_to_move, obj)

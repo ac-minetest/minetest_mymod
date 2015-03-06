@@ -77,6 +77,26 @@ local piston_on = function(pos, node)
 	local pistonspec = minetest.registered_nodes[node.name].mesecons_piston
 
 	local dir = piston_get_direction(pistonspec.dir, node)
+	
+	--rnd: movestones, pistons cant mess up with protection anymore
+	local player, pos_end
+	pos_end = pos; 
+	pos_end.x = pos_end.x+dir.x*10
+	pos_end.y = pos_end.y+dir.y*10
+	pos_end.z = pos_end.z+dir.z*10
+	
+	for _,player in pairs(minetest.get_objects_inside_radius(pos, 3)) do
+				if player:is_player() then
+					if not protector.can_dig(5,pos_end,player) then 
+						minetest.set_node(pos, {name="air"}) -- bye bye piston
+						minetest.chat_send_all("trying to move with piston/movestone inside protected area " .. pos.x .. " " .. pos.y .. " " .. pos.z)
+						return 
+					end
+				end
+	end
+	
+	
+	
 	local np = mesecon:addPosRule(pos, dir)
 	local success, stack, oldstack = mesecon:mvps_push(np, dir, PISTON_MAXIMUM_PUSH)
 	if success then
