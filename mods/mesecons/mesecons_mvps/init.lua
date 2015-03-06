@@ -201,7 +201,20 @@ function mesecon:mvps_move_objects(pos, dir, nodestack)
 		 y = dir.y * #nodestack,
 		 z = dir.z * #nodestack})
 
-
+	--rnd: movestones, pistons cant mess up with protection anymore
+	local player
+	for _,player in pairs(minetest.get_objects_inside_radius(pos, 3)) do
+				if player:is_player() then
+					if not protector.can_dig(5,pushpos,player) then 
+						minetest.set_node(pos, {name="air"}) -- bye bye piston or movestone
+						return 
+					end
+				end
+	end
+	
+	
+	
+		 
 	local objects = minetest.get_objects_inside_radius(pushpos, 1)
 	for _, obj in ipairs(objects) do
 		table.insert(objects_to_move, obj)
