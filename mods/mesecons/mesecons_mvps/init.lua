@@ -40,7 +40,7 @@ local function on_mvps_move(moved_nodes)
 end
 
 function mesecon:mvps_process_stack(stack)
-	return --rnd 
+	if 1==1 then return end--rnd 
 	-- update mesecons for placed nodes ( has to be done after all nodes have been added )
 	for _, n in ipairs(stack) do
 		nodeupdate(n.pos)
@@ -74,7 +74,7 @@ function mesecon:mvps_get_stack(pos, dir, maximum)
 end
 
 function mesecon:mvps_push(pos, dir, maximum) -- pos: pos of mvps; dir: direction of push; maximum: maximum nodes to be pushed
-	return --rnd 
+	if 1==1 then return end--rnd 
 	
 	local nodes = mesecon:mvps_get_stack(pos, dir, maximum)
 
@@ -196,7 +196,7 @@ function mesecon:mvps_pull_all(pos, direction) -- pos: pos of mvps; direction: d
 end
 
 function mesecon:mvps_move_objects(pos, dir, nodestack)
-	return --rnd 
+	if 1==1 then return end--rnd
 	
 	local objects_to_move = {}
 
