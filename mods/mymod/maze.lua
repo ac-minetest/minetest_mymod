@@ -131,10 +131,10 @@ function maze_deep_first_search(m,n,start,seed) -- returns a table of strings re
 	end,	
 })
   
-  
+  core.register_privilege("maze", "Can create mazes") 
   minetest.register_chatcommand("maze", {
     description = "/maze (optional m,n,start,seed) generates maze at players position, directed towards positive x,z axix",
-    privs = {kick = true},
+    privs = {maze = true},
     func = function(name, param)
 		local m,n,start, seed
 		if param == "" then m=10;n=10;start=1;seed=1 else
@@ -164,4 +164,26 @@ function maze_deep_first_search(m,n,start,seed) -- returns a table of strings re
 		
 end,	
 })
+
+minetest.register_node("mymod:glass_maze", {
+	description = "maze_glass",
+	drawtype = "glasslike_framed_optional",
+	tiles = {"default_glass.png", "default_glass_detail.png"},
+	inventory_image = minetest.inventorycube("default_glass.png"),
+	paramtype = "light",
+	sunlight_propagates = true,
+	is_ground_content = false,
+	groups = {immortal = 1},
+	sounds = default.node_sound_glass_defaults(),
+})
+
+minetest.register_node("mymod:stone_maze", {
+	description = "maze_wall",
+	tiles = {"default_stone.png"},
+	is_ground_content = true,
+	groups = {immortal = 1},
+	legacy_mineral = true,
+	sounds = default.node_sound_stone_defaults(),
+})
+
   
