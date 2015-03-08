@@ -186,6 +186,7 @@ dofile(minetest.get_modpath("mymod").."/acid.lua")
 dofile(minetest.get_modpath("mymod").."/recipes.lua")
 dofile(minetest.get_modpath("mymod").."/tweaks.lua")
 dofile(minetest.get_modpath("mymod").."/life.lua")
+dofile(minetest.get_modpath("mymod").."/maze.lua")
 
 -- MAIN PROCESSING STEP:
 -- players walk slower away from spawn, mana regenerates, application of various effects
