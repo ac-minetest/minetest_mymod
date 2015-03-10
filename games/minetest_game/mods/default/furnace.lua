@@ -47,9 +47,9 @@ local function can_dig(pos, player)
 end
 
 local function allow_metadata_inventory_put(pos, listname, index, stack, player)
-	if minetest.is_protected(pos, player:get_player_name()) then
-		return 0
-	end
+	-- if minetest.is_protected(pos, player:get_player_name()) then
+		-- return 0
+	-- end
 	local meta = minetest.get_meta(pos)
 	local inv = meta:get_inventory()
 	if listname == "fuel" then
@@ -76,9 +76,9 @@ local function allow_metadata_inventory_move(pos, from_list, from_index, to_list
 end
 
 local function allow_metadata_inventory_take(pos, listname, index, stack, player)
-	if minetest.is_protected(pos, player:get_player_name()) then
-		return 0
-	end
+	-- if minetest.is_protected(pos, player:get_player_name()) then
+		-- return 0
+	-- end
 	return stack:get_count()
 end
 
