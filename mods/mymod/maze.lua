@@ -115,21 +115,6 @@ function maze_deep_first_search(m,n,start,seed) -- returns a table of strings re
   --for _,v in pairs(maze) do print(v) end
   
   
-  minetest.register_chatcommand("test", {
-    description = "/maze generates maze at players position, directed towards positive x,z axix",
-    privs = {kick = true},
-    func = function(name, param)
-		local player = minetest.env:get_player_by_name(name); if player==nil then return end
-		local pos =  player:getpos();local p = {x=pos.x,y=pos.y,z=pos.z};
-		for i = 1,10 do
-				p.x = pos.x+i
-			for j=1,10 do
-				p.z = pos.z+j
-				minetest.set_node(p,{name="default:stone"})
-			end
-		end
-	end,	
-})
   
   core.register_privilege("maze", "Can create mazes") 
   minetest.register_chatcommand("maze", {

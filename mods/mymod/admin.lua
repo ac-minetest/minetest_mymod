@@ -38,9 +38,7 @@
 		local x,y,z,dist
 		i=string.find(part,"at %(",1); 
 		if i ~= nil then -- look for coordinates
-			i=i+4;
-			--print (i .. " : " ..string.sub(part,i))
-			j=i
+			i=i+4; j=i
 			j=string.find(part,",",i);
 			x = tonumber(string.sub(part,i,j-1))
 			i=string.find(part,",",j+1);
