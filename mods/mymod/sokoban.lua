@@ -73,6 +73,7 @@ description = "sokoban crate",
 					if s=="#" then minetest.set_node(p,{name="default:wood"}) end
 					if s=="$" then minetest.set_node(p,{name="mymod:crate"}) end
 					if s=="." then p.y=p.y-1;minetest.set_node(p,{name="default:tree"}); p.y=p.y+1;minetest.set_node(p,{name="air"}) end
+					if s=="@" then p.y=p.y-1;minetest.set_node(p,{name="default:glass"}); p.y=p.y+1;minetest.set_node(p,{name="air"}) end
 				end
 			end
 		end
