@@ -68,8 +68,8 @@ description = "sokoban crate",
 				i=i+1;
 				for j = 1,string.len(str) do
 					p.x=pos.x+i;p.z=pos.z+j; s=string.sub(str,j,j);
-					p.y=p.y-1; minetest.set_node(p,{name="default:stone"}); p.y=p.y+1 -- clear floor
-					if s==" " then minetest.set_node(p,{name="air"}) end
+					p.y=p.y-1; if minetest.get_node(p).name~="default:stone" then minetest.set_node(p,{name="default:stone"}); p.y=p.y+1 -- clear floor
+					if s==" " and minetest.get_node(p,{name="air"}).name~="air" then minetest.set_node(p,{name="air"}) end
 					if s=="#" then minetest.set_node(p,{name="default:wood"}) end
 					if s=="$" then minetest.set_node(p,{name="mymod:crate"}) end
 					if s=="." then p.y=p.y-1;minetest.set_node(p,{name="default:tree"}); p.y=p.y+1;minetest.set_node(p,{name="air"}) end
