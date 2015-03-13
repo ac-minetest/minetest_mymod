@@ -1,6 +1,6 @@
 ﻿Minetest mymod ( first try at minetest modding ) by ac
 
--redesign of minetest game to include skill system with experience points and magic spells
+-redesign of minetest game to include skill system with experience points and magic spells, advanced farming
 -added tool/weapons skill requirements
 -can only dig certain ores/blocks with certain tools
 -mobs overhaul ( much stronger, do more damage away from spawn, give more xp when killed away from spawn)
@@ -8,7 +8,11 @@
 -bone mechanics ( craft everything from bones), start in barren rocky world
 -special blocks: bone extractor gives random ores, slow down mine is mese activated and cripples players speed, chicken breeder, game_of_life block,
 sokoban level loader block
--lots of tweaks and bug fixes
+-new player commands: /maze: generates maze using deep first search backtracking algorithm, /searchlog searches log debug.txt for nearby events, ...
+-magic spells: heal spell, fireball spell, slow spell, float spell
+- farming: now seed has a quality, dependent on farming skill. Seed quality is directly related to probability of failure during seed growth.
+	In case of failure seed devolves back to original state ( when planted ).
+-lots of tweaks and bug fixes ( water freezes to ice when dark )
 --------------------------------------------
 
 zlib/libpng License
