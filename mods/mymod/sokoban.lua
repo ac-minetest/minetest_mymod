@@ -31,6 +31,11 @@ minetest.register_node("mymod:crate", {
 	end,
 })
 
+
+local SOKOBAN_WALL = "default:wood"
+local SOKOBAN_FLOOR = "default:stone"
+local SOKOBAN_GOAL = "default:tree"
+
 minetest.register_node("mymod:sokoban", {
 description = "sokoban crate",
 	tiles = {"default_brick.png","crate.png","crate.png","crate.png","crate.png","crate.png"},
@@ -67,13 +72,14 @@ description = "sokoban crate",
 				if string.sub(str,1,1)==";" then file:close(); return end
 				i=i+1;
 				for j = 1,string.len(str) do
-					p.x=pos.x+i;p.z=pos.z+j; s=string.sub(str,j,j);
+					p.x=pos.x+i;p.y=pos.y; p.z=pos.z+j; s=string.sub(str,j,j);
 					p.y=p.y-1; 
-					if minetest.get_node(p).name~="default:stone" then minetest.set_node(p,{name="default:stone"}); p.y=p.y+1; end -- clear floor
+					if minetest.get_node(p).name~=SOKOBAN_FLOOR then minetest.set_node(p,{name=SOKOBAN_FLOOR}); end -- clear floor
+					p.y=p.y+1;
 					if s==" " and minetest.get_node(p,{name="air"}).name~="air" then minetest.set_node(p,{name="air"}) end
-					if s=="#" then minetest.set_node(p,{name="default:wood"}) end
+					if s=="#" then minetest.set_node(p,{name=SOKOBAN_WALL}) end
 					if s=="$" then minetest.set_node(p,{name="mymod:crate"}) end
-					if s=="." then p.y=p.y-1;minetest.set_node(p,{name="default:tree"}); p.y=p.y+1;minetest.set_node(p,{name="air"}) end
+					if s=="." then p.y=p.y-1;minetest.set_node(p,{name=SOKOBAN_GOAL}); p.y=p.y+1;minetest.set_node(p,{name="air"}) end
 					if s=="@" then p.y=p.y-1;minetest.set_node(p,{name="default:glass"}); p.y=p.y+1;minetest.set_node(p,{name="air"}) end
 				end
 			end
