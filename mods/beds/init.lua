@@ -28,6 +28,7 @@ function plock(start, max, tick, player, yaw)
 end
 
 function exit(pos)
+	if pos==nil then return end -- error occured
 	if minetest.env:get_node({x=pos.x+1,y=pos.y,z=pos.z}).name == "air" then
 		return {x=pos.x+1,y=pos.y,z=pos.z}
 	elseif minetest.env:get_node({x=pos.x-1,y=pos.y,z=pos.z}).name == "air" then
