@@ -1,5 +1,10 @@
 -- sokoban push mechanics by rnd
 local push_time = 0
+local SOKOBAN_WALL = "default:wood"
+local SOKOBAN_FLOOR = "default:stone"
+local SOKOBAN_GOAL = "default:tree"
+
+
 minetest.register_node("mymod:crate", {
 	description = "sokoban crate",
 	tiles = {"crate.png"},
@@ -29,15 +34,11 @@ minetest.register_node("mymod:crate", {
 			minetest.sound_play("default_dig_dig_immediate", {pos=q,gain=1.0,max_hear_distance = 24,})
 			--local str = minetest.get_meta(pos):get_string("infotext");
 			local meta = minetest.get_meta(q);
-			q.y=q.y-1;if minetest.get_node(q).name==SOKOBAN_GOAL then  meta:set_string("infotext", "GOAL REACHED") else meta:set_string("infotext", "push crate on top of goal block") end
+			q.y=q.y-1; if minetest.get_node(q).name==SOKOBAN_GOAL then  meta:set_string("infotext", "GOAL REACHED") else meta:set_string("infotext", "push crate on top of goal block") end
 		end
 	end,
 })
 
-
-local SOKOBAN_WALL = "default:wood"
-local SOKOBAN_FLOOR = "default:stone"
-local SOKOBAN_GOAL = "default:tree"
 
 minetest.register_node("mymod:sokoban", {
 description = "sokoban crate",

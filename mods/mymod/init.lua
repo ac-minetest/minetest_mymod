@@ -27,13 +27,9 @@ minetest.register_chatcommand("spawn", {
 
 		local pos=player:getpos()
 		local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
-		if math.abs(pos.x-static_spawnpoint.x)<20 and math.abs(pos.z-static_spawnpoint.z)<20 then 
-			if pos.y>static_spawnpoint.y-3 then 
-				minetest.chat_send_player(name, "can only teleport to spawn outside spawn area!")
+		if math.abs(pos.x-static_spawnpoint.x)<32 and math.abs(pos.z-static_spawnpoint.z)<32 and math.abs(pos.y-static_spawnpoint.y)<20 then 
+				minetest.chat_send_player(name, "can only teleport to spawn outside spawn area/jail!")
 				return
-				elseif pos.y>static_spawnpoint.y-10 and playerdata[name].jail<=0 then
-					player:setpos(static_spawnpoint)
-				return 
 			end
 		else
 			player:setpos(static_spawnpoint)
@@ -276,7 +272,7 @@ minetest.register_globalstep(function(dtime)
 			if playerdata[name].jail > 0 then 
 				
 				
-				if playerdata[name].jail > 1 and (dist>16 or (pos.y > spawnpoint.y-3 or pos.y < spawnpoint.y-7)) then -- what you doing out of jail? go back :P
+				if playerdata[name].jail > 1 and (dist>32 or (pos.y > spawnpoint.y-3 or pos.y < spawnpoint.y-10)) then -- what you doing out of jail? go back :P
 					player:setpos( {x=spawnpoint.x, y=spawnpoint.y-5, z=spawnpoint.z} )
 					minetest.chat_send_player(name,"Prisoner transported to jail, remaining jail sentence ".. math.ceil(MYMOD_UPDATE_TIME*(playerdata[name].jail - 1)/0.01) .. " seconds ");
 				end
@@ -327,7 +323,7 @@ minetest.register_globalstep(function(dtime)
 				local node1 = minetest.get_node(p).name;p.y=p.y+1;
 				local node2 = minetest.get_node(p).name;
 				if (node1=="default:stone" or node1=="default:cobble") and (node2=="default:stone" or node2=="default:cobble") then
-					minetest.chat_send_all(name.. " was caught walking inside walls.")
+					minetest.chat_send_all(name.. " was caught walking inside walls at " .. pos.x .. " " .. pos.y .. " " .. pos.z)
 					minetest.log("action", name.. " was caught walking inside walls at " .. pos.x .. " " .. pos.y .. " " .. pos.z)
 					playerdata[name].jail = playerdata[name].jail+1.5
 				end
