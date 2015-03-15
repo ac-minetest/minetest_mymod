@@ -30,7 +30,6 @@ minetest.register_chatcommand("spawn", {
 		if math.abs(pos.x-static_spawnpoint.x)<32 and math.abs(pos.z-static_spawnpoint.z)<32 and math.abs(pos.y-static_spawnpoint.y)<20 then 
 				minetest.chat_send_player(name, "can only teleport to spawn outside spawn area/jail!")
 				return
-			end
 		else
 			player:setpos(static_spawnpoint)
 			minetest.chat_send_player(name, "Teleported to spawn")
