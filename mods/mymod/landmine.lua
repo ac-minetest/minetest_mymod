@@ -24,6 +24,7 @@ minetest.register_abm(
 				playerdata[name].speed = true; -- remember that speed was changed
 				if	 playerdata[name].slow ~= nil then
 					playerdata[name].slow.time = playerdata[name].slow.time + 60
+					playerdata[name].slow.mag = 0.1
 				end
 				obj:punch(obj, 1.0, {
 						 full_punch_interval = 1.0,
