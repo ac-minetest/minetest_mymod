@@ -405,6 +405,7 @@ function shooter:blast(pos, radius, fleshy, distance, user)
 				if minetest.line_of_sight(obj_pos, blast_pos, 1) then
 					-- BUG HAPPENS HERE: occurs when player aims turret directly down and shoots, maybe error cause 0.5^0 in damage??
 					if obj:get_hp()~=nil then -- rnd: extra safety check. is it enough? 
+						if obj:is_player() then obj:set_detach() end -- rnd: detach so bones can spawn
 						obj:set_hp(obj:get_hp()-damage) -- alternative damage, ignores armor
 						-- obj:punch(obj, 1.0, {
 							-- full_punch_interval = 1.0,
