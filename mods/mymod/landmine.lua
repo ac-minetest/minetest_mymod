@@ -20,8 +20,9 @@ minetest.register_abm(
 					minetest.chat_send_player(obj:get_player_name(), "<EFFECT> slowed by mine")
 				end
 				obj:set_physics_override({speed =  0.1});
-				playerdata[obj:get_player_name()].speed = true; -- remember that speed was changed
-				if playerdata[name].slow ~= nil then
+				local name = obj:get_player_name();
+				playerdata[name].speed = true; -- remember that speed was changed
+				if	 playerdata[name].slow ~= nil then
 					playerdata[name].slow.time = playerdata[name].slow.time + 60
 				end
 				obj:punch(obj, 1.0, {
