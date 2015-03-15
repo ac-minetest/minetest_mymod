@@ -329,7 +329,7 @@ minetest.register_globalstep(function(dtime)
 				if (node1=="default:stone" or node1=="default:cobble") and (node2=="default:stone" or node2=="default:cobble") then
 					minetest.chat_send_all(name.. " was caught walking inside walls.")
 					minetest.log("action", name.. " was caught walking inside walls at " .. pos.x .. " " .. pos.y .. " " .. pos.z)
-					playerdata[name].jail = playerdata[name].jail+1
+					playerdata[name].jail = playerdata[name].jail+1.5
 				end
 			end
 		
