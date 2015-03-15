@@ -115,7 +115,7 @@ minetest.register_entity("shooter:turret_entity", {
 			local pitch = self.pitch
 			local yaw = self.object:getyaw()
 			local ctrl = self.player:get_player_control()
-			local step = 2
+			local step = 10
 			if ctrl then
 				if ctrl.sneak then
 					step = 1
