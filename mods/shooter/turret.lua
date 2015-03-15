@@ -239,6 +239,14 @@ minetest.register_node("shooter:turret", {
 			end
 		end
 	end,
+	on_punch = function(pos, node, puncher, pointed_thing)
+		local tnode = minetest.get_node({x=pos.x, y=pos.y + 1, z=pos.z})
+		if tnode.name == "air" then -- rnd fix
+			if not get_turret_entity(pos) then
+				minetest.add_entity(pos, "shooter:turret_entity")
+			end
+		end
+	end,
 	can_dig = function(pos, player)
 		local meta = minetest.get_meta(pos);
 		local inv = meta:get_inventory()

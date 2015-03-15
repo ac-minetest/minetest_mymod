@@ -30,3 +30,10 @@
 	-- minetest.register_node(":"..name, table2)	
 -- end
 -- shared_chests();
+
+
+minetest.register_craft({
+	type = "cooking",
+	output = "default:coal_lump",
+	recipe = "default:tree",
+})
