@@ -21,6 +21,9 @@ minetest.register_abm(
 				end
 				obj:set_physics_override({speed =  0.1});
 				playerdata[obj:get_player_name()].speed = true; -- remember that speed was changed
+				if playerdata[name].slow ~= nil then
+					playerdata[name].slow.time = playerdata[name].slow.time + 60
+				end
 				obj:punch(obj, 1.0, {
 						 full_punch_interval = 1.0,
 						 damage_groups = {fleshy=damage},
