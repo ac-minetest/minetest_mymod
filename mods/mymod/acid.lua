@@ -124,21 +124,46 @@ local function overwrite(name)
 	for i,v in pairs(table) do
 		table2[i] = v
 	end
-	
+	table2.drop = '';
 	table2.on_dig = function(pos, node, digger)
 		
 		 minetest.node_dig(pos, node, digger) -- this code handles dig itself
 				
 		local name = digger:get_player_name(); if name == nil then return end
-		if pos.y>0 then return end -- only underground
+		
 		--math.randomseed(pos.y)
 		local i = math.random(100) -- probability if spawns acid
-		if i == 1 then
+		if i == 1 and pos.y>0 then -- only underground
 			minetest.set_node(pos, {name="mymod:acid_source_active"})
+			else minetest.set_node(pos, {name="mymod:stone1"}) -- progressive stone digging
 		end
 	end
-	
-	
 	minetest.register_node(":"..name, table2)
 end 
 overwrite("default:stone")
+
+
+-- 3 phase stone digging
+
+minetest.register_node("mymod:stone1", {
+	description = "Stone 1",
+	tiles = {"stone1.png"},
+	is_ground_content = true,
+	groups = {cracky=3, stone=1},
+	drop = '',
+	on_dig = function(pos, node, digger)
+		minetest.set_node(pos, {name="mymod:stone2"}) -- progressive stone digging
+	end,
+	legacy_mineral = true,
+	sounds = default.node_sound_stone_defaults(),
+})
+
+minetest.register_node("mymod:stone2", {
+	description = "Stone 2",
+	tiles = {"stone2.png"},
+	is_ground_content = true,
+	groups = {cracky=3, stone=1},
+	drop = 'default:cobble',
+	legacy_mineral = true,
+	sounds = default.node_sound_stone_defaults(),
+})

@@ -37,3 +37,4 @@ minetest.register_craft({
 	output = "default:coal_lump",
 	recipe = "default:tree",
 })
+
