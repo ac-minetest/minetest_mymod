@@ -27,6 +27,9 @@ minetest.register_node("mymod:crate", {
 			minetest.set_node(pos,{name="air"})
 			minetest.set_node(q,{name="mymod:crate"})
 			minetest.sound_play("default_dig_dig_immediate", {pos=q,gain=1.0,max_hear_distance = 24,})
+			q.y=q.y-1; 
+			q.y=q.y+1; local meta = minetest.get_meta(q);
+			if minetest.get_node(q).name==SOKOBAN_GOAL then  meta:set_string("infotext", "GOAL REACHED") else meta:set_string("infotext", "push crate on top of goal block") end
 		end
 	end,
 })
