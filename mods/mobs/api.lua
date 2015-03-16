@@ -961,7 +961,7 @@ function mobs:register_arrow(name, def)
 		hit_object = def.hit_object, -- rnd
 		owner = def.owner, -- rnd
 		damage = def.damage, -- rnd
-		timer = def.timer, -- rnd
+		timer = def.timer or 10, -- rnd
 		collisionbox = {0,0,0,0,0,0}, -- remove box around arrows
 
 		on_step = function(self, dtime)
@@ -974,11 +974,11 @@ function mobs:register_arrow(name, def)
 			end
 			
 			-- rnd: WHY PROBLEM HERE?  attempt to perform arithmetic on field 'timer' (a nil value)
-			-- self.timer = self.timer - dtime -- rnd
-			-- if self.timer < 0 then 
-				-- self.object:remove()
-				-- return
-			-- end
+			 self.timer = self.timer - dtime -- rnd
+			 if self.timer < 0 then 
+				self.object:remove()
+				return
+			 end
 			
 		
 			for _,player in pairs(minetest.get_objects_inside_radius(pos, 2)) do
@@ -1142,6 +1142,7 @@ minetest.register_node("mobs:spell_fireball", {
 })
 
 
+-- fireball shooter
 minetest.register_node("mobs:firebox", {
 	description = "firebox: at placer's skill 0 does 15 dmg, does 35 dmg at skill 4000, 45 dmg at skill 16000, in between linear",
 	wield_image = "fireball_spell.png", -- TO DO : change texture
