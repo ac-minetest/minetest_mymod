@@ -866,17 +866,8 @@ function mobs:register_spawn(name, nodes, max_light, min_light, chance, active_o
 			if not mobs.spawning_mobs[name] then
 				return
 			end
-						
+			
 			pos.y = pos.y+1
-			--rnd : check if player nearby
-			
-			local objects = minetest.get_objects_inside_radius(pos, 8) -- no mob spawns radius 6 around player
-			for _,obj in ipairs(objects) do
-				if (obj:is_player()) then return end
-			end
-
-			
-			
 			if not minetest.get_node_light(pos) then
 				return
 			end
@@ -1039,7 +1030,7 @@ local weapon = player:get_wielded_item()
 		local wear
 		if tool_capabilities.groupcaps.snappy~=nil then
 			wear = 65535/(tool_capabilities.groupcaps.snappy.uses)
-			else wear = 0 -- already handled elsewhere, shooter mod for example
+			else wear = 65535/50
 		end
 				
 		weapon:add_wear(wear)
@@ -1110,7 +1101,7 @@ end
 minetest.register_node("mobs:spell_fireball", {
 	description = "fireball spell: at skill 0 does 15 dmg, does 35 dmg at skill 4000, 45 dmg at skill 16000, in between linear",
 	wield_image = "fireball_spell.png", -- TO DO : change texture
-	wield_scale = {x=0.8,y=0.8,z=0.8}, 
+	wield_scale = {x=0.6,y=2.,z=1.}, 
 	drawtype = "allfaces",
 	paramtype = "light",
 	light_source = 10,
@@ -1149,6 +1140,62 @@ minetest.register_node("mobs:spell_fireball", {
 		
 	end,
 })
+
+
+minetest.register_node("mobs:firebox", {
+	description = "firebox: at placer's skill 0 does 15 dmg, does 35 dmg at skill 4000, 45 dmg at skill 16000, in between linear",
+	wield_image = "fireball_spell.png", -- TO DO : change texture
+	wield_scale = {x=0.6,y=2.,z=1.}, 
+	drawtype = "allfaces",
+	paramtype = "light",
+	light_source = 10,
+	tiles = {"fireball_spell.png"},
+	groups = {oddly_breakable_by_hand=3},
+	on_place = function(itemstack, placer, pointed_thing)
+		local pos = pointed_thing.under; pos.y=pos.y+1;
+		local meta = minetest.get_meta(pos);
+		local name = placer:get_player_name();
+		if name == nil then return end
+		--meta:set_string("owner",name);
+		local skill = playerdata[name].magic; --  diamond sword 20 dmg/lvl 8 - 4000, mithril 30/lvl 10 - 16000
+		
+		if skill> 4000 then skill = (skill/100-40)/12+20; skill = skill*1.5 -- fireball does 50% more dmg as sword
+			else skill = (10+skill/400)*1.5;
+		end
+		meta:set_int("damage",skill);
+		meta:set_string("name",name);
+		meta:set_int("time",minetest.get_gametime());
+	end,
+	
+	mesecons = {effector = {
+		action_on = function (pos, node)
+		
+		local meta = minetest.get_meta(pos);
+		local t = meta:get_int("time"); local t_new = minetest.get_gametime();
+		if t_new-t<1 then return end
+		meta:set_int("time",t_new);
+
+		local obj = minetest.add_entity(pos, "mobs:fireball_spell_projectile")
+		local v = obj:get_luaentity().velocity
+		
+		local name = meta:get_string("name");
+		
+		local skill = meta:get_int("damage");
+		obj:get_luaentity().owner = name 
+		obj:get_luaentity().timer =  10
+		
+		obj:get_luaentity().damage = skill;
+		view.x = 1*v;view.y = 0*v;view.z = 0*v;
+		obj:setvelocity(view)
+		minetest.sound_play("shooter_flare_fire", {pos=pos,gain=1.0,max_hear_distance = 64,})
+			
+			-- TO DO
+		end
+		}},
+})
+
+
+
 
 mobs:register_arrow("mobs:fireball_spell_projectile", {
 	visual = "sprite",
