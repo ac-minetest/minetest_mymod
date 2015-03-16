@@ -10,16 +10,14 @@ minetest.register_abm({ -- water freeze
 	action = function(pos, node, active_object_count, active_object_count_wider)
 		local p = {x=pos.x, y=pos.y+1, z=pos.z}
 		local above = minetest.get_node(p) 
-		if minetest.get_node_light(p)==nil then 
-			if above.name == "default:ice" then -- depth freezing
-				minetest.set_node(pos, {name="default:ice"})
-				return
-			end
+		
+		if above.name == "default:ice" then -- depth freezing
+			minetest.set_node(pos, {name="default:ice"})
+			return
 		end
-		if minetest.get_node_light(p)<=LIGHT_MAX*0.7 then -- check if above not too bright
-			if above.name == "air" then
-				minetest.set_node(pos, {name="default:ice"})
-			end
+	
+		if above.name == "air" and minetest.get_node_light(p)<=LIGHT_MAX*0.7 then -- check if above not too bright
+			minetest.set_node(pos, {name="default:ice"})
 		end 
 	end,
 })
