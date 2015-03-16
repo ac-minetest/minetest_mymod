@@ -130,10 +130,17 @@ local function overwrite(name)
 		 minetest.node_dig(pos, node, digger) -- this code handles dig itself
 				
 		local name = digger:get_player_name(); if name == nil then return end
-		
+		local wielded = (digger:get_wielded_item()):get_name()
+		-- better picks dig in one step
+		if wielded == "default:pick_diamond" or wielded == "moreores:pick_mithril" then 
+			local player_inv = digger:get_inventory()
+			local stk = ItemStack({name="default:cobble"})
+			if player_inv:room_for_item("main", stk) then player_inv:add_item("main", stk) end
+		return
+		end
 		--math.randomseed(pos.y)
 		local i = math.random(100) -- probability if spawns acid
-		if i == 1 and pos.y>0 then -- only underground
+		if i == 1 and pos.y<0 then -- only underground
 			minetest.set_node(pos, {name="mymod:acid_source_active"})
 			else minetest.set_node(pos, {name="mymod:stone1"}) -- progressive stone digging
 		end
