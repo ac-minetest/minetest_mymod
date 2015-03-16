@@ -137,7 +137,8 @@ local function overwrite(name)
 	
 	table2.on_dig = function(pos, node, digger)
 		
-		 minetest.node_dig(pos, node, digger) -- this code handles dig itself
+		 if not protector.can_dig(5,pos,digger) then return end
+		 --minetest.node_dig(pos, node, digger) -- this code handles dig itself
 				
 		local name = digger:get_player_name(); if name == nil then return end
 		local wielded = (digger:get_wielded_item()):get_name()
