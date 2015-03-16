@@ -1153,6 +1153,7 @@ minetest.register_node("mobs:firebox", {
 	groups = {oddly_breakable_by_hand=3},
 	on_place = function(itemstack, placer, pointed_thing)
 		local pos = pointed_thing.under; pos.y=pos.y+1;
+		minetest.set_node(pos,{name="mobs:firebox"});
 		local meta = minetest.get_meta(pos);
 		local name = placer:get_player_name();
 		if name == nil then return end
