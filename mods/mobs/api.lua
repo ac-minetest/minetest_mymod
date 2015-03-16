@@ -1169,7 +1169,7 @@ minetest.register_node("mobs:firebox", {
 	end,
 	
 	mesecons = {effector = {
-		action_on = function (pos, node)
+		action_on = function (pos, node) -- emulate spell
 		
 		local meta = minetest.get_meta(pos);
 		local t = meta:get_int("time"); local t_new = minetest.get_gametime();
@@ -1178,15 +1178,13 @@ minetest.register_node("mobs:firebox", {
 
 		local obj = minetest.add_entity(pos, "mobs:fireball_spell_projectile")
 		local v = obj:get_luaentity().velocity
-		
 		local name = meta:get_string("name");
-		
 		local skill = meta:get_int("damage");
 		obj:get_luaentity().owner = name 
 		obj:get_luaentity().timer =  10
 		
 		obj:get_luaentity().damage = skill;
-		view.x = 1*v;view.y = 0*v;view.z = 0*v;
+		local view={};view.x = 1*v;view.y = 0*v;view.z = 0*v;
 		obj:setvelocity(view)
 		minetest.sound_play("shooter_flare_fire", {pos=pos,gain=1.0,max_hear_distance = 64,})
 			
