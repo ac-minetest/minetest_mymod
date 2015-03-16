@@ -12,7 +12,10 @@ minetest.register_abm({ -- water freeze
 		local above = minetest.get_node(p) 
 		
 		if above.name == "default:ice" then -- depth freezing
-			minetest.set_node(pos, {name="default:ice"})
+			p.y=p.y+4;above = minetest.get_node(p) 
+			if above.name == "air" then -- only freeze to depth 4
+				minetest.set_node(pos, {name="default:ice"})
+			end
 			return
 		end
 	
