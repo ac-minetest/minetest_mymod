@@ -1157,6 +1157,10 @@ minetest.register_node("mobs:firebox", {
 		local meta = minetest.get_meta(pos);
 		local name = placer:get_player_name();
 		if name == nil then return end
+		
+		if playerdata[name].mana<1 then
+			minetest.chat_send_player(name,"Need at least 1 mana"); return
+		end
 		--meta:set_string("owner",name);
 		local skill = playerdata[name].magic; --  diamond sword 20 dmg/lvl 8 - 4000, mithril 30/lvl 10 - 16000
 		
