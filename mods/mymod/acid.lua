@@ -125,6 +125,16 @@ local function overwrite(name)
 		table2[i] = v
 	end
 	table2.drop = '';
+	
+	-- table2.on_destruct = function(pos) -- for some reason this works even worse ( more blink) than on_dig
+		-- --math.randomseed(pos.y)
+		-- local i = math.random(100) -- probability if spawns acid
+		-- if i == 1 and pos.y<0 then -- only underground
+			-- minetest.set_node(pos, {name="mymod:acid_source_active"})
+			-- else minetest.set_node(pos, {name="mymod:stone1"}) -- progressive stone digging
+		-- end
+	-- end;
+	
 	table2.on_dig = function(pos, node, digger)
 		
 		 minetest.node_dig(pos, node, digger) -- this code handles dig itself
@@ -144,7 +154,7 @@ local function overwrite(name)
 			minetest.set_node(pos, {name="mymod:acid_source_active"})
 			else minetest.set_node(pos, {name="mymod:stone1"}) -- progressive stone digging
 		end
-	end
+	end;
 	minetest.register_node(":"..name, table2)
 end 
 overwrite("default:stone")
