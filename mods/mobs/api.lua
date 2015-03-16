@@ -1171,7 +1171,7 @@ minetest.register_node("mobs:firebox", {
 		meta:set_string("name",name);
 		meta:set_int("time",minetest.get_gametime());
 		local view = placer:get_look_dir() 
-		meta:set_int("viewx",view.x);meta:set_int("viewz",view.z);
+		meta:set_float("viewx",view.x);meta:set_float("viewz",view.z);
 	end,
 	
 	mesecons = {effector = {
@@ -1190,7 +1190,7 @@ minetest.register_node("mobs:firebox", {
 		obj:get_luaentity().timer =  10
 		
 		obj:get_luaentity().damage = skill;
-		local view={};view.x = meta:get_int("viewx")*v;view.y = 0;view.z = meta:get_int("viewz")*v;
+		local view={};view.x = meta:get_float("viewx")*v;view.y = 0;view.z = meta:get_float("viewz")*v;
 		obj:setvelocity(view)
 		minetest.sound_play("shooter_flare_fire", {pos=pos,gain=1.0,max_hear_distance = 64,})
 			
