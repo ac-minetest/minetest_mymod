@@ -39,7 +39,7 @@ minetest.register_chatcommand("home", {
             player:setpos(homepos[player:get_player_name()])
             minetest.chat_send_player(name, "Teleported to home!")
         else
-            minetest.chat_send_player(name, "Set a home using /sethome")
+            minetest.chat_send_player(name, "Set a home by sleeping in bed at nignt first.")
         end
     end,
 })
