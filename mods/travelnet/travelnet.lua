@@ -94,8 +94,9 @@ minetest.register_node("travelnet:travelnet", {
 
 })
 
---[
-minetest.register_craft({
-        output = "travelnet:travelnet",
-        recipe = travelnet.travelnet_recipe,
-})
+--[ -- recipe disabled: RND
+-- minetest.register_craft({
+        -- output = "travelnet:travelnet",
+        -- recipe = travelnet.travelnet_recipe,
+-- })
+

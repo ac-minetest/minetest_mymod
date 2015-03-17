@@ -10,7 +10,7 @@ exchange.shop.formspec = {
 		"list[current_player;customer_gets;0,3;3,2;]"..
 		"label[5,0;Owner wants]"..
 		"list["..list_name..";owner_wants;5,0.5;3,2;]"..
-		"label[5,2.5;Owner gives]"..
+		"label[5,2.5;Owner gives]".. --change this line
 		"list["..list_name..";owner_gives;5,3;3,2;]"..
 		"list[current_player;main;0,5.5;8,4;]"..
 		"button[3,2;2,1;exchange;Exchange]"

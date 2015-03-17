@@ -10,12 +10,15 @@ function bone_extractor(pos)
 	local  i = math.random(1000);
 
 	local out;
-	if i>=500 and i<1000 then out = "default:stone_with_copper" end
-	if i>=200 and i<500 then out = "default:stone_with_iron" end
+	if i>=800 then out = "bones:bones" end
+	if i>=600 and i< 800 then out = "moreores:mineral_tin" end
+	if i>=400 and i<600 then out = "default:stone_with_copper" end
+	if i>=200 and i<400 then out = "default:stone_with_iron" end
 	if i>=100 and i< 200 then out = "default:stone_with_gold" end
 	if i>=50 and i<100 then out = "default:stone_with_mese" end
 	if i>=25 and i<50 then out = "default:stone_with_diamond" end
 	if i>=10 and i<25 then out = "moreores:mineral_mithril" end
+	
 	if out~=nil then
 		minetest.set_node(pos_below, {name=out})
 	end
