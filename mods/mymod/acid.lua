@@ -146,7 +146,11 @@ local function overwrite(name)
 		if wielded == "default:pick_diamond" or wielded == "moreores:pick_mithril" then 
 			local player_inv = digger:get_inventory()
 			local stk = ItemStack({name="default:cobble"})
-			if player_inv:room_for_item("main", stk) then player_inv:add_item("main", stk) end
+			if player_inv:room_for_item("main", stk) then 
+				player_inv:add_item("main", stk) 
+				minetest.set_node(pos, {name="air"})
+			end
+			
 		return
 		end
 		--math.randomseed(pos.y)
