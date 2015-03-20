@@ -70,16 +70,22 @@ armor.def = {
 }
 
 armor.update_player_visuals = function(self, player)
-	if not player then
-		return
-	end
+	if not player then return end
 	local name = player:get_player_name()
-	if self.textures[name] then
-		default.player_set_textures(player, {
-			self.textures[name].skin,
-			self.textures[name].armor,
-			self.textures[name].wielditem,
-		})
+	if not self.textures[name] then return end
+	local skin = armor:get_player_skin(name)
+	default.player_set_textures(player, {
+		skin..".png",
+		self.textures[name].armor,
+		self.textures[name].wielditem,
+	})
+	
+end
+
+if(skins) then
+	skins.update_player_skin = function(player)
+		armor:update_player_visuals(player)
+		skins.save()
 	end
 end
 
@@ -105,7 +111,7 @@ armor.set_player_armor = function(self, player)
 	local textures = {}
 	local physics_o = {speed=1,gravity=1,jump=1}
 	local material = {type=nil, count=1}
-	local preview = armor:get_player_skin(name).."_preview.png"
+	local preview = "character_preview.png"
 	for _,v in ipairs(self.elements) do
 		elements[v] = false
 	end
@@ -233,8 +239,6 @@ end
 
 armor.get_player_skin = function(self, name)
 	local skin = nil
-	local skins = false -- RND
-	local u_skins = false
 	
 	if skins then
 		skin = skins.skins[name]
