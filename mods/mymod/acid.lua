@@ -138,8 +138,57 @@ local function overwrite(name)
 	table2.on_dig = function(pos, node, digger)
 		
 		 if not protector.can_dig(5,pos,digger) then return end
-		 --minetest.node_dig(pos, node, digger) -- this code handles dig itself
+		 minetest.node_dig(pos, node, digger) -- this code handles dig itself
 				
+		local i,j,k
+		i = math.random(100) -- probability if spawns acid
+		local node;
+		if i == 2 and pos.y < 0 then -- cave in
+			-- find closest nearby ceiling block and collapse it by spawning 3x3x3 gravel
+			--minetest.chat_send_all("CAVEIN")
+			local p = {x=pos.x,y=pos.y,z=pos.z};
+			local found = false;
+			local r = 2;
+			for i = -r,r do
+				p.x =  pos.x+i
+				for j = -r,r do
+					p.z =  pos.z+j
+					for k = 0,2 do
+						p.y=pos.y+k
+						node = (minetest.get_node(p)).name;
+						if node == "default:stone" or node == "default:cobble" then
+							p.y=p.y-1
+							if (minetest.get_node(p)).name == "air" then
+								found = true; p.y=p.y+1;goto continue;
+							end
+						end
+					end
+				end
+			end
+			
+			::continue::
+			if found then 
+				minetest.sound_play("default_break_glass.1", {pos=pos, gain=1})
+				--minetest.chat_send_all("COLLAPSING")
+				pos.x=p.x;pos.y=p.y;pos.z=p.z
+				for i = -r,r do
+					p.x =  pos.x+i
+					for j = -r,r do
+						p.z=pos.z+j
+						local h = math.random(2)-1
+						for k = -1,h-1 do
+							p.y=pos.y+k
+							if (minetest.get_node(p)).name ~= "air" then
+								minetest.set_node(p,{name="default:gravel"});
+							end
+						end
+					end
+				end
+			end
+			
+			return
+		end
+		
 		local name = digger:get_player_name(); if name == nil then return end
 		local wielded = (digger:get_wielded_item()):get_name()
 		-- better picks dig in one step
@@ -148,13 +197,16 @@ local function overwrite(name)
 			local stk = ItemStack({name="default:cobble"})
 			if player_inv:room_for_item("main", stk) then 
 				player_inv:add_item("main", stk) 
-				minetest.set_node(pos, {name="air"})
+				if i == 1 and pos.y<0 then -- only underground
+					minetest.set_node(pos, {name="mymod:acid_source_active"})
+					else minetest.set_node(pos, {name="air"})
+				end
 			end
 			
 		return
 		end
 		--math.randomseed(pos.y)
-		local i = math.random(100) -- probability if spawns acid
+		
 		if i == 1 and pos.y<0 then -- only underground
 			minetest.set_node(pos, {name="mymod:acid_source_active"})
 			else minetest.set_node(pos, {name="mymod:stone1"}) -- progressive stone digging

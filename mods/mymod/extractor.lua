@@ -22,7 +22,8 @@ function bone_extractor(pos)
 	if out~=nil then
 		minetest.set_node(pos_below, {name=out})
 	end
-		
+	minetest.sound_play("default_cool_lava.3", {pos=pos, gain=1})
+	
 end
 
 -- here i see a for looping over a list and defining spawners for specific mob types
