@@ -75,15 +75,15 @@ end
 
 
 minetest.register_chatcommand("setrace", { -- RND 
-	params = "<race: 1 or 2>",
+	params = "<race: 0-4>",
 	description = "pick your race",
 	privs = {},
 	func = function(name, param)
 		if param == "" then
 			-- how to use formspec?
-			--local ret = minetest.show_formspec( name, true ,skins.formspec.main(name) );
+			--minetest.show_formspec( name, "simple_skins:form" ,skins.formspec.main(name) );
 			
-			return false, "Invalid usage, use setrace 1 or 2. then reconnect server"
+			return false, "Invalid usage, use setrace 0-4."
 		end 
 		
 		local player = minetest.env:get_player_by_name(name)
@@ -91,13 +91,9 @@ minetest.register_chatcommand("setrace", { -- RND
 				-- just a check to prevent the server crashing
 				return false
 		end
-	
-		if param == "2" then
-			skins.skins[player:get_player_name()] = "character_2"
-		else
-			skins.skins[player:get_player_name()] = "character_1"
-		end
-		
+		local race = tonumber(param);
+		if race == nil then return end
+		skins.skins[player:get_player_name()] = "character_"..race
 		skins.update_player_skin(player)
 	end
 })
