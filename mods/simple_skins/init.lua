@@ -75,7 +75,7 @@ end
 
 
 minetest.register_chatcommand("setrace", { -- RND 
-	params = "<race: 0-4>",
+	params = "<race: 0-5>",
 	description = "pick your race",
 	privs = {},
 	func = function(name, param)
@@ -83,7 +83,7 @@ minetest.register_chatcommand("setrace", { -- RND
 			-- how to use formspec?
 			--minetest.show_formspec( name, "simple_skins:form" ,skins.formspec.main(name) );
 			
-			return false, "Invalid usage, use setrace 0-4."
+			return false, "Invalid usage, use setrace 0-5."
 		end 
 		
 		local player = minetest.env:get_player_by_name(name)
