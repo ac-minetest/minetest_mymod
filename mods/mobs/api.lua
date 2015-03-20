@@ -1008,7 +1008,7 @@ function mobs:register_arrow(name, def)
 					end
 				end
 			end
-			self.object:setacceleration({x=0,y=-2,z=0}) --rnd
+			self.object:setacceleration({x=0,y=-1,z=0}) --rnd
 		end
 	})
 end
