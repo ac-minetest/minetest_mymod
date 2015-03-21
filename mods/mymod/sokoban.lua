@@ -88,12 +88,19 @@ description = "sokoban crate",
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
 		local form  = 
-		"size[3,1]" ..  -- width, height
+		"size[3,2]" ..  -- width, height
 		"field[0,0.5;3,1;level;enter level 1-90;1]"
 		meta:set_string("formspec", form)
 		meta:set_string("infotext","sokoban level loader, right click to select level")
 		meta:set_int("time", minetest.get_gametime());
 	end, 
+	on_punch = function(pos, node, player) -- make timer ready to enter
+		local privs = minetest.get_player_privs(name); 
+		if not privs.ban then return end
+		local meta = minetest.get_meta(pos)
+		local t = minetest.get_gametime(); meta:set_int("time", t-130)		
+		minetest.chat_send_all("Sokoban loader reset. Load level now.")
+	end,
 	on_receive_fields = function(pos, formname, fields, sender) 
 		local name = sender:get_player_name(); if name==nil then return end
 		local privs = minetest.get_player_privs(name); 
