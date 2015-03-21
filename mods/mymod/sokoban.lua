@@ -5,7 +5,7 @@ local sokoban = {};
 sokoban.push_time = 0
 sokoban.blocks = 0;sokoban.level = 0; sokoban.moves=0;
 sokoban.load=0;sokoban.playername =""
-local SOKOBAN_WALL = "default:brick"
+local SOKOBAN_WALL = "mymod:stone_maze"
 local SOKOBAN_FLOOR = "default:stone"
 local SOKOBAN_GOAL = "default:tree"
 

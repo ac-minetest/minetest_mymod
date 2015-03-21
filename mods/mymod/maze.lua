@@ -164,7 +164,7 @@ minetest.register_node("mymod:glass_maze", {
 
 minetest.register_node("mymod:stone_maze", {
 	description = "maze_wall",
-	tiles = {"default_stone.png"},
+	tiles = {"default_brick.png"},
 	is_ground_content = true,
 	groups = {immortal = 1},
 	legacy_mineral = true,
