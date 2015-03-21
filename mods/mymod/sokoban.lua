@@ -70,7 +70,9 @@ minetest.register_node("mymod:crate", {
 		if sokoban.blocks~=0 then
 			minetest.chat_send_player(name,"move " .. sokoban.moves .. " : " ..sokoban.blocks .. " crates left ");
 			else minetest.chat_send_all( name .. " just solved sokoban level ".. sokoban.level .. " in " .. sokoban.moves .. " moves. He gets " .. (sokoban.level-0.5)*100 .. " XP reward.")
-			playerdata[name].xp = playerdata[name].xp + (sokoban.level-0.5)*100
+			if playerdata~=nil then
+				playerdata[name].xp = playerdata[name].xp + (sokoban.level-0.5)*100
+			end
 			sokoban.playername = ""; sokoban.level = 1
 		end
 	end,
@@ -89,7 +91,7 @@ description = "sokoban crate",
 		local meta = minetest.get_meta(pos)
 		local form  = 
 		"size[3,2]" ..  -- width, height
-		"field[0,0.5;3,1;level;enter level 1-90;1]"
+		"field[0,0.5;3,2.5;level;enter level 1-90;1]"
 		meta:set_string("formspec", form)
 		meta:set_string("infotext","sokoban level loader, right click to select level")
 		meta:set_int("time", minetest.get_gametime());
@@ -109,9 +111,12 @@ description = "sokoban crate",
 		local meta = minetest.get_meta(pos)
 		local t = minetest.get_gametime();local t_old = meta:get_int("time");
 		if not privs.ban then 
-			
-			if t-t_old<120 and name~=sokoban.playername then 
-				minetest.chat_send_player(name,"Wait at least 2 minutes to load next level. "..120-(t-t_old) .. " seconds left.");
+			if t-t_old<300 and name~=sokoban.playername then 
+				minetest.chat_send_player(name,"Wait at least 5 minutes to load next level. "..300-(t-t_old) .. " seconds left.");
+				return 
+			end
+			if t-t_old<60 and name==sokoban.playername then 
+				minetest.chat_send_player(name,"Wait at least 1 minute to load next level. "..60-(t-t_old) .. " seconds left.");
 				return 
 			end
 		end
@@ -137,7 +142,7 @@ description = "sokoban crate",
 			str = file:read("*line"); 
 			if str~=nil then 
 				if string.sub(str,1,1)==";" then
-					file:close(); minetest.chat_send_all("Sokoban level "..sokoban.level .." loaded by ".. name); return 
+					file:close(); minetest.chat_send_all("Sokoban level "..sokoban.level .." loaded by ".. name .. ". It has " .. sokoban.blocks  .. " to push. "); return 
 				end
 				i=i+1;
 				for j = 1,string.len(str) do
@@ -145,8 +150,8 @@ description = "sokoban crate",
 					p.y=p.y-1; 
 					if minetest.get_node(p).name~=SOKOBAN_FLOOR then minetest.set_node(p,{name=SOKOBAN_FLOOR}); end -- clear floor
 					p.y=p.y+1;
-					if s==" " and minetest.get_node(p,{name="air"}).name~="air" then minetest.set_node(p,{name="air"}) end
-					if s=="#" then minetest.set_node(p,{name=SOKOBAN_WALL}) end
+					if s==" " and minetest.get_node(p).name~="air" then minetest.set_node(p,{name="air"}) end
+					if s=="#" and minetest.get_node(p).name~=SOKOBAN_WALL then minetest.set_node(p,{name=SOKOBAN_WALL}) end
 					if s=="$" then minetest.set_node(p,{name="mymod:crate"});sokoban.blocks=sokoban.blocks+1 end
 					if s=="." then p.y=p.y-1;minetest.set_node(p,{name=SOKOBAN_GOAL}); p.y=p.y+1;minetest.set_node(p,{name="air"}) end
 					--starting position
