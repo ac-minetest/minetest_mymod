@@ -140,7 +140,12 @@ description = "sokoban crate",
 					if s=="#" then minetest.set_node(p,{name=SOKOBAN_WALL}) end
 					if s=="$" then minetest.set_node(p,{name="mymod:crate"});sokoban.blocks=sokoban.blocks+1 end
 					if s=="." then p.y=p.y-1;minetest.set_node(p,{name=SOKOBAN_GOAL}); p.y=p.y+1;minetest.set_node(p,{name="air"}) end
+					--starting position
 					if s=="@" then p.y=p.y-1;minetest.set_node(p,{name="default:glass"}); p.y=p.y+1;minetest.set_node(p,{name="air"}) end
+					if s~="@" then p.y = pos.y+2;minetest.set_node(p,{name="mymod:glass_maze"});  
+						else p.y=pos.y+2;minetest.set_node(p,{name="default:ladder"})
+					end -- roof above to block jumps
+					
 				end
 			end
 		end
