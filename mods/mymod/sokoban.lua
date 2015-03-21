@@ -71,7 +71,7 @@ minetest.register_node("mymod:crate", {
 			minetest.chat_send_player(name,"move " .. sokoban.moves .. " : " ..sokoban.blocks .. " crates left ");
 			else minetest.chat_send_all( name .. " just solved sokoban level ".. sokoban.level .. " in " .. sokoban.moves .. " moves. He gets " .. (sokoban.level-0.5)*100 .. " XP reward.")
 			playerdata[name].xp = playerdata[name].xp + (sokoban.level-0.5)*100
-			sokoban.playername = ""; sokoban.level = nil
+			sokoban.playername = ""; sokoban.level = 1
 		end
 	end,
 })
@@ -109,7 +109,7 @@ description = "sokoban crate",
 		local t = minetest.get_gametime();local t_old = meta:get_int("time");
 		if not privs.ban then 
 			
-			if t-t_old<120 then 
+			if t-t_old<120 and name~=sokoban.playername then 
 				minetest.chat_send_player(name,"Wait at least 2 minutes to load next level. "..120-(t-t_old) .. " seconds left.");
 				return 
 			end
