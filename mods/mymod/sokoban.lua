@@ -95,6 +95,7 @@ description = "sokoban crate",
 		meta:set_int("time", minetest.get_gametime());
 	end, 
 	on_punch = function(pos, node, player) -- make timer ready to enter
+		local name = player:get_player_name(); if name==nil then return end
 		local privs = minetest.get_player_privs(name); 
 		if not privs.ban then return end
 		local meta = minetest.get_meta(pos)
