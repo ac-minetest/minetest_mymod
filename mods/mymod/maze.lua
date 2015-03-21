@@ -140,7 +140,7 @@ function maze_deep_first_search(m,n,start,seed) -- returns a table of strings re
 			for k = 1,string.len(v) do
 				p.z=pos.z+k
 					if string.sub(v,k,k)=="1" then
-						minetest.set_node(p,{name="default:stone"})
+						minetest.set_node(p,{name="mymod:stone_maze"})
 						else minetest.set_node(p,{name="air"})
 					end
 				end
