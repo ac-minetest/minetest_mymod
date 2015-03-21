@@ -97,18 +97,17 @@ description = "sokoban crate",
 		local name = sender:get_player_name(); if name==nil then return end
 		local privs = minetest.get_player_privs(name); 
 		
+		local meta = minetest.get_meta(pos)
 		if not privs.ban then 
-			local meta = minetest.get_meta(pos)
 			local t = minetest.get_gametime();local t_old = meta:get_int("time");
 			if t-t_old<120 then 
 				minetest.chat_send_player(name,"Wait at least 2 minutes to load next level. "..120-(t-t_old) .. " seconds left.");
 				return 
-			else meta:set_int("time", t);
 			end
 		end
-		
-		
+	
 		if fields.level == nil then return end
+		meta:set_int("time", t);
 		local lvl = tonumber(fields.level)-1;
 		if lvl <0 or lvl >89 then return end
 		
