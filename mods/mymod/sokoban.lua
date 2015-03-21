@@ -71,7 +71,7 @@ minetest.register_node("mymod:crate", {
 			minetest.chat_send_player(name,"move " .. sokoban.moves .. " : " ..sokoban.blocks .. " crates left ");
 			else minetest.chat_send_all( name .. " just solved sokoban level ".. sokoban.level .. " in " .. sokoban.moves .. " moves. He gets " .. (sokoban.level-0.5)*100 .. " XP reward.")
 			playerdata[name].xp = playerdata[name].xp + (sokoban.level-0.5)*100
-			sokoban.playername = ""
+			sokoban.playername = ""; sokoban.level = nil
 		end
 	end,
 })
@@ -88,8 +88,8 @@ description = "sokoban crate",
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
 		local form  = 
-		"size[2,1]" ..  -- width, height
-		"field[0,0.5;2,1;level;enter level 1-90;1]"
+		"size[3,1]" ..  -- width, height
+		"field[0,0.5;3,1;level;enter level 1-90;1]"
 		meta:set_string("formspec", form)
 		meta:set_string("infotext","sokoban level loader, right click to select level")
 		meta:set_int("time", minetest.get_gametime());
@@ -99,15 +99,16 @@ description = "sokoban crate",
 		local privs = minetest.get_player_privs(name); 
 		
 		local meta = minetest.get_meta(pos)
+		local t = minetest.get_gametime();local t_old = meta:get_int("time");
 		if not privs.ban then 
-			local t = minetest.get_gametime();local t_old = meta:get_int("time");
+			
 			if t-t_old<120 then 
 				minetest.chat_send_player(name,"Wait at least 2 minutes to load next level. "..120-(t-t_old) .. " seconds left.");
 				return 
 			end
 		end
 	
-		if fields.level == nil then fields.level = 1 end -- default lvl 1
+		if fields.level == nil then return end 
 		meta:set_int("time", t);
 		local lvl = tonumber(fields.level)-1;
 		if lvl <0 or lvl >89 then return end
