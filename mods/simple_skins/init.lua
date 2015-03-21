@@ -73,34 +73,6 @@ skins.save = function()
 end
 
 
-
-minetest.register_chatcommand("setrace", { -- RND 
-	params = "<race: 0-5>",
-	description = "pick your race",
-	privs = {},
-	func = function(name, param)
-		if param == "" then
-			-- how to use formspec?
-			--minetest.show_formspec( name, "simple_skins:form" ,skins.formspec.main(name) );
-			
-			return false, "Invalid usage, use setrace 0-5."
-		end 
-		
-		local player = minetest.env:get_player_by_name(name)
-		if player == nil then
-				-- just a check to prevent the server crashing
-				return false
-		end
-		local race = tonumber(param);
-		if race == nil then return end
-		skins.skins[player:get_player_name()] = "character_"..race
-		skins.update_player_skin(player)
-	end
-})
-
-
-
-
 -- Skins Selection Page
 
 skins.formspec = {}
@@ -156,6 +128,34 @@ minetest.register_on_joinplayer(function(player)
 	skins.update_player_skin(player)
 	--inventory_plus.register_button(player,"skins","Skin")
 end)
+
+
+-- simple skins mod required for this ( make sure its run first by putting it into depends.txt)
+minetest.register_chatcommand("setrace", { -- RND 
+	params = "<race: 0-5>",
+	description = "pick your race",
+	privs = {},
+	func = function(name, param)
+		if param == "" then
+			-- how to use formspec?
+			--minetest.show_formspec( name, "simple_skins:form" ,skins.formspec.main(name) );
+			
+			return false, "Invalid usage, use setrace 0-5."
+		end 
+		
+		local player = minetest.env:get_player_by_name(name)
+		if player == nil then
+				-- just a check to prevent the server crashing
+				return false
+		end
+		local race = tonumber(param);
+		if race == nil then return end
+		skins.skins[player:get_player_name()] = "character_"..race
+		skins.update_player_skin(player)
+	end
+})
+
+
 
 minetest.register_on_player_receive_fields(function(player,formname,fields)
 	if fields.skins then

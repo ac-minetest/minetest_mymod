@@ -2,3 +2,4 @@ default
 bones
 craft_guide
 chatplus
+simple_skins

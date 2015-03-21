@@ -62,9 +62,6 @@ end,
 
 
 
-
-
-
 minetest.register_abm({ -- lava destroyes bones (every?) after 10 minutes
 	nodenames = {"bones:bones"},
 	neighbors = {"default:lava_flowing","default:lava_source"},
@@ -327,6 +324,23 @@ minetest.register_globalstep(function(dtime)
 					playerdata[name].jail = playerdata[name].jail+1.5
 				end
 			end
+			
+			-- skins check : requires simple_skins mod inside depends.txt
+			
+			if skins.skins~=nil then
+				local skin = tonumber(string.sub(skins.skins[name],11));
+				--minetest.chat_send_all(name.." has skin number " .. skin)
+				if skin == 0 then -- kirby the little dude gets stepped on
+					for _,suspect in pairs(minetest.get_objects_inside_radius(pos, 2)) do
+						if suspect:is_player() and suspect:get_player_name()~=player:get_player_name() then
+							local crusher = suspect:get_player_name();
+							minetest.chat_send_all(crusher .. " couldnt see " .. name .. " so he stepped on him by accident ")
+							player:set_hp(player:get_hp()-5);
+						end
+					end
+				end
+			end
+			
 		
 			-- local here = minetest.get_node(pos);
 			-- if here.name=="default:stone" then 
