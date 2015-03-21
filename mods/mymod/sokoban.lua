@@ -25,7 +25,7 @@ minetest.register_node("mymod:crate", {
 				minetest.chat_send_player(name,"Please right click level loader block to load and play Sokoban")
 				return
 			end
-			minetest.chat_send_player(name,"Only ".. name .. " can play. To play new level please right click loader block and select level.")
+			minetest.chat_send_player(name,"Only ".. sokoban.playername .. " can play. To play new level please right click loader block and select level.")
 			return
 		end
 		local time = sokoban.push_time; local t = minetest.get_gametime();
