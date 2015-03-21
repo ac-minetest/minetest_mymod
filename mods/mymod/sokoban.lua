@@ -128,7 +128,7 @@ description = "sokoban crate",
 			if str~=nil then 
 				if string.sub(str,1,1)==";" then
 					sokoban.playername = name
-					file:close(); minetest.chat_send_all("Sokoban level "..sokoban.level .." loaded."); return 
+					file:close(); minetest.chat_send_all("Sokoban level "..sokoban.level .." loaded by ".. name); return 
 				end
 				i=i+1;
 				for j = 1,string.len(str) do
