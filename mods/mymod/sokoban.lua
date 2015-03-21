@@ -115,8 +115,9 @@ description = "sokoban crate",
 				return 
 			end
 		end
-	
+		
 		if fields.level == nil then return end 
+		sokoban.playername = name
 		meta:set_int("time", t);
 		local lvl = tonumber(fields.level)-1;
 		if lvl <0 or lvl >89 then return end
@@ -136,7 +137,6 @@ description = "sokoban crate",
 			str = file:read("*line"); 
 			if str~=nil then 
 				if string.sub(str,1,1)==";" then
-					sokoban.playername = name
 					file:close(); minetest.chat_send_all("Sokoban level "..sokoban.level .." loaded by ".. name); return 
 				end
 				i=i+1;
