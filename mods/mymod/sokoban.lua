@@ -69,8 +69,8 @@ minetest.register_node("mymod:crate", {
 		local name = player:get_player_name(); if name==nil then return end
 		if sokoban.blocks~=0 then
 			minetest.chat_send_player(name,"move " .. sokoban.moves .. " : " ..sokoban.blocks .. " crates left ");
-			else minetest.chat_send_all( name .. " just solved sokoban level ".. sokoban.level .. " in " .. sokoban.moves .. " moves. He gets a nice XP reward.")
-			playerdata[name].xp = playerdata[name].xp + (sokoban.level-1)*100
+			else minetest.chat_send_all( name .. " just solved sokoban level ".. sokoban.level .. " in " .. sokoban.moves .. " moves. He gets " .. (sokoban.level-0.5)*100 .. " XP reward.")
+			playerdata[name].xp = playerdata[name].xp + (sokoban.level-0.5)*100
 			sokoban.playername = ""
 		end
 	end,
