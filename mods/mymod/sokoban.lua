@@ -87,8 +87,8 @@ description = "sokoban crate",
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
 		local form  = 
-		"size[1,1]" ..  -- width, height
-		"field[0,0.5;1,1;level;enter level 1-90;1]"
+		"size[2,1]" ..  -- width, height
+		"field[0,0.5;2,1;level;enter level 1-90;1]"
 		meta:set_string("formspec", form)
 		meta:set_string("infotext","sokoban level loader, right click to select level")
 		meta:set_int("time", minetest.get_gametime());
@@ -106,7 +106,7 @@ description = "sokoban crate",
 			end
 		end
 	
-		if fields.level == nil then return end
+		if fields.level == nil then fields.level = 1 end -- default lvl 1
 		meta:set_int("time", t);
 		local lvl = tonumber(fields.level)-1;
 		if lvl <0 or lvl >89 then return end
