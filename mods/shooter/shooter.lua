@@ -282,7 +282,7 @@ function shooter:fire_weapon(user, pointed_thing, def)
 	elseif pointed_thing.type == "object" then
 		local object = pointed_thing.ref
 		if shooter:is_valid_object(object) == true then
-			object:punch(user, nil, def.tool_caps, v1)
+			object:punch(user, nil, def.tool_caps, v1) -- rnd: do damage here?
 			local p2 = object:getpos()
 			local pp = get_particle_pos(p1, v1, vector.distance(p1, p2))
 			pp.y = pp.y + 1.75

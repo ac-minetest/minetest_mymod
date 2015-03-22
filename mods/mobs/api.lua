@@ -78,7 +78,13 @@ function mobs:register_mob(name, def)
 					
 					--rnd attack
 					if self.hp_max>10 then -- small monsters are quiet
-						minetest.sound_play("spotted", {pos=self.object:getpos(),gain=1.0,max_hear_distance = 32,})
+						if self.run_velocity ==9 then -- aggressor
+							minetest.sound_play("lil_friend", {pos=self.object:getpos(),gain=1.0,max_hear_distance = 32,})
+						else
+							minetest.sound_play("spotted", {pos=self.object:getpos(),gain=1.0,max_hear_distance = 32,})
+						end
+						
+						
 					end
 				  --					if self.sounds.war_cry then
 --						if math.random(0,100) < 90 then
