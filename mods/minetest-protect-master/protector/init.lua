@@ -229,7 +229,7 @@ minetest.register_node(protector.node, {
 	end,
 	on_rightclick = function(pos, node, clicker, itemstack)
 		local meta = minetest.env:get_meta(pos)
-		if protector.can_dig(1,pos,clicker,true) then
+		if protector.can_dig(1,pos,clicker,true,2) then
 			minetest.show_formspec(
 				clicker:get_player_name(),
 				"protector_"..minetest.pos_to_string(pos),
