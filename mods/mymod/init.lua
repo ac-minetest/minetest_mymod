@@ -241,7 +241,7 @@ minetest.register_globalstep(function(dtime)
 			votingpoll.time =0; votingpoll.state = 0; 
 			if votingpoll.result<=0 then
 				minetest.chat_send_all("Vote ends. Player ".. votingpoll.name .." receives punishment with voting result " .. votingpoll.result );
-				playerdata[votingpoll.name].jail= math.max(playerdata[votingpoll.name].jail+votingpoll.jail,1.2)
+				playerdata[votingpoll.name].jail= math.max(playerdata[votingpoll.name].jail+votingpoll.jail,1.25)
 				else minetest.chat_send_all("Vote ends. Player ".. votingpoll.name .." is excused with voting result " .. votingpoll.result);
 			end
 		end -- voting ended

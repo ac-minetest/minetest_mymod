@@ -158,7 +158,7 @@ minetest.register_node("mymod:glass_maze", {
 	paramtype = "light",
 	sunlight_propagates = true,
 	is_ground_content = false,
-	groups = {immortal = 1},
+	groups = {immortal = 1,disable_jump=1},
 	sounds = default.node_sound_glass_defaults(),
 })
 
@@ -166,7 +166,7 @@ minetest.register_node("mymod:stone_maze", {
 	description = "maze_wall",
 	tiles = {"default_brick.png"},
 	is_ground_content = true,
-	groups = {immortal = 1},
+	groups = {immortal = 1,disable_jump=1},
 	legacy_mineral = true,
 	sounds = default.node_sound_stone_defaults(),
 })
