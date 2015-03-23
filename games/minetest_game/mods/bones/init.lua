@@ -189,10 +189,15 @@ minetest.register_on_dieplayer(function(player)
 			"list[current_name;main;0,0;8,4;]"..
 			"list[current_player;main;0,5;8,4;]")
 	meta:set_string("infotext", player_name.."'s fresh bones")
-	meta:set_string("owner", player_name)
+	
+	
+	--rnd owner sets to empty if bones inside other protection
+	if  minetest.is_protected(pos, player_name) then meta:set_string("owner", "") else meta:set_string("owner", player_name) end
+	
 	meta:set_int("time", 0)
 	meta:set_int("bonetime_counter", 0) -- rnd: this is lag fix for bone counter
 	
 	local timer  = minetest.get_node_timer(pos)
 	timer:start(10)
 end)
+ 
