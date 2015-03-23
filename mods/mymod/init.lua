@@ -177,7 +177,7 @@ minetest.register_chatcommand("y", {
     privs = {},
     func = function(name)
 		if votingpoll.state ==1 then 
-			if votingpoll.votes[name] == nil then 
+			if votingpoll.votes[name] == nil and votingpoll.name~=name then 
 				votingpoll.result = votingpoll.result -1
 				votingpoll.votes[name] = true;
 			end
@@ -191,7 +191,7 @@ minetest.register_chatcommand("n", {
     privs = {},
     func = function(name)
 		if votingpoll.state ==1 then 
-			if votingpoll.votes[name] == nil then 
+			if votingpoll.votes[name] == nil and votingpoll.name~=name then 
 				votingpoll.result = votingpoll.result +1
 				votingpoll.votes[name] = true;
 			end
@@ -241,7 +241,7 @@ minetest.register_globalstep(function(dtime)
 			votingpoll.time =0; votingpoll.state = 0; 
 			if votingpoll.result<=0 then
 				minetest.chat_send_all("Vote ends. Player ".. votingpoll.name .." receives punishment with voting result " .. votingpoll.result );
-				playerdata[votingpoll.name].jail=playerdata[votingpoll.name].jail+votingpoll.jail
+				playerdata[votingpoll.name].jail= math.max(playerdata[votingpoll.name].jail+votingpoll.jail,1.2)
 				else minetest.chat_send_all("Vote ends. Player ".. votingpoll.name .." is excused with voting result " .. votingpoll.result);
 			end
 		end -- voting ended
