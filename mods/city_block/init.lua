@@ -124,7 +124,7 @@ minetest.register_on_dieplayer(
 								if playerdata[suspect_name].jail~= nil then
 									if votingpoll.state ~=1 then 
 										votingpoll.name = suspect_name; votingpoll.jail = 3; votingpoll.time = 10; votingpoll.state = 2;
-										votingpoll.reason = name.. " is suspect for killing " .. player:get_player_name()  .. " in town ";
+										votingpoll.reason = suspect_name.. " is suspect for killing " .. player:get_player_name()  .. " in town ";
 									end
 									--playerdata[suspect_name].jail = playerdata[suspect_name].jail + 3
 								end
