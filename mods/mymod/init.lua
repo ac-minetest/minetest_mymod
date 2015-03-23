@@ -178,7 +178,7 @@ minetest.register_chatcommand("y", {
     func = function(name)
 		if votingpoll.state ==1 then 
 			if votingpoll.votes[name] == nil then 
-				votingpoll.result = votingpoll.result +1
+				votingpoll.result = votingpoll.result -1
 				votingpoll.votes[name] = true;
 			end
 		else return
@@ -192,7 +192,7 @@ minetest.register_chatcommand("n", {
     func = function(name)
 		if votingpoll.state ==1 then 
 			if votingpoll.votes[name] == nil then 
-				votingpoll.result = votingpoll.result -1
+				votingpoll.result = votingpoll.result +1
 				votingpoll.votes[name] = true;
 			end
 		else return
