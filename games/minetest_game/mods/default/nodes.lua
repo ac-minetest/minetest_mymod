@@ -864,6 +864,29 @@ minetest.register_node("default:chest_locked", {
 				"default:chest_locked",
 				default.get_locked_chest_formspec(pos)
 			)
+		else -- rnd
+			local r = 5;
+			local name = clicker:get_player_name(); if name==nil then return end
+			local positions = minetest.find_nodes_in_area(
+			{x=pos.x-r, y=pos.y-r, z=pos.z-r},
+			{x=pos.x+r, y=pos.y+r, z=pos.z+r},
+			"protector:protect");
+			local protected = false;local ppos;
+			for _, p in ipairs(positions) do
+				local nmeta = minetest.env:get_meta(p)
+				local owner = nmeta:get_string("owner")
+				if owner == name then protected = true; ppos = p;end
+			end
+			if protected then 
+				local i = math.random(3);
+				if i==1 then minetest.set_node(ppos,{name="air"}); minetest.chat_send_player(name,"Take over fail.") return end
+				meta:set_string("owner", name) 
+				minetest.chat_send_player(name,"Congratulations, chest is yours now");
+				else minetest.chat_send_player(name,"Protect chest with protector and try to take it. There is 1:3 chance you will fail and loose protector.");
+			end
+		
+		
+		
 		end
 	end,
 })
