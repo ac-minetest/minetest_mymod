@@ -230,12 +230,13 @@ minetest.register_globalstep(function(dtime)
 	local player
 	local t
 	
+	-- jail voting
 	if votingpoll.state == 2 then -- new vote 
 		minetest.chat_send_all("VOTE (" .. votingpoll.time .. "s): do we punish " .. votingpoll.name .. " for: " .. votingpoll.reason .. "? say /y or /n ");
 		votingpoll.state = 1 -- voting countdown
 		votingpoll.result = 0;votingpoll.votes = {};
 		elseif votingpoll.state == 1 then
-			votingpoll.time = votingpoll.time-dtime
+			votingpoll.time = votingpoll.time-MYMOD_UPDATE_TIME
 		if votingpoll.time<0 then 
 			votingpoll.time =0; votingpoll.state = 0; 
 			if votingpoll.result<=0 then
@@ -245,6 +246,7 @@ minetest.register_globalstep(function(dtime)
 			end
 		end -- voting ended
 	end
+	
 		for _,player in ipairs(minetest.get_connected_players()) do 
 			pos = player:getpos()
 			local name = player:get_player_name();
