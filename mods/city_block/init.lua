@@ -122,7 +122,11 @@ minetest.register_on_dieplayer(
 							minetest.chat_send_all("Player "..suspect_name.." sent to jail as suspect for killing in town. You can free him with /free ".. suspect_name)
 							if playerdata[suspect_name]~= nil then
 								if playerdata[suspect_name].jail~= nil then
-									playerdata[suspect_name].jail = playerdata[suspect_name].jail + 3
+									if votingpoll.state ~=1 then 
+										votingpoll.name = suspect_name; votingpoll.jail = 3; votingpoll.time = 10; votingpoll.state = 2;
+										votingpoll.reason = name.. " is suspect for killing " .. player:get_player_name()  .. " in town ";
+									end
+									--playerdata[suspect_name].jail = playerdata[suspect_name].jail + 3
 								end
 							end
 							minetest.log("action", "Player "..suspect_name.." warned for killing in town")

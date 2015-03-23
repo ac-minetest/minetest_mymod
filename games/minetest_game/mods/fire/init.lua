@@ -109,7 +109,7 @@ minetest.register_abm({
 	interval = 1,
 	chance = 2,
 	action = function(p0, node, _, _)
-		return --rnd disable fire
+		if 1==1 then return end --rnd disable fire
 		-- If there is water or stuff like that around flame, don't ignite
 		if fire.flame_should_extinguish(p0) then
 			return
@@ -128,7 +128,7 @@ minetest.register_abm({
 	interval = 2,
 	chance = 10,
 	action = function(p0, node, _, _)
-		return --rnd disable fire
+		if 1==1 then return end --rnd disable fire
 		local reg = minetest.registered_nodes[node.name]
 		if not reg or not reg.groups.igniter or reg.groups.igniter < 2 then
 			return

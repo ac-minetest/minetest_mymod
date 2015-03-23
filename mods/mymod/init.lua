@@ -76,6 +76,7 @@ minetest.register_abm({ -- lava destroyes bones (every?) after 10 minutes
 
 -- here various player stats are saved (experience, skills, effects)
 playerdata = {};
+votingpoll = {}; 
 
 minetest.register_on_joinplayer(function(player) -- init stuff on player join
 
@@ -170,6 +171,35 @@ minetest.register_chatcommand("jail", {
 end,	
 })
 
+
+minetest.register_chatcommand("y", {
+    description = "vote yes in poll",
+    privs = {},
+    func = function(name)
+		if votingpoll.state ==1 then 
+			if votingpoll.votes[name] == nil then 
+				votingpoll.result = votingpoll.result +1
+				votingpoll.votes[name] = true;
+			end
+		else return
+		end
+	end
+	})
+	
+minetest.register_chatcommand("n", {
+    description = "vote no in poll",
+    privs = {},
+    func = function(name)
+		if votingpoll.state ==1 then 
+			if votingpoll.votes[name] == nil then 
+				votingpoll.result = votingpoll.result -1
+				votingpoll.votes[name] = true;
+			end
+		else return
+		end
+	end
+	})
+
 dofile(minetest.get_modpath("mymod").."/experience.lua")
 dofile(minetest.get_modpath("mymod").."/landmine.lua")
 dofile(minetest.get_modpath("mymod").."/extractor.lua")
@@ -199,6 +229,21 @@ minetest.register_globalstep(function(dtime)
 	local pos,dist
 	local player
 	local t
+	
+	if votingpoll.state == 2 then -- new vote 
+		minetest.chat_send_all("VOTE (" .. votingpoll.time .. "s): do we punish " .. votingpoll.name .. " for: " .. votingpoll.reason .. "? say /y or /n ");
+		votingpoll.state = 1 -- voting countdown
+		votingpoll.result = 0;votingpoll.votes = {};
+		elseif votingpoll.state == 1 then
+			votingpoll.time = votingpoll.time-dtime
+		if votingpoll.time<0 then 
+			votingpoll.time =0; votingpoll.state = 0; 
+			if votingpoll.result<=0 then
+				minetest.chat_send_all("Vote ends. Player ".. votingpoll.name .." receives punishment.");
+				playerdata[votingpoll.name].jail=playerdata[votingpoll.name].jail+votingpoll.jail
+			end
+		end -- voting ended
+	end
 		for _,player in ipairs(minetest.get_connected_players()) do 
 			pos = player:getpos()
 			local name = player:get_player_name();
@@ -321,7 +366,11 @@ minetest.register_globalstep(function(dtime)
 				if (node1=="default:stone" or node1=="default:cobble") and (node2=="default:stone" or node2=="default:cobble") then
 					minetest.chat_send_all(name.. " was caught walking inside walls at " .. pos.x .. " " .. pos.y .. " " .. pos.z)
 					minetest.log("action", name.. " was caught walking inside walls at " .. pos.x .. " " .. pos.y .. " " .. pos.z)
-					playerdata[name].jail = playerdata[name].jail+1.5
+					--playerdata[name].jail = playerdata[name].jail+1.5
+					if votingpoll.state ~=1 then
+						votingpoll.name = name; votingpoll.jail = 1.5; votingpoll.time = 10; votingpoll.state = 2;
+						votingpoll.reason = name.. " was caught walking inside walls at " .. pos.x .. " " .. pos.y .. " " .. pos.z;
+					end
 				end
 			end
 			
