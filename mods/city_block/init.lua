@@ -110,6 +110,9 @@ minetest.register_on_dieplayer(
 		local spawnpoint = core.setting_get_pos("static_spawnpoint")
 		local pos=player:getpos()
 		local suspect_name
+		minetest.log("action", player:get_player_name().. " died at " .. pos.x .. " " ..pos.y .. " " ..pos.z );
+		--minetest.chat_send_player(player:get_player_name(),"SERVER: you died at ".. pos.x .. " " ..pos.y .. " " ..pos.z );
+		
 		-- maybe above with spawnpoint.x works???, otherwise it crashes
 		if city_block:in_city(pos) then --and math.abs(pos.x-spawnpoint.x)<20 and math.abs(pos.y-spawnpoint.y)<20 and math.abs(pos.z-spawnpoint.z)<20 then
 			for _,suspect in pairs(minetest.get_objects_inside_radius(pos, 3.8)) do

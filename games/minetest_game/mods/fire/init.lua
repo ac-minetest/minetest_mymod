@@ -11,7 +11,7 @@ minetest.register_node("fire:basic_flame", {
 	}},
 	inventory_image = "fire_basic_flame.png",
 	light_source = 14,
-	groups = {igniter=2,dig_immediate=3},
+	groups = {dig_immediate=3}, -- igniter=2, rnd: fire no longer ignites stuff
 	drop = '',
 	walkable = false,
 	buildable_to = true,
@@ -109,7 +109,6 @@ minetest.register_abm({
 	interval = 1,
 	chance = 2,
 	action = function(p0, node, _, _)
-		if 1==1 then return end --rnd disable fire
 		-- If there is water or stuff like that around flame, don't ignite
 		if fire.flame_should_extinguish(p0) then
 			return
@@ -128,7 +127,6 @@ minetest.register_abm({
 	interval = 2,
 	chance = 10,
 	action = function(p0, node, _, _)
-		if 1==1 then return end --rnd disable fire
 		local reg = minetest.registered_nodes[node.name]
 		if not reg or not reg.groups.igniter or reg.groups.igniter < 2 then
 			return
