@@ -220,7 +220,7 @@ craft_guide.update_recipe = function(meta, player, stack, alternate)
 	
 	-- show me the unknown items
 	craft_guide.log(dump(craft))
-	--minetest.chat_send_player(player:get_player_name(), "recipe for "..stack:get_name()..": "..dump(craft))
+	minetest.chat_send_player(player:get_player_name(), "recipe for "..stack:get_name()..": "..dump(craft))
 	
 	local itemstack = ItemStack(craft.output)
 	inv:set_stack("output", 1, itemstack)
@@ -329,7 +329,7 @@ craft_guide.create_inventory = function(inv, search)
 					--and (not def.groups.not_in_creative_inventory or def.groups.not_in_creative_inventory == 0)
 					and def.description and def.description ~= "" then
 				if search then
-					if string.find(def.name, search) or string.find(def.description, search) then
+					if string.find(string.lower(def.name), string.lower(search)) or string.find(string.lower(def.description), string.lower(search)) then
 						table.insert(craft_guide_list, name)
 					end
 				else
