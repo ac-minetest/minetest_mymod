@@ -169,6 +169,21 @@ minetest.register_node("mymod:stone_maze", {
 	groups = {immortal = 1,disable_jump=1},
 	legacy_mineral = true,
 	sounds = default.node_sound_stone_defaults(),
+	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+		local name = player:get_player_name(); if name == nil then return end
+		if minetest.is_protected(pos, name) then
+			return
+		 end
+		local player_inv = player:get_inventory()
+		if player_inv:room_for_item("main", {"mymod:stone_maze"}) then
+			player_inv:add_item("main", "mymod:stone_maze") 
+			minetest.remove_node(pos) -- remove bones
+		end
+
+		
+		
+		
+	end
 })
 
   
