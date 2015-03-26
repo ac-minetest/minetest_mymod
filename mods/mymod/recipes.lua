@@ -10,6 +10,16 @@ minetest.register_craft({
 })
 
 minetest.register_craft({
+	output = "default:dirt",
+	recipe = {
+		{"", "default:coal_lump",""},
+		{"bones:bones", "bones:bones","bones:bones"},
+		{"default:papyrus", "bones:bones","default:papyrus"}
+	}
+})
+
+
+minetest.register_craft({
 	output = "default:sand",
 	recipe = {
 		{"bones:bones", "bones:bones"},
