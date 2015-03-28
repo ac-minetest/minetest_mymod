@@ -167,3 +167,60 @@ description = "sokoban crate",
 		file:close();		
 	end,
 })
+
+-- CHECKERS GAME
+
+local checkers ={};
+checkers.piece = "";
+checkers.time = 0;
+
+--game pieces
+
+function register_piece(name, desc, tiles, punch)
+	minetest.register_node(name, {
+		description = desc,
+		drawtype = "nodebox",
+		paramtype = "light",
+		tiles = tiles,
+		groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3},
+		sounds = default.node_sound_defaults(),
+		node_box = {
+		type = "fixed",
+		fixed = {-0.5, -0.5, -0.5, 0.5, -0.3, 0.5},
+		},
+		selection_box = {
+			type = "fixed",
+			fixed = {-0.5, -0.5, -0.5, 0.5, -0.3, 0.5},
+					
+		},
+		on_punch= punch,
+	}) 
+end
+function register_board(name,desc,tiles)
+	minetest.register_node(name, {
+			description = desc,
+			tiles = tiles,
+			groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3},
+			sounds = default.node_sound_defaults(),
+			on_punch = function(pos, node, player) -- place piece on board
+					if checkers.piece == "" then return end
+					local above = {x=pos.x,y=pos.y+1;z=pos.z};
+					minetest.set_node(above, {name = checkers.piece});
+					checkers.piece = ""
+			end,
+	}) 
+end
+
+local piece_punch  = function(pos, node, player) -- pick up piece
+	local t = minetest.get_gametime(); if t-checkers.time <1 then return end; checkers.time = t;
+	checkers.piece = node.name; minetest.set_node(pos, {name="air"});
+end
+
+register_board("mymod:board_white","white board",{"wool_white.png"})
+register_board("mymod:board_black","black board",{"wool_black.png"})
+
+register_piece("mymod:checkers_blue","blue piece",{"wool_blue.png"},piece_punch)
+register_piece("mymod:checkers_blue_queen","blue queen piece",{"queen_blue.png"},piece_punch)
+
+register_piece("mymod:checkers_red","red piece",{"wool_red.png"},piece_punch)
+register_piece("mymod:checkers_red_queen","red piece",{"queen_red.png"},piece_punch)
