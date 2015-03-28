@@ -154,3 +154,12 @@ minetest.register_craft({
 		{"default:dirt","flowers:geranium","flowers:	rose"},
 	}
 })
+
+minetest.register_craft({
+	output = "travelnet:travelnet",
+	recipe = {
+		{"default:mese","default:mese","default:mese"},
+		{"default:mese","moreores:mithril_block","default:mese"},
+		{"default:mese","default:mese","default:mese"},
+	}
+})
