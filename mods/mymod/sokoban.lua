@@ -171,10 +171,46 @@ description = "sokoban crate",
 -- CHECKERS GAME
 
 local checkers ={};
-checkers.piece = "";
-checkers.time = 0;
+checkers.piece = "";checkers.time = 0;
+checkers.pos = {x=-43,y=4,z=74} -- bottom left position of 8x8 checkerboard piece
 
 --game pieces
+
+local function draw_board() -- pos is bottom left position of checkerboard
+	
+	local pos = checkers.pos;
+	local node;
+	for i = 1,8 do
+		for j =1,8 do
+			node = minetest.get_node({x=pos.x+i-1,y=pos.y,z=pos.z-1}).name;
+			if (i+j) % 2 == 1 then 
+				if node~="mymod:board_black" then minetest.set_node({x=pos.x+i-1,y=pos.y,z=pos.z-1},{name = "mymod:board_black"}) end
+				else
+				if node~="mymod:board_white" then minetest.set_node({x=pos.x+i-1,y=pos.y,z=pos.z-1},{name = "mymod:board_white"}) end
+			end
+			node = minetest.get_node({x=pos.x+i-1,y=pos.y+1,z=pos.z-1}).name;
+			if node="air" then minetest.set_node({x=pos.x+i-1,y=pos.y+1,z=pos.z-1},{name = "air"}) end
+		end
+	end
+
+	for i = 1,4 do
+		minetest.set_node({x=pos.x+2*i-1,y=pos.y+1,z=pos.z},{name = "mymod:checkers_red"})
+		minetest.set_node({x=pos.x+2*i-2,y=pos.y+1,z=pos.z+1},{name = "mymod:checkers_red"})
+		
+		minetest.set_node({x=pos.x+2*i-1,y=pos.y+1,z=pos.z+6},{name = "mymod:checkers_blue"})
+		minetest.set_node({x=pos.x+2*i-2,y=pos.y+1,z=pos.z+7},{name = "mymod:checkers_blue"})
+	end
+end
+
+minetest.register_chatcommand("checkers", {
+    description = "Start a game of checkers and refresh board display",
+    privs = {kick=true},
+    func = function(name,param)
+		draw_board();checkers.piece = ""
+	end
+	}
+)
+
 
 function register_piece(name, desc, tiles, punch)
 	minetest.register_node(name, {
@@ -212,6 +248,7 @@ function register_board(name,desc,tiles)
 end
 
 local piece_punch  = function(pos, node, player) -- pick up piece
+	if checkers.piece~="" then return end -- dont pick up another piece before last one was put down
 	local t = minetest.get_gametime(); if t-checkers.time <1 then return end; checkers.time = t;
 	checkers.piece = node.name; minetest.set_node(pos, {name="air"});
 end
