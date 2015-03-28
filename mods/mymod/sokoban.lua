@@ -172,7 +172,7 @@ description = "sokoban crate",
 
 local checkers ={};
 checkers.piece = "";checkers.time = 0;
-checkers.pos = {x=-43,y=4,z=74} -- bottom left position of 8x8 checkerboard piece
+checkers.pos = {x=-43,y=14,z=74} -- bottom left position of 8x8 checkerboard piece
 
 --game pieces
 
