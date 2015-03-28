@@ -189,7 +189,7 @@ local function draw_board() -- pos is bottom left position of checkerboard
 				if node~="mymod:board_white" then minetest.set_node({x=pos.x+i-1,y=pos.y,z=pos.z-1},{name = "mymod:board_white"}) end
 			end
 			node = minetest.get_node({x=pos.x+i-1,y=pos.y+1,z=pos.z-1}).name;
-			if node="air" then minetest.set_node({x=pos.x+i-1,y=pos.y+1,z=pos.z-1},{name = "air"}) end
+			if node~="air" then minetest.set_node({x=pos.x+i-1,y=pos.y+1,z=pos.z-1},{name = "air"}) end
 		end
 	end
 
