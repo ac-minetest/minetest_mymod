@@ -127,7 +127,7 @@ description = "sokoban crate",
 		local lvl = tonumber(fields.level)-1;
 		if lvl <0 or lvl >89 then return end
 		
-		file = io.open(minetest.get_modpath("mymod").."/sokoban.txt","r")
+		local file = io.open(minetest.get_modpath("mymod").."/sokoban.txt","r")
 		if not file then minetest.chat_send_player(name,"failed to open sokoban.txt") return end
 		local str = ""; local s; local p = {x=pos.x,y=pos.y,z=pos.z}; local i,j;i=0;
 		local lvl_found = false
