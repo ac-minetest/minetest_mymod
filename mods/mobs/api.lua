@@ -593,7 +593,7 @@ function mobs:register_mob(name, def)
 							if distance < 500 then distance = (1+distance/500)
 								else distance = (1+distance/100) -- 5x more powerful mobs below 500
 							end
-							if self.object== nil or self.attack.player==nil or self.damage==nil then
+							if self.object== nil or self.attack.player==nil or self.damage==nil or self.attack.player == nil then
 								return -- PREVENT ERROR??
 							end
 							
