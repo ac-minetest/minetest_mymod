@@ -1000,7 +1000,9 @@ function mobs:register_arrow(name, def)
 					local s = self.object:getpos() -- arrow
 					local p = player:getpos() -- target
 					local dist = get_distance(s,p) 
-					if dist~=0 then -- dont hit itself..
+					local hp = player:get_luaentity().hp_max; -- dont destroy objects withouth hp_max ( monsters have that )
+					--if hp~=nil then minetest.chat_send_all("BAM OBJECT, hp ".. hp) end
+					if hp~=nil and hp>0 and dist~=0 then -- dont hit itself..
 						local owner = self.object:get_luaentity().owner; 
 						--minetest.chat_send_all("BAM OBJECT")
 						if owner~=nil then
