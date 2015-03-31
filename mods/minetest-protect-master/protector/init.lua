@@ -283,11 +283,10 @@ minetest.register_on_player_receive_fields(function(player,formname,fields)
 		end
 		
 		if fields.protector_mode then
-			if tonumber(fields.protector_mode) ~= 0 then -- turn on penalty mode: rnd
-				meta:set_int("penalty",1)
-			else meta:set_int("penalty",0)
+			if tonumber(fields.protector_mode) == 1 then -- turn on penalty mode: rnd
+				meta:set_int("penalty",0) -- penalty off
+			else meta:set_int("penalty",1) -- penalty on
 			end
-			return
 		end
 		
 		if fields.protector_add_member then
