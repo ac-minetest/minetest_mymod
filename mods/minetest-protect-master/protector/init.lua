@@ -88,9 +88,7 @@ protector.generate_formspec = function (meta)
 	if i > npp then
 		formspec = formspec .. "button[1,7;1,1;protector_page_next;>>]"
 	end
-	formspec = formspec .. "label[2,7;Page "..(meta:get_int("page")+1).."/"..math.floor((s+i-1)/15+1).."]"
-	formspec = formspec .. "button [0,7; 1,1; exit; exit]" -- rnd fix
-	
+	formspec = formspec .. "label[2,7;Page "..(meta:get_int("page")+1).."/"..math.floor((s+i-1)/15+1).."]"	
 	return formspec
 end
 
@@ -306,18 +304,7 @@ minetest.register_on_player_receive_fields(function(player,formname,fields)
 		if fields.protector_page_next then
 			meta:set_int("page",meta:get_int("page")+1)
 		end
-		
-		if fields.exit then -- rnd fix
-			return
-		end
-		
-		-- fix here
-		
-		
-		-- minetest.show_formspec(
-			-- player:get_player_name(), formname,
-			-- protector.generate_formspec(meta)
-		-- )
+
 	end
 end)
 
