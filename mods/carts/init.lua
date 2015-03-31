@@ -505,9 +505,9 @@ minetest.register_node("carts:powerrail", {
 	groups = {bendy=2,snappy=1,dig_immediate=2,attached_node=1,rail=1,connect_to_raillike=1},
 	
 	after_place_node = function(pos, placer, itemstack)
-		if not mesecon then
+		--if not mesecon then
 			minetest.env:get_meta(pos):set_string("cart_acceleration", "1") --rnd
-		end
+		--end
 	end,
 	
 	mesecons = {
