@@ -123,7 +123,7 @@ protector.can_dig = function(r,pos,digger,onlyowner,infolevel)
 					-- rnd
 					local text = "Please do not build inside area owned by " .. owner .. " or you will go to jail. Slow down a little :) Thank you."
 					local name = digger:get_player_name(); 
-					if playerdata[name]~=nil and meta:get_int("penalty")==1 then 
+					if playerdata[name]~=nil and meta:get_int("penalty")==0 then 
 						if playerdata[name].jail + 0.55 >1 and votingpoll.state ~=1 then
 							votingpoll.name = name; votingpoll.jail = 0.55; votingpoll.time = 10; votingpoll.state = 2;
 							votingpoll.reason = name.. " tried to edit " .. owner .. "'s property ";
@@ -285,8 +285,8 @@ minetest.register_on_player_receive_fields(function(player,formname,fields)
 		
 		if fields.protector_mode then
 			if tonumber(fields.protector_mode) == 1 then -- turn on penalty mode: rnd
-				meta:set_int("penalty",0) -- penalty off
-			else meta:set_int("penalty",1) -- penalty on
+				meta:set_int("penalty",1) -- penalty off
+			else meta:set_int("penalty",0) -- penalty on
 			end
 		end
 		
