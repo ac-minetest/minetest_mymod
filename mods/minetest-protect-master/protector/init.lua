@@ -54,12 +54,13 @@ end
 
 protector.generate_formspec = function (meta)
 	if meta:get_int("page") == nil then meta:set_int("page",0) end
+	local penalty = tonumber(meta_get_int("penalty"));
 	local formspec = "size[8,8]"
 		.."label[0,0;-- Protector interface --]"
 		.."label[0,1;Punch the node to show the protected area.]"
 		.."label[0,2;Current members:]" -- rnd
 		.."label[3,0;choose penalty mode: default 0/1]"
-		.."field[5,1;1,0.5;protector_mode;;0]"
+		.."field[5,1;1,0.5;protector_mode;;"..penalty.."]"
 		
 	local members = protector.get_member_list(meta)
 	
