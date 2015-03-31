@@ -70,7 +70,7 @@ minetest.register_chatcommand("t", {
 			if player:get_player_name()~=name then
 				local pos2 = player:getpos();
 				local dist = math.sqrt((pos1.x-pos2.x)^2+(pos1.y-pos2.y)^2+(pos1.z-pos2.z)^2);
-				if dist < 32 then minetest.chat_send_player(player:get_player_name(), param) end
+				if dist < 32 then minetest.chat_send_player(player:get_player_name(),name .." : ".. param) end
 			end
 		end
 	end
