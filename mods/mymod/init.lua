@@ -66,8 +66,8 @@ minetest.register_chatcommand("t", {
     func = function(name,param)
 		local sender = minetest.env:get_player_by_name(name); if sender==nil then return end
 		local pos1 = sender:getpos();
-		for _,player in pairs(minetest.get_objects_inside_radius(pos, 2)) do
-			if player:is_player() and  player:get_player_name()~=name then
+		for _,player in pairs(minetest.get_connected_players()) do
+			if player:get_player_name()~=name then
 				local pos2 = player:getpos();
 				local dist = math.sqrt((pos1.x-pos2.x)^2+(pos1.y-pos2.y)^2+(pos1.z-pos2.z)^2);
 				if dist < 32 then minetest.chat_send_player(player:get_player_name(), param) end
