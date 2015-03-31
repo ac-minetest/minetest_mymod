@@ -57,7 +57,10 @@ protector.generate_formspec = function (meta)
 	local formspec = "size[8,8]"
 		.."label[0,0;-- Protector interface --]"
 		.."label[0,1;Punch the node to show the protected area.]"
-		.."label[0,2;Current members:]"
+		.."label[0,2;Current members:]" -- rnd
+		.."label[3,0;choose penalty mode: default 0/1]"
+		.."field[5,1;1,0.5;protector_mode;;0]"
+		
 	local members = protector.get_member_list(meta)
 	
 	local npp = 15 -- names per page, for the moment is 4*4 (-1 for the + button)
@@ -119,7 +122,7 @@ protector.can_dig = function(r,pos,digger,onlyowner,infolevel)
 					-- rnd
 					local text = "Please do not build inside area owned by " .. owner .. " or you will go to jail. Slow down a little :) Thank you."
 					local name = digger:get_player_name(); 
-					if playerdata[name]~=nil then 
+					if playerdata[name]~=nil and meta:get_int("penalty")==1 then 
 						if playerdata[name].jail + 0.55 >1 and votingpoll.state ~=1 then
 							votingpoll.name = name; votingpoll.jail = 0.55; votingpoll.time = 10; votingpoll.state = 2;
 							votingpoll.reason = name.. " tried to edit " .. owner .. "'s property ";
@@ -278,6 +281,15 @@ minetest.register_on_player_receive_fields(function(player,formname,fields)
 		if not protector.can_dig(1,pos,player,true) then
 			return
 		end
+		
+		if fields.protector_mode then
+			if tonumber(fields.protector_mode) ~= 0 then -- turn on penalty mode: rnd
+				meta:set_int("penalty",1)
+			else meta:set_int("penalty",0)
+			end
+			return
+		end
+		
 		if fields.protector_add_member then
 			for _, i in ipairs(fields.protector_add_member:split(" ")) do
 				protector.add_member(meta,i)
