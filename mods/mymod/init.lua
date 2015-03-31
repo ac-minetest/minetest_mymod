@@ -73,7 +73,7 @@ minetest.register_chatcommand("t", {
 				if dist < 32 then minetest.chat_send_player(player:get_player_name(), param) end
 			end
 	end
-	});
+	})
 
 minetest.register_abm({ -- lava destroyes bones (every?) after 10 minutes
 	nodenames = {"bones:bones"},
