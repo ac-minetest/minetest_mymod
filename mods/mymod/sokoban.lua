@@ -169,39 +169,10 @@ description = "sokoban crate",
 })
 
 -- CHECKERS GAME
-
-minetest.register_node("mymod:checkers", {
-description = "checkers crate",
-	tiles = {"moreblocks_iron_checker.png","crate.png","crate.png","crate.png","crate.png","crate.png"},
-	groups = {oddly_breakable_by_hand=1},
-	is_ground_content = false,
-	paramtype = "light",
-	light_source = 14,
-	sounds = default.node_sound_wood_defaults(),
-	on_construct = function(pos)
-		local meta = minetest.get_meta(pos)
-		local form  = 
-		"size[3,2]" ..  -- width, height
-		"field[0,0.5;3,2.5;level;enter level 1-90;1]"
-		meta:set_string("formspec", form)
-		meta:set_string("infotext","sokoban level loader, right click to select level")
-		meta:set_int("time", minetest.get_gametime());
-		checkers.pos = {x = pos.x+1, y=pos.y-1, z=pos.z+1}
-	end, 
-	on_punch = function(pos, node, player)
-		local name = player:get_player_name(); if name==nil then return end
-		local privs = minetest.get_player_privs(name); 
-		if not privs.kick then return end -- only admin
-		draw_board()
-	end
-	}
-	)
-
-
 local checkers ={};
 checkers.piece = "";checkers.time = 0;
-checkers.pos = {x=-43,y=14,z=74} -- bottom left position of 8x8 checkerboard piece
-checkers.piece_pos = {x=checkers.pos.x,y=checkers.pos.y,z=checkers.pos.z};
+checkers.pos = {} -- bottom left position of 8x8 checkerboard piece
+checkers.piece_pos = {} -- position of pick up piece
 
 --game pieces
 
@@ -222,7 +193,7 @@ local function draw_board() -- pos is bottom left position of checkerboard
 		end
 	end
 
-	for i = 1,4 do
+	for i = 1,4 do -- place pieces
 		minetest.set_node({x=pos.x+2*i-1,y=pos.y+1,z=pos.z},{name = "mymod:checkers_red"})
 		minetest.set_node({x=pos.x+2*i-2,y=pos.y+1,z=pos.z+1},{name = "mymod:checkers_red"})
 		
@@ -230,6 +201,35 @@ local function draw_board() -- pos is bottom left position of checkerboard
 		minetest.set_node({x=pos.x+2*i-2,y=pos.y+1,z=pos.z+7},{name = "mymod:checkers_blue"})
 	end
 end
+
+minetest.register_node("mymod:checkers", {
+description = "checkers crate",
+	tiles = {"moreblocks_iron_checker.png","crate.png","crate.png","crate.png","crate.png","crate.png"},
+	groups = {oddly_breakable_by_hand=1},
+	is_ground_content = false,
+	paramtype = "light",
+	light_source = 14,
+	sounds = default.node_sound_wood_defaults(),
+	on_construct = function(pos)
+		local meta = minetest.get_meta(pos)
+		local form  = 
+		"size[3,2]" ..  -- width, height
+		"field[0,0.5;3,2.5;level;enter level 1-90;1]"
+		meta:set_string("formspec", form)
+		meta:set_string("infotext","checkers game block, admin only")
+		meta:set_int("time", minetest.get_gametime());
+		checkers.pos = {x = pos.x+1, y=pos.y-1, z=pos.z+1}
+	end, 
+	on_punch = function(pos, node, player)
+		local name = player:get_player_name(); if name==nil then return end
+		local privs = minetest.get_player_privs(name); 
+		if not privs.kick then return end -- only admin
+		checkers.pos = {x = pos.x+1, y=pos.y-1, z=pos.z+1}
+		draw_board()
+	end
+	}
+	)
+
 
 minetest.register_chatcommand("checkers", {
     description = "Start a game of checkers and refresh board display",
@@ -268,18 +268,21 @@ function register_board(name,desc,tiles)
 			groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3},
 			sounds = default.node_sound_defaults(),
 			on_punch = function(pos, node, player) -- place piece on board
+					if checkers.pos.x == nil then minetest.chat_send_all("punch checkers game block before playing.") return end
 					if checkers.piece == "" then return end
+					local t = minetest.get_gametime(); if t-checkers.time <1 then return end; checkers.time = t;
 					local above = {x=pos.x,y=pos.y+1;z=pos.z};
 					minetest.set_node(above, {name = checkers.piece});
 					minetest.chat_send_all(
-					"checkers move: ".. checkers.piece_pos.x-checkers.pos.x+1 .. "," .. checkers.piece_pos.z-checkers.pos.z+1 .. " to " ..
-					above.x-checkers.pos.x+1 .. "," .. above.z-checkers.pos.z+1 )
+					"checkers move: ".. checkers.piece_pos.z-checkers.pos.z+1 .. "," .. checkers.piece_pos.x-checkers.pos.x+1 .. " to " ..
+					above.z-checkers.pos.z+1 .. "," .. above.x-checkers.pos.x+1 )
 					checkers.piece = ""
 			end,
 	}) 
 end
 
 local piece_punch  = function(pos, node, player) -- pick up piece
+	if checkers.pos.x == nil then minetest.chat_send_all("punch checkers game block before playing.") return end
 	if checkers.piece~="" then return end -- dont pick up another piece before last one was put down
 	local t = minetest.get_gametime(); if t-checkers.time <1 then return end; checkers.time = t;
 	checkers.piece = node.name; minetest.set_node(pos, {name="air"});
