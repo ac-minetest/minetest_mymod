@@ -64,7 +64,7 @@ minetest.register_chatcommand("t", {
     description = "localised chat",
     privs = {},
     func = function(name,param)
-		local sender = minetest.env:get_player_by_name(param);
+		local sender = minetest.env:get_player_by_name(name); if sender==nil then return end
 		local pos1 = sender:getpos();
 		for _,player in pairs(minetest.get_objects_inside_radius(pos, 2)) do
 			if player:is_player() and  player:get_player_name()~=name then
