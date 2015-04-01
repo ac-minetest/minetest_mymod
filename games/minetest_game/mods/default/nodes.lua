@@ -881,6 +881,7 @@ minetest.register_node("default:chest_locked", {
 				local i = math.random(3);
 				if i==1 then minetest.set_node(ppos,{name="air"}); minetest.chat_send_player(name,"Take over fail.") return end
 				meta:set_string("owner", name) 
+				meta:set_string("infotext", "chest taken over by " ..name) 
 				minetest.chat_send_player(name,"Congratulations, chest is yours now");
 				else minetest.chat_send_player(name,"Protect chest with protector and try to take it. There is 1:3 chance you will fail and loose protector.");
 			end
