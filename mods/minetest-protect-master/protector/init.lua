@@ -54,7 +54,7 @@ end
 
 protector.generate_formspec = function (meta)
 	if meta:get_int("page") == nil then meta:set_int("page",0) end
-	local penalty = tonumber(meta_get_int("penalty"));
+	local penalty = tonumber(meta:get_int("penalty"));
 	local formspec = "size[8,8]"
 		.."label[0,0;-- Protector interface --]"
 		.."label[0,1;Punch the node to show the protected area.]"
