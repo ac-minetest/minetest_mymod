@@ -1235,24 +1235,16 @@ mobs:register_arrow("mobs:fireball_spell_projectile", {
 	
 	hit_node = function(self, pos, node)
 			minetest.sound_play("tnt_explode", {pos=pos,gain=1.0,max_hear_distance = 64,})
-			--minetest.chat_send_all("BAM NODE!")
-			-- ice melts
 			if node.name=="default:ice" then 
-				if minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z}).name=="air" then
 					minetest.set_node(pos, {name="default:water_source"}) 
-				end
 			end 
 			
 			if node.name=="mymod:acid_source_active" then -- changes acid source to flowing
-				if minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z}).name=="air" then
 					minetest.set_node(pos, {name="mymod:acid_flowing_active"}) 
-				end
 			end 
 			
 			if node.name=="mymod:acid_flowing_active" then -- changes acid source to flowing
-				if minetest.get_node({x=pos.x,y=pos.y+1,z=pos.z}).name=="air" then
 					minetest.set_node(pos, {name="air"}) 
-				end
 			end 
 			
 			--furnace gets fuel for 5 secs 
