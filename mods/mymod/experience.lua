@@ -592,12 +592,12 @@ minetest.register_craft({
 
 minetest.register_node("mymod:spell_float", {
 	description = "float spell: enable glitch climbing and reduce gravity to max(0.75-magic_skill/5000,0.25) for 5+min(magic_skill/1000,5) seconds",
-	wield_image = "gui_furnace_arrow_fg.png",
+	wield_image = "bubble.png",
 	wield_scale = {x=0.8,y=0.8,z=0.8}, 
 	drawtype = "allfaces",
 	paramtype = "light",
 	light_source = 10,
-	tiles = {"gui_furnace_arrow_fg.png"},
+	tiles = {"bubble.png"},
 	groups = {oddly_breakable_by_hand=1},
 	on_use = function(itemstack, user, pointed_thing)
 		local name = user:get_player_name(); if name == nil then return end
@@ -620,3 +620,80 @@ minetest.register_node("mymod:spell_float", {
 	end
 	,
 })
+
+minetest.register_node("mymod:gravitator_on", {
+	description = "artificial gravity",
+	inventory_image = "bubble.png",
+	drawtype = "allfaces",
+	paramtype = "light",
+	light_source = 12,
+	wield_image = "bubble.png",
+	wield_scale = {x=0.8,y=2.5,z=1.3},
+	tiles = {"bubble.png","side_on.png","side_on.png"},
+	stack_max = 1,
+	groups = {oddly_breakable_by_hand=1,mesecon_effector_on = 1},
+	mesecons = {effector = {
+		action_off = function (pos, node)
+			minetest.swap_node(pos, {name = "mymod:gravitator_off"})
+		end
+	}}
+	}
+)
+
+minetest.register_node("mymod:gravitator_off", {
+	description = "artificial gravity",
+	inventory_image = "bubble.png",
+	drawtype = "allfaces",
+	paramtype = "light",
+	wield_image = "bubble.png",
+	wield_scale = {x=0.8,y=2.5,z=1.3},
+	tiles = {"bubble.png","side_off.png","side_off.png"},
+	stack_max = 1,
+	groups = {oddly_breakable_by_hand=1,mesecon_effector_on = 1},
+	mesecons = {effector = {
+		action_on = function (pos, node)
+			minetest.swap_node(pos, {name = "mymod:gravitator_on"})
+		end
+	}},
+	on_place = function(itemstack, placer, pointed_thing)
+		local pos = pointed_thing.above;
+		minetest.set_node(pos,{name = "mymod:gravitator_off"})
+		local meta = minetest.get_meta(pos)
+		local mag = 1.0
+		local form = "size[2,1]".."field[0,0.5;2.5,1;gravitator;set magnitude;"..mag.."]"
+		meta:set_string("formspec",form); meta:set_float("mag",mag)
+		meta:set_string("owner",placer:get_player_name());
+		itemstack:take_item() 
+		return itemstack
+	end,
+	on_receive_fields = function(pos, formname, fields, sender)
+		if fields.gravitator then
+			local meta = minetest.get_meta(pos);
+			if sender:get_player_name()~=meta:get_string("owner") then return end		
+			 meta:set_float("mag",tonumber(fields.gravitator))
+		end
+	end,
+	}
+)
+
+minetest.register_abm(
+	{nodenames = {"mymod:gravitator_on"},
+	interval = 1.0,
+	chance = 1,
+	action = function(pos)
+		local meta = minetest.get_meta(pos);
+		local mag = meta:get_float("mag");
+		local objects = minetest.get_objects_inside_radius(pos, 8) -- radius
+		for _,obj in ipairs(objects) do
+			if (obj:is_player()) then
+				local obj_pos = obj:getpos()
+				local name = obj:get_player_name();
+				playerdata[name].float.time = playerdata[name].float.time + 1
+				playerdata[name].float.mag = mag
+				obj:set_physics_override({gravity = mag, sneak_glitch = true});
+				playerdata[name].gravity = true;
+			end
+		end
+	end
+	});
+
