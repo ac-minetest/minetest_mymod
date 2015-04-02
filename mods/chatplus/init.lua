@@ -141,7 +141,7 @@ chatlog = {};
 chatlog.msg ={}
 
 chatlog.ind = 0;
-chatlog.len = 100; -- starts looping after that
+chatlog.len = 500; -- starts looping after that
 for i = 0 , chatlog.len-1 do chatlog.msg[i] = "" end
 chatlog.badwords = {"cunt","sex","bitch","fuck","fuk","asshole","shit","stfu","anal","anus","tits","dick"}
 chatlog.chars = {"o0","t7","i1","c<k","uv","e3"} -- first char can be replaced by others
@@ -168,6 +168,7 @@ function chatplus.send(from,msg)
 		if badword then 
 			minetest.chat_send_player(from,"Keep your language civilized.") ;
 			playerdata[from].jail = playerdata[from].jail + 1.2;
+			return false
 		end
 
 
