@@ -877,13 +877,18 @@ minetest.register_node("default:chest_locked", {
 				local owner = nmeta:get_string("owner")
 				if owner == name then protected = true; ppos = p;end
 			end
-			if protected then 
-				local i = math.random(3);
-				if i==1 then minetest.set_node(ppos,{name="air"}); minetest.chat_send_player(name,"Take over fail.") return end
-				meta:set_string("owner", name) 
-				meta:set_string("infotext", "chest taken over by " ..name) 
-				minetest.chat_send_player(name,"Congratulations, chest is yours now");
-				else minetest.chat_send_player(name,"Protect chest with protector and try to take it. There is 1:3 chance you will fail and loose protector.");
+			if protected then -- your protector nearby, attempt capture			
+				local form  = 
+				"size[5.5,1.5]" ..  -- width, height
+				"textarea[0,0;6,1;text1;chest_takeover;Try to take over chest. There is 1:3 chance you will fail and loose protector.]"..
+				"button[0,1;1,1;OK;OK]";
+				minetest.show_formspec(name, "mymod:form_chest_takeover ".. pos.x .. " " .. pos.y .. " " .. pos.z.. " " .. ppos.x .. " " .. ppos.y .. " " .. ppos.z , form)
+		
+				-- local i = math.random(3);
+				-- if i==1 then minetest.set_node(ppos,{name="air"}); minetest.chat_send_player(name,"Take over fail.") return end
+				-- meta:set_string("owner", name) 
+				-- meta:set_string("infotext", "chest taken over by " ..name) 
+				-- minetest.chat_send_player(name,"Congratulations, chest is yours now");
 			end
 		
 		

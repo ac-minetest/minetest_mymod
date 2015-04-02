@@ -152,8 +152,9 @@ end,
 
 -- process form output
 minetest.register_on_player_receive_fields(function(player, formname, fields) -- this gets called if text sent from form or form exit
-    if formname == "mymod:form_experience" then -- Replace this with your form name
-		--minetest.chat_send_all("Player "..player:get_player_name().." submitted fields "..dump(fields))
+    
+	
+	if formname == "mymod:form_experience" then -- Replace this with your form name
 		
 		if fields["button1"]~=nil then 
 			local name = player:get_player_name(); if name == nil then return end
@@ -170,9 +171,32 @@ minetest.register_on_player_receive_fields(function(player, formname, fields) --
 			playerdata[name].max_mana = playerdata[name].max_mana+t; 
 			minetest.chat_send_player(name,"Converted xp to "..t.." additional maximum mana");
 		end
-		
-		
+	return	
 	end
+	
+	 if string.find(formname,"mymod:form_chest_takeover")~=nil then
+			if fields["OK"]~=nil then
+				local name = player:get_player_name(); if name == nil then return end
+				--minetest.chat_send_all("Player "..player:get_player_name().." submitted fields "..dump(fields))
+				local param = {};
+				for w in formname:gmatch("%S+") do 
+					--minetest.chat_send_all(1+#param .. " : " .. w)
+					param[1+#param] = tonumber(w);
+					
+				end
+				local pos = {x = param[1],y = param[2] , z= param[3]}
+				local ppos = {x = param[4],y = param[5] , z = param[6]}
+				--minetest.chat_send_all(pos.x .. " " .. pos.y .. " " .. pos.z)
+				--minetest.chat_send_all(ppos.x .. " " .. ppos.y .. " " .. ppos.z)
+				local meta = minetest.get_meta(pos)
+				local i = math.random(3);
+				if i==1 then minetest.set_node(ppos,{name="air"}); minetest.chat_send_player(name,"Take over fail.") return end
+				meta:set_string("owner", name) 
+				meta:set_string("infotext", "chest taken over by " ..name) 
+				minetest.chat_send_player(name,"Congratulations, chest is yours now");
+			end
+	 end
+	 
 end)
 
 
