@@ -200,6 +200,14 @@ local function draw_board() -- pos is bottom left position of checkerboard
 		minetest.set_node({x=pos.x+2*i-1,y=pos.y+1,z=pos.z+6},{name = "mymod:checkers_blue"})
 		minetest.set_node({x=pos.x+2*i-2,y=pos.y+1,z=pos.z+7},{name = "mymod:checkers_blue"})
 	end
+	
+	for i = 1,8 do -- place kings
+		node = minetest.get_node({x=pos.x+i-1,y=pos.y+1,z=pos.z-2}).name;
+		if node~="mymod:checkers_red_queen" then minetest.set_node({x=pos.x+i-1,y=pos.y+1,z=pos.z-2},{name = "mymod:checkers_red_queen"}) end
+		node = minetest.get_node({x=pos.x+i-1,y=pos.y+1,z=pos.z+9}).name;
+		if node~="mymod:checkers_blue_queen" then minetest.set_node({x=pos.x+i-1,y=pos.y+1,z=pos.z+9},{name = "mymod:checkers_blue_queen"}) end
+	end
+	
 end
 
 minetest.register_node("mymod:checkers", {
@@ -268,21 +276,28 @@ function register_board(name,desc,tiles)
 			groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3},
 			sounds = default.node_sound_defaults(),
 			on_punch = function(pos, node, player) -- place piece on board
+					local name = player:get_player_name(); if name == nil then return end
 					if checkers.pos.x == nil then minetest.chat_send_all("punch checkers game block before playing.") return end
 					if checkers.piece == "" then return end
 					local t = minetest.get_gametime(); if t-checkers.time <1 then return end; checkers.time = t;
 					local above = {x=pos.x,y=pos.y+1;z=pos.z};
+					local x,y; x= above.z-checkers.pos.z+1; y=above.x-checkers.pos.x+1;
+					if x<1 or x>8 or y<1 or y>8 then
+						minetest.chat_send_all(name .." captured piece at ".. checkers.piece_pos.z-checkers.pos.z+1 .. ","..checkers.piece_pos.x-checkers.pos.x+1)
+						checkers.piece = "" return 
+					end -- drop piece if put down outside checkerboard
 					minetest.set_node(above, {name = checkers.piece});
+					
 					minetest.chat_send_all(
-					"checkers move: ".. checkers.piece_pos.z-checkers.pos.z+1 .. "," .. checkers.piece_pos.x-checkers.pos.x+1 .. " to " ..
-					above.z-checkers.pos.z+1 .. "," .. above.x-checkers.pos.x+1 )
+					name .." moved: ".. checkers.piece_pos.z-checkers.pos.z+1 .. "," .. checkers.piece_pos.x-checkers.pos.x+1 .. " to " ..
+					x .. "," .. y )
 					checkers.piece = ""
 			end,
 	}) 
 end
 
 local piece_punch  = function(pos, node, player) -- pick up piece
-	if checkers.pos.x == nil then minetest.chat_send_all("punch checkers game block before playing.") return end
+	if checkers.pos.x == nil then minetest.chat_send_all("punch checkers game block before playing (need kick priv).") return end
 	if checkers.piece~="" then return end -- dont pick up another piece before last one was put down
 	local t = minetest.get_gametime(); if t-checkers.time <1 then return end; checkers.time = t;
 	checkers.piece = node.name; minetest.set_node(pos, {name="air"});
