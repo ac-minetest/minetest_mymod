@@ -128,7 +128,7 @@ description = "sokoban crate",
 		sokoban.playername = name
 		meta:set_int("time", t);
 		local lvl;
-		if fields.play ~= nil and fields.level ~=nil then			
+		if fields.play ~= nil and tonumber(fields.level) ~=nil then			
 			lvl = tonumber(fields.level)-1 
 		end
 		if lvl == nil then return end
