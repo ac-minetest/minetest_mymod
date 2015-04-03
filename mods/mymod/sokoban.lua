@@ -89,9 +89,11 @@ description = "sokoban crate",
 	sounds = default.node_sound_wood_defaults(),
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
+		
 		local form  = 
-		"size[3,2]" ..  -- width, height
-		"field[0,0.5;3,2.5;level;enter level 1-90;1]"
+		"size[3,1]" ..  -- width, height
+		"field[0,0.5;3,1;level;enter level 1 to 90;1]"..
+		"button[2.5,0.25;1,1;play;OK]"
 		meta:set_string("formspec", form)
 		meta:set_string("infotext","sokoban level loader, right click to select level")
 		meta:set_int("time", minetest.get_gametime());
@@ -121,10 +123,15 @@ description = "sokoban crate",
 			end
 		end
 		
-		if fields.level == nil then return end 
+		--minetest.chat_send_all("formname " .. formname .. " fields " .. dump(fields))
+		
 		sokoban.playername = name
 		meta:set_int("time", t);
-		local lvl = tonumber(fields.level)-1;
+		local lvl;
+		if fields.play ~= nil and fields.level ~=nil then			
+			lvl = tonumber(fields.level)-1 
+		end
+		if lvl == nil then return end
 		if lvl <0 or lvl >89 then return end
 		
 		local file = io.open(minetest.get_modpath("mymod").."/sokoban.txt","r")
@@ -220,10 +227,6 @@ description = "checkers crate",
 	sounds = default.node_sound_wood_defaults(),
 	on_construct = function(pos)
 		local meta = minetest.get_meta(pos)
-		local form  = 
-		"size[3,2]" ..  -- width, height
-		"field[0,0.5;3,2.5;level;enter level 1-90;1]"
-		meta:set_string("formspec", form)
 		meta:set_string("infotext","checkers game block, admin only")
 		meta:set_int("time", minetest.get_gametime());
 		checkers.pos = {x = pos.x+1, y=pos.y-1, z=pos.z+1}
