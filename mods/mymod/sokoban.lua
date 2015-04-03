@@ -1,4 +1,6 @@
--- sokoban push mechanics by rnd
+-- SOKOBAN GAME
+-- basic board game mechanics ( checkers )
+-- by rnd
 
 
 local sokoban = {};
@@ -70,7 +72,7 @@ minetest.register_node("mymod:crate", {
 		if sokoban.blocks~=0 then
 			minetest.chat_send_player(name,"move " .. sokoban.moves .. " : " ..sokoban.blocks .. " crates left ");
 			else minetest.chat_send_all( name .. " just solved sokoban level ".. sokoban.level .. " in " .. sokoban.moves .. " moves. He gets " .. (sokoban.level-0.5)*100 .. " XP reward.")
-			if playerdata~=nil then
+			if playerdata~=nil then -- award xp if playerdata exist
 				playerdata[name].xp = playerdata[name].xp + (sokoban.level-0.5)*100
 			end
 			sokoban.playername = ""; sokoban.level = 1
@@ -174,6 +176,7 @@ description = "sokoban crate",
 		file:close();		
 	end,
 })
+
 
 -- CHECKERS GAME
 local checkers ={};

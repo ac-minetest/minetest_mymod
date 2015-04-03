@@ -635,6 +635,20 @@ minetest.register_node("mymod:gravitator_on", {
 	mesecons = {effector = {
 		action_off = function (pos, node)
 			minetest.swap_node(pos, {name = "mymod:gravitator_off"})
+				
+			-- turn off gravity effect immidiately
+			local objects = minetest.get_objects_inside_radius(pos, 8) -- radius
+			for _,obj in ipairs(objects) do
+				if (obj:is_player()) then
+					local obj_pos = obj:getpos()
+					local name = obj:get_player_name();
+					playerdata[name].float.time = 0
+					playerdata[name].float.mag = 1
+					obj:set_physics_override({gravity = mag, sneak_glitch = false});
+					playerdata[name].gravity = false;
+				end
+			end
+			
 		end
 	}}
 	}
