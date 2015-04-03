@@ -38,12 +38,16 @@ minetest.register_craft({
 	recipe = "default:tree",
 })
 
-local function tree_chop(name) -- cactus like tree chopping
+local function tree_chop(name) -- cactus like tree chopping for breaker
 	local table = minetest.registered_nodes[name];
 	local table2 = {};
 	for i,v in pairs(table) do table2[i] = v end
 	table2.after_dig_node = function(pos, node, metadata, digger)
-		default.dig_up(pos, node, digger)
+		local wielded = digger:get_wielded_item();
+		tp = wielded:get_name()
+		if tp=="default:pick_mese" then
+			default.dig_up(pos, node, digger)
+		end
 	end
 	minetest.register_node(":"..name, table2)	
 end
