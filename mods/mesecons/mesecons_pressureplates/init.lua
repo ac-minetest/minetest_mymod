@@ -70,6 +70,9 @@ function mesecon:register_pressure_plate(offstate, onstate, description, texture
 		mesecons = {receptor = {
 			state = mesecon.state.off
 		}},
+		on_punch = function(pos, node, puncher, pointed_thing) -- rnd: functions as cheap button when punched
+			minetest.set_node(pos, {name = onstate})
+		end,
 		on_construct = function(pos)
 			minetest.get_node_timer(pos):start(PRESSURE_PLATE_INTERVAL)
 		end,

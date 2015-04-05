@@ -76,7 +76,7 @@ function mobs:register_mob(name, def)
 						return
 					end
 					
-					--rnd attack
+					--rnd start attack
 					if self.hp_max>10 then -- small monsters are quiet
 						if self.run_velocity ==9 then -- aggressor
 							minetest.sound_play("lil_friend", {pos=self.object:getpos(),gain=1.0,max_hear_distance = 32,})
@@ -354,7 +354,7 @@ function mobs:register_mob(name, def)
 						local dist = ((p.x-s.x)^2 + (p.y-s.y)^2 + (p.z-s.z)^2)^0.5
 						if dist < self.view_range and self.in_fov(self,p) then
 							if minetest.line_of_sight(sp,p,2) == true then
-								self.do_attack(self,player,dist)
+								self.do_attack(self,player,dist) -- STARTS ATTACK 1
 								break
 							end
 						end
@@ -421,7 +421,7 @@ function mobs:register_mob(name, def)
 				end
 			end
 			
-			if self.following and self.following:is_player() then
+			if self.following and self.following:is_player() then -- rnd comment: follow player here
 				if self.following:get_wielded_item():get_name() ~= self.follow and self.type ~= "warpet" then
 					self.following = nil
 				else
@@ -434,8 +434,12 @@ function mobs:register_mob(name, def)
 							self.v_start = false
 						end
 					else
-						local vec = {x=p.x-s.x, y=p.y-s.y, z=p.z-s.z}
-						local yaw = math.atan(vec.z/vec.x)+math.pi/2
+						-- rnd: insert custom path code here
+						
+						-- algorithm: if stuck for long time calculate path and follow it, otherwise just one node of path: player position
+						-- will be stack like, when node reached it will be removed, when stack length == 0 then it will go to stand state (as below )
+						local vec = {x=p.x-s.x, y=p.y-s.y, z=p.z-s.z} -- rnd: direction vector
+						local yaw = math.atan(vec.z/vec.x)+math.pi/2 -- rnd: aim toward player ( p )
 						if self.drawtype == "side" then
 							yaw = yaw+(math.pi/2)
 						end
@@ -738,8 +742,10 @@ function mobs:register_mob(name, def)
 					local name = hitter:get_player_name();
 					local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
 					local distance = get_distance(static_spawnpoint,pos) 
-					playerdata[name].xp = playerdata[name].xp + 0.15*self.hp_max*(1+distance/100)
-					playerdata[name].xp = math.ceil(playerdata[name].xp*10)/10
+					if playerdata~=nil then -- add xp if mod present
+						playerdata[name].xp = playerdata[name].xp + 0.15*self.hp_max*(1+distance/100)
+						playerdata[name].xp = math.ceil(playerdata[name].xp*10)/10
+					end
 					
 --					if self.sounds.death ~= nil then
 --						minetest.sound_play(self.sounds.death,{
@@ -1049,7 +1055,13 @@ local weapon = player:get_wielded_item()
 	
 	local name = player:get_player_name();
 	if name==nil then return end -- ERROR
-	local level  = get_level(playerdata[name].xp)
+	local level;
+
+	if playerdata~= nil	then
+		level = get_level(playerdata[name].xp)
+		else level = 10
+	end
+	
 	local tp = weapon:get_name()
 	if level < 2 and tp == "default:sword_stone" then
 		weapon:add_wear(65535/4);player:set_wielded_item(weapon)
@@ -1116,6 +1128,7 @@ minetest.register_node("mobs:spell_fireball", {
 	groups = {oddly_breakable_by_hand=3},
 	on_use = function(itemstack, user, pointed_thing)
 		local name = user:get_player_name(); if name == nil then return end
+		if playerdata == nil then return end
 		local t = minetest.get_gametime();if t-playerdata[name].spelltime<1 then return end;playerdata[name].spelltime = t;
 		
 		if playerdata[name].mana<1 then
@@ -1165,6 +1178,7 @@ minetest.register_node("mobs:firebox", {
 		local meta = minetest.get_meta(pos);
 		local name = placer:get_player_name();
 		if name == nil then return end
+		if playerdata==nil then return end
 		
 		if playerdata[name].mana<1 then
 			minetest.chat_send_player(name,"Need at least 1 mana"); return
