@@ -685,6 +685,7 @@ minetest.register_node("mymod:gravitator_off", {
 			local meta = minetest.get_meta(pos);
 			if sender:get_player_name()~=meta:get_string("owner") then return end		
 			 meta:set_float("mag",tonumber(fields.gravitator))
+			 meta:set_string("infotext", "Gravity setting : " .. meta:get_string("mag") .. ". Placed by " .. meta:get_string("owner"));
 		end
 	end,
 	}
@@ -711,3 +712,11 @@ minetest.register_abm(
 	end
 	});
 
+minetest.register_craft({
+	output = "mymod:gravitator_off", --"mymod:spell_float"
+	recipe = {
+		{"", "default:mese",""},
+		{"default:mese", "mymod:spell_float","default:mese"},
+		{"", "default:mese",""}
+	}
+})
