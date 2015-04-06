@@ -84,12 +84,6 @@ minetest.register_node("mymod:landmine_off", {
 )
 
  
- minetest.register_on_dieplayer(function(player) -- restore ill effects with death
-	player:set_physics_override({speed =  1.0})
-	playerdata[player:get_player_name()].speed = false; 
- end)
- 
- 
  minetest.register_craft({
 	output = "mymod:landmine_off",
 	recipe = {

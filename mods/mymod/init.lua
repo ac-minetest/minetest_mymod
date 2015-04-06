@@ -374,13 +374,45 @@ minetest.register_globalstep(function(dtime)
 				player:hud_change(playerdata[name].manahud, "number", t)
 			end
 
-		
-			-- CHEAT CHECK: simple noclip check
-			
-			if not privs.noclip then
+
+			-- READ NODE NAME AT CURRENT POS
 				local p = pos;
-				local node1 = minetest.get_node(p).name;p.y=p.y+1;
-				local node2 = minetest.get_node(p).name;
+				local node1 = minetest.get_node(p).name;
+				p.y=p.y+1;local node2 = minetest.get_node(p).name;
+
+			-- CHECK WHEN PLAYER ENTERS/LEAVES WATER
+				if playerdata[name].water ~= nil then 
+						if playerdata[name].water.state==0 and node2=="default:water_source" then -- enter water
+							--minetest.chat_send_all("entered water") 
+							playerdata[name].water.depth = 0.5*(p.y+playerdata[name].water.lastheight);
+							playerdata[name].water.state = 1;
+						elseif playerdata[name].water.state==1 and node2=="default:water_source" then -- still in water
+							local depth = playerdata[name].water.depth-p.y; depth = math.ceil(depth)
+							--minetest.chat_send_all("current water depth: " .. depth)
+							if depth > 10 then
+								minetest.chat_send_player(name,"warning: exceeded water depth 10, current ".. depth)
+								player:set_hp(player:get_hp()-depth/5);
+							elseif depth>5 
+								then playerdata[name].slow.mag = math.min(playerdata[name].slow.mag,0.5-depth/25);
+								playerdata[name].slow.time = playerdata[name].slow.time + 1
+							end
+						elseif playerdata[name].water.state==1 and node2~="default:water_source" then -- leave water
+							--minetest.chat_send_all("left water")
+							playerdata[name].water.state = 0
+							playerdata[name].water.lastheight = p.y
+						else playerdata[name].water.lastheight = p.y -- player out of water
+						end
+					else -- init
+					playerdata[name].water = {}
+					if node2~="default:water_source" then playerdata[name].water.state = 0; else playerdata[name].water.state = 1; end -- not in water
+					playerdata[name].water.depth = 0;playerdata[name].water.lastheight = p.y
+				end
+			
+			-- CHEAT CHECK: simple noclip check
+		
+
+				if not privs.noclip then
+				
 				if (node1=="default:stone" or node1=="default:cobble") and (node2=="default:stone" or node2=="default:cobble") then
 					minetest.chat_send_all(name.. " was caught walking inside walls at " .. pos.x .. " " .. pos.y .. " " .. pos.z)
 					minetest.log("action", name.. " was caught walking inside walls at " .. pos.x .. " " .. pos.y .. " " .. pos.z)

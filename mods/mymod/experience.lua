@@ -213,6 +213,8 @@ minetest.register_on_dieplayer(
 		playerdata[name].poison = {time=0, mag = 0}
 		playerdata[name].gravity = false
 		playerdata[name].jail = 0
+		player:set_physics_override({speed =  1.0})
+		playerdata[player:get_player_name()].speed = false;  
 		minetest.chat_send_player(name,"You loose 10% of your experience and skills because you died.");
 	end
 )
