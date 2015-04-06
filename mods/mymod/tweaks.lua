@@ -83,5 +83,28 @@ local function stronger_mese_torch()
 end
 minetest.after(5, stronger_mese_torch)
 
+-- DIGGING SPEEDS FOR PICKAXES
+
+local function adjust_dig_speed(name,factor)
+	local table = minetest.registered_items[name];
+	local table2 = {};
+	for i,v in pairs(table) do table2[i] = v end
+		
+	for i,v in pairs(table2.tool_capabilities.groupcaps.cracky.times) do
+		table2.tool_capabilities.groupcaps.cracky.times[i] = v*factor
+	end	
+	minetest.register_tool(":"..name, table2)	
+end
+
+local dig_factor = 2;
+adjust_dig_speed("default:pick_wood",dig_factor)
+adjust_dig_speed("default:pick_stone",dig_factor)
+adjust_dig_speed("default:pick_steel",dig_factor)
+adjust_dig_speed("default:pick_bronze",dig_factor)
+adjust_dig_speed("default:pick_mese",dig_factor)
+adjust_dig_speed("default:pick_diamond",dig_factor)
+adjust_dig_speed("moreores:pick_silver",dig_factor)
+adjust_dig_speed("moreores:pick_mithril",dig_factor)
+
 
 
