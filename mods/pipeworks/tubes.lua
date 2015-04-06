@@ -276,7 +276,7 @@ if pipeworks.enable_mese_tube then
 				{tube = {can_go = function(pos, node, velocity, stack)
 						 local tbl = {}
 						 
-						 minetest.sound_play("robot1", {pos=user:getpos(),gain=0.5,max_hear_distance = 16,}) -- rnd test
+						 minetest.sound_play("robot1", {pos=pos,gain=0.5,max_hear_distance = 16,}) -- rnd test
 						 
 						 local meta = minetest.get_meta(pos)
 						 local inv = meta:get_inventory()
