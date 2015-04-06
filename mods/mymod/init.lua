@@ -225,6 +225,7 @@ dofile(minetest.get_modpath("mymod").."/life.lua")
 dofile(minetest.get_modpath("mymod").."/maze.lua")
 dofile(minetest.get_modpath("mymod").."/sokoban.lua")
 dofile(minetest.get_modpath("mymod").."/admin.lua")
+dofile(minetest.get_modpath("mymod").."/roadgen.lua")
 
 -- MAIN PROCESSING STEP:
 -- players walk slower away from spawn, mana regenerates, application of various effects

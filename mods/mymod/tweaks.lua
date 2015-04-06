@@ -56,4 +56,32 @@ tree_chop("default:pinetree");
 tree_chop("default:jungletree");
 
 
+local function torch_vanish_underwater()
+	local name = "default:torch"
+	local table = minetest.registered_nodes[name];
+	local table2 = {};
+	for i,v in pairs(table) do table2[i] = v end
+	table2.after_place_node = function(pos, placer, itemstack, pointed_thing)
+		local water = "default:water_source";
+		if minetest.find_node_near(pos, 1, {"group:water"})~= nil then
+			minetest.sound_play("default_cool_lava", {pos = pos,  gain = 0.25})
+			minetest.set_node(pos,{name="air"}); 
+		end
+		
+	end
+	minetest.register_node(":"..name, table2)	
+end
+minetest.after(5,torch_vanish_underwater)
+
+local function stronger_mese_torch()
+	local name = "mesecons_torch:mesecon_torch_on"
+	local table = minetest.registered_nodes[name];
+	local table2 = {};
+	for i,v in pairs(table) do table2[i] = v end
+	table2.light_source = LIGHT_MAX-1,
+	minetest.register_node(":"..name, table2)	
+end
+minetest.after(5, stronger_mese_torch)
+
+
 
