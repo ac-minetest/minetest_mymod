@@ -578,7 +578,7 @@ minetest.register_node("mymod:spell_slow", {
 	,
 })
 
--- low gravity
+-- SPELL FLOAT
 
 minetest.register_craft({
 	output = "mymod:spell_float",
@@ -620,6 +620,51 @@ minetest.register_node("mymod:spell_float", {
 	end
 	,
 })
+
+-- SPELL HASTE
+
+minetest.register_craft({
+	output = "mymod:spell_haste",
+	recipe = {
+		{"default:diamond", "default:diamond","default:diamond"},
+		{"default:diamond", "homedecor:power_crystal","default:diamond"},
+		{"default:diamond", "default:diamond","default:diamond"}
+	}
+})
+
+
+minetest.register_node("mymod:spell_haste", {
+	description = "haste spell: speeds up player 2x for 1+min(magic_skill/1000,4) seconds",
+	wield_image = "3d_armor_inv_boots_gold.png",
+	wield_scale = {x=0.8,y=0.8,z=0.8}, 
+	drawtype = "allfaces",
+	paramtype = "light",
+	light_source = 10,
+	tiles = {"3d_armor_inv_boots_gold.png"},
+	groups = {oddly_breakable_by_hand=1},
+	on_use = function(itemstack, user, pointed_thing)
+		local name = user:get_player_name(); if name == nil then return end
+	
+		local t = minetest.get_gametime();
+	
+		if t-playerdata[name].spelltime<10 then return end;playerdata[name].spelltime = t;  -- only at least 10s after last spell
+
+		if playerdata[name].mana<2 then
+			minetest.chat_send_player(name,"Need at least 2 mana"); return
+		end
+		
+		local skill = playerdata[name].magic;
+		playerdata[name].slow.time = playerdata[name].slow.time + 1+math.min(skill/1000,4)
+		playerdata[name].slow.mag = 2;
+		user:set_physics_override({speed = playerdata[name].slow.mag});
+		playerdata[name].speed = true;
+		minetest.sound_play("magic", {pos=user:getpos(),gain=1.0,max_hear_distance = 32,})
+		minetest.chat_send_player(name,"[EFFECT] ".. playerdata[name].slow.mag  .. "x speed increase for " .. playerdata[name].slow.time .. "s.")
+	end
+	,
+})
+
+-- ARTIFICIAL GRAVITY
 
 minetest.register_node("mymod:gravitator_on", {
 	description = "artificial gravity",
