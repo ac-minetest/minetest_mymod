@@ -304,7 +304,7 @@ farming.register_plant = function(name, def)
 			local i = math.random(math.ceil(quality)); 
 			--debug
 			--minetest.chat_send_all(" quality  " .. quality .. " rnd " .. i .. " height " .. plant_height)
-			if i <= 10 -- fail
+			if i <= 10 then-- fail
 				if plant_height>1 then 	plant_height = plant_height-1 end
 				quality = quality - 2
 			end; -- rnd devolve
