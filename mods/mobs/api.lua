@@ -743,7 +743,7 @@ function mobs:register_mob(name, def)
 					local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
 					local distance = get_distance(static_spawnpoint,pos) 
 					if playerdata~=nil then -- add xp if mod present
-						playerdata[name].xp = playerdata[name].xp + 0.15*self.hp_max*(1+distance/100)
+						playerdata[name].xp = playerdata[name].xp + 0.2*0.15*self.hp_max*(1+distance/100)
 						playerdata[name].xp = math.ceil(playerdata[name].xp*10)/10
 					end
 					
@@ -1190,6 +1190,7 @@ minetest.register_node("mobs:firebox", {
 			else skill = (10+skill/400)*1.5;
 		end
 		meta:set_int("damage",skill);
+		meta:set_string("infotext", "fireball damage ".. skill);
 		meta:set_string("name",name);
 		meta:set_int("time",minetest.get_gametime());
 		local view = placer:get_look_dir() 
