@@ -309,7 +309,7 @@ farming.register_plant = function(name, def)
 				quality = quality - 2
 			end; -- rnd devolve
 			
-			if plant_height<1 or quality <= 10 then -- plant dies, dirt turns to non farm
+			if plant_height<1 or quality <=0 then -- plant dies, dirt turns to non farm
 				minetest.set_node(pos, {name ="air"}) 
 				pos.y = pos.y-1; minetest.set_node(pos, {name ="default:dirt"}) 
 				pos.y = pos.y+1; minetest.set_node(pos, {name ="default:grass_1"})				
