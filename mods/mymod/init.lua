@@ -390,17 +390,18 @@ minetest.register_globalstep(function(dtime)
 							local depth = playerdata[name].water.depth-p.y; depth = math.ceil(depth)
 							--minetest.chat_send_all("current water depth: " .. depth)
 							if depth > 10 then
-								minetest.chat_send_player(name,"warning: exceeded water depth 10, current ".. depth)
+								minetest.chat_send_player(name,"warning: water depth ".. depth)
 								player:set_hp(player:get_hp()-depth/5);
 							elseif depth>5 
-								then playerdata[name].slow.mag = math.min(playerdata[name].slow.mag,0.5-depth/25);
-								playerdata[name].slow.time = playerdata[name].slow.time + 1
+								then playerdata[name].slow.mag = math.min(playerdata[name].slow.mag,math.max(0.5-depth/20,0.1));
+								playerdata[name].slow.time = playerdata[name].slow.time + MYMOD_UPDATE_TIME
 							end
 						elseif playerdata[name].water.state==1 and node2=="air" and node1=="air" then -- leave water
 							--minetest.chat_send_all("left water")
+							-- additionaly check if water really cleared? is water nearby?
 							playerdata[name].water.state = 0
 							playerdata[name].water.lastheight = p.y
-						else playerdata[name].water.lastheight = p.y -- player out of water
+						else playerdata[name].water.lastheight = p.y -- not quite cleared of water, but not completely inside
 						end
 					else -- init
 					playerdata[name].water = {}
