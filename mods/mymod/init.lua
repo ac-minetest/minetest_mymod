@@ -393,6 +393,7 @@ minetest.register_globalstep(function(dtime)
 								player:set_hp(player:get_hp()-depth/5);
 							elseif depth>5 
 								then playerdata[name].slow.mag = math.min(playerdata[name].slow.mag,math.max(0.5-depth/20,0.1));
+								playerdata[name].speed = true
 								playerdata[name].slow.time = playerdata[name].slow.time + MYMOD_UPDATE_TIME
 							end
 						elseif playerdata[name].water.state==1 and node2=="air" and node1=="air" then -- leave water
@@ -400,7 +401,9 @@ minetest.register_globalstep(function(dtime)
 							-- additionaly check if water really cleared? is water nearby?
 							playerdata[name].water.state = 0
 							playerdata[name].water.lastheight = p.y
-						else playerdata[name].water.lastheight = p.y -- not quite cleared of water, but not completely inside
+						else 
+							playerdata[name].speed = false
+							playerdata[name].water.lastheight = p.y -- not quite cleared of water, but not completely inside
 						end
 					else -- init
 					playerdata[name].water = {}
