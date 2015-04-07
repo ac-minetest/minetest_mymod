@@ -396,7 +396,7 @@ minetest.register_globalstep(function(dtime)
 								then playerdata[name].slow.mag = math.min(playerdata[name].slow.mag,0.5-depth/25);
 								playerdata[name].slow.time = playerdata[name].slow.time + 1
 							end
-						elseif playerdata[name].water.state==1 and node2~="default:water_source" and node1~="default:water_source" then -- leave water
+						elseif playerdata[name].water.state==1 and node2=="air" and node1=="air" then -- leave water
 							--minetest.chat_send_all("left water")
 							playerdata[name].water.state = 0
 							playerdata[name].water.lastheight = p.y
