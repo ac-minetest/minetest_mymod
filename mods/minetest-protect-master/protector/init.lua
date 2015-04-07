@@ -59,7 +59,7 @@ protector.generate_formspec = function (meta)
 		.."label[0,0;-- Protector interface --]"
 		.."label[0,1;Punch the node to show the protected area.]"
 		.."label[0,2;Current members:]" -- rnd
-		.."label[3,0;choose penalty mode: default 0/1]"
+		.."label[3,0;Tolerate intruders: 0 - jail, 1 - warn only]"
 		.."field[5,1;1,0.5;protector_mode;;"..penalty.."]"
 		
 	local members = protector.get_member_list(meta)
