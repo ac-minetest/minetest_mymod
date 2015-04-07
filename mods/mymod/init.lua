@@ -392,7 +392,7 @@ minetest.register_globalstep(function(dtime)
 								minetest.chat_send_player(name,"warning: water depth ".. depth)
 								player:set_hp(player:get_hp()-depth/5);
 							elseif depth>5 
-								then playerdata[name].slow.mag = math.min(playerdata[name].slow.mag,math.max(0.5-depth/20,0.1));
+								then playerdata[name].slow.mag = math.max(0.5-depth/20,0.2);
 								playerdata[name].speed = true
 								playerdata[name].slow.time = playerdata[name].slow.time + MYMOD_UPDATE_TIME
 							end
