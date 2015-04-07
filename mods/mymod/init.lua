@@ -373,13 +373,12 @@ minetest.register_globalstep(function(dtime)
 				if t~=0 then t = 20*playerdata[name].mana/playerdata[name].max_mana else t = 0 end
 				player:hud_change(playerdata[name].manahud, "number", t)
 			end
-
-
+			
 			-- READ NODE NAME AT CURRENT POS
 				local p = pos;
 				local node1 = minetest.get_node(p).name;
 				p.y=p.y+1;local node2 = minetest.get_node(p).name;
-
+			
 			-- CHECK WHEN PLAYER ENTERS/LEAVES WATER
 				if playerdata[name].water ~= nil then 
 						if playerdata[name].water.state==0 and node2=="default:water_source" then -- enter water
