@@ -68,6 +68,9 @@ function mobs:register_mob(name, def)
 		do_attack = function(self, player, dist)
 			      if self.state ~= "attack" then
 					
+					if self.owner then
+						if self.owner == player:get_player_name() then return end-- dont attack owner
+					end
 					-- rnd : remove monster if it attacks inside spawn area
 					local pos  = self.object:getpos();
 					local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 

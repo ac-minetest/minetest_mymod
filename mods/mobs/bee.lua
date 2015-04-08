@@ -17,6 +17,7 @@ mobs:register_mob("mobs:bee", {
 	armor = 100,
 	damage = 4,
 	attack_type = "dogfight",
+	owner = "",
 	drops = {
 		{name = "mobs:med_cooked",
 		chance = 1,
@@ -35,7 +36,6 @@ mobs:register_mob("mobs:bee", {
 		walk_start = 35,
 		walk_end = 65,
 	},
-	
 	on_rightclick = function(self, clicker)
 		if clicker:is_player() and clicker:get_inventory() then
 			clicker:get_inventory():add_item("main", "mobs:bee")
@@ -54,7 +54,9 @@ minetest.register_craftitem("mobs:bee", {
 	
 	on_place = function(itemstack, placer, pointed_thing)
 		if pointed_thing.above then
-			minetest.env:add_entity(pointed_thing.above, "mobs:bee")
+			local obj = minetest.env:add_entity(pointed_thing.above, "mobs:bee") -- rnd
+			local entity = obj:get_luaentity();
+			entity.owner = placer:get_player_name();			
 			itemstack:take_item()
 		end
 		return itemstack
@@ -106,7 +108,7 @@ minetest.register_abm({
 		interval = 20,
 		chance = 5,
 		action = function(pos, node, active_object_count, active_object_count_wider) 
-			if active_object_count_wider > 10 then
+			if active_object_count_wider > active_object_count then
 				return
 			end
 		local objs = minetest.env:get_objects_inside_radius(pos,8)
