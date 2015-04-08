@@ -17,7 +17,8 @@ mobs:register_mob("mobs:bee", {
 	armor = 100,
 	damage = 4,
 	attack_type = "dogfight",
-	owner = "",
+	owner = "", -- rnd
+	gravity = 0.4,
 	drops = {
 		{name = "mobs:med_cooked",
 		chance = 1,

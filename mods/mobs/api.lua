@@ -4,7 +4,7 @@ mobs.mod = "redo"
 function mobs:register_mob(name, def)
 	minetest.register_entity(name, {
 		name = name,
-		hp_min = def.hp_min or 5, --
+		hp_min = def.hp_min or 5, 
 		hp_max = def.hp_max,
 		physical = true,
 		owner = def.owner,
@@ -55,6 +55,7 @@ function mobs:register_mob(name, def)
 		stimer = 0,
 		timer = 0,
 		slow = {time=0,mag=0}, --rnd
+		gravity = def.gravity or 1, -- rnd
 		env_damage_timer = 0, -- only if state = "attack"
 		attack = {player=nil, dist=nil},
 		state = "stand",
@@ -241,9 +242,9 @@ function mobs:register_mob(name, def)
 				end
 				local x = math.sin(yaw) * -2
 				local z = math.cos(yaw) * 2
-				self.object:setacceleration({x=x, y=-10, z=z})
+				self.object:setacceleration({x=x, y=-10*self.gravity, z=z}) -- rnd
 			else
-				self.object:setacceleration({x=0, y=-10, z=0})
+				self.object:setacceleration({x=0, y=-10*self.gravity, z=0}) -- rnd
 			end
 			
 			if self.disable_fall_damage and self.object:getvelocity().y == 0 then
@@ -455,10 +456,16 @@ function mobs:register_mob(name, def)
 								self.v_start = true
 								self.set_velocity(self, self.walk_velocity)
 							else
-								if self.jump and self.get_velocity(self) <= 1.5 and self.object:getvelocity().y == 0 then
-									local v = self.object:getvelocity()
-									v.y = 7 -- rnd increased jump
-									self.object:setvelocity(v)
+								if self.gravity > 0.5 then
+									if self.jump and self.get_velocity(self) <= 1.5 and self.object:getvelocity().y == 0 then
+										local v = self.object:getvelocity()
+										v.y = 7 -- rnd increased jump
+										self.object:setvelocity(v)
+									end
+									else -- code for floating mobs
+										local v = self.object:getvelocity()
+										v.y = (p.y-s.y)*0.1
+										self.object:setvelocity(v)
 								end
 								self.set_velocity(self, self.walk_velocity)
 							end
