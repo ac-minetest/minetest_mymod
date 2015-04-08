@@ -108,7 +108,126 @@ minetest.register_craft({
 	}
 })
 
---flowers
+-- MORE TREES
+
+minetest.register_craft({
+	output = "moretrees:jungletree_sapling",
+	recipe = {
+		{"default:dirt","default:junglesapling","default:pine_sapling"},
+	}
+})
+
+minetest.register_craft({
+	output = "moretrees:apple_tree_sapling",
+	recipe = {
+		{"default:apple","flowers:tulip","default:apple"},
+		{"flowers:tulip","default:junglesapling","flowers:tulip"},
+		{"default:apple","flowers:tulip","default:apple"}
+	}
+})
+
+minetest.register_craft({
+	output = "moretrees:rubber_tree_sapling",
+	recipe = {
+		{"building_blocks:Tar","building_blocks:Tar","building_blocks:Tar"},
+		{"building_blocks:Tar","moretrees:apple_tree_sapling","building_blocks:Tar"},
+		{"building_blocks:Tar","building_blocks:Tar","building_blocks:Tar"}
+	}
+})
+
+minetest.register_craft({
+	output = "moretrees:willow_sapling",
+	recipe = {
+		{"default:dirt","default:dirt","default:dirt"},
+		{"default:dirt","moretrees:rubber_tree_sapling","default:dirt"},
+		{"default:dirt","default:dirt","default:dirt"}
+	}
+})
+
+
+minetest.register_craft({
+	output = "moretrees:acacia_sapling",
+	recipe = {
+		{"default:dirt","default:dirt","default:dirt"},
+		{"default:dirt","moretrees:willow_sapling","default:dirt"},
+		{"default:dirt","default:dirt","default:dirt"}
+	}
+})
+
+minetest.register_craft({
+	output = "moretrees:fir_sapling",
+	recipe = {
+		{"default:dirt","default:dirt","default:dirt"},
+		{"default:dirt","moretrees:acacia_sapling","default:dirt"},
+		{"default:dirt","default:dirt","default:dirt"}
+	}
+})
+
+minetest.register_craft({
+	output = "moretrees:pine_sapling",
+	recipe = {
+		{"default:dirt","default:dirt","default:dirt"},
+		{"default:dirt","moretrees:fir_sapling","default:dirt"},
+		{"default:dirt","default:dirt","default:dirt"}
+	}
+})
+
+minetest.register_craft({
+	output = "moretrees:spruce_sapling",
+	recipe = {
+		{"default:dirt","default:dirt","default:dirt"},
+		{"default:dirt","moretrees:pine_sapling","default:dirt"},
+		{"default:dirt","default:dirt","default:dirt"}
+	}
+})
+
+minetest.register_craft({
+	output = "moretrees:birch_sapling",
+	recipe = {
+		{"default:dirt","default:dirt","default:dirt"},
+		{"default:dirt","moretrees:spruce_sapling","default:dirt"},
+		{"default:dirt","default:dirt","default:dirt"}
+	}
+})
+
+minetest.register_craft({
+	output = "moretrees:beech_sapling",
+	recipe = {
+		{"default:dirt","default:dirt","default:dirt"},
+		{"default:dirt","moretrees:birch_sapling","default:dirt"},
+		{"default:dirt","default:dirt","default:dirt"}
+	}
+})
+
+minetest.register_craft({
+	output = "moretrees:oak_sapling",
+	recipe = {
+		{"default:dirt","default:dirt","default:dirt"},
+		{"default:dirt","moretrees:beech_sapling","default:dirt"},
+		{"default:dirt","default:dirt","default:dirt"}
+	}
+})
+
+minetest.register_craft({
+	output = "moretrees:sequoia_sapling",
+	recipe = {
+		{"default:dirt","default:dirt","default:dirt"},
+		{"default:dirt","moretrees:oak_sapling","default:dirt"},
+		{"default:dirt","default:dirt","default:dirt"}
+	}
+})
+
+minetest.register_craft({
+	output = "moretrees:palm_sapling",
+	recipe = {
+		{"default:dirt","default:dirt","default:dirt"},
+		{"default:dirt","moretrees:sequoia_sapling","default:dirt"},
+		{"default:dirt","default:dirt","default:dirt"}
+	}
+})
+
+
+-- FLOWERS
 minetest.register_craft({
 	output = "flowers:dandelion_white",
 	recipe = {
@@ -143,17 +262,10 @@ minetest.register_craft({
 minetest.register_craft({
 	output = "flowers:tulip",
 	recipe = {
-		{"default:dirt","flowers:dandelion_yellow","flowers:flower_rose"},
+		{"default:dirt","flowers:dandelion_yellow","flowers:rose"},
 	}
 })
 
-
-minetest.register_craft({
-	output = "flowers:tulip",
-	recipe = {
-		{"default:dirt","flowers:geranium","flowers:	rose"},
-	}
-})
 
 minetest.register_craft({
 	output = "travelnet:travelnet",

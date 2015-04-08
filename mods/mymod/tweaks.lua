@@ -55,6 +55,21 @@ tree_chop("default:tree");
 tree_chop("default:pinetree");
 tree_chop("default:jungletree");
 
+tree_chop("moretrees:beech_trunk");
+tree_chop("moretrees:apple_tree_trunk");
+tree_chop("moretrees:oak_trunk");
+tree_chop("moretrees:sequoia_trunk");
+tree_chop("moretrees:birch_trunk");
+tree_chop("moretrees:palm_trunk");
+tree_chop("moretrees:spruce_trunk");
+tree_chop("moretrees:pine_trunk");
+tree_chop("moretrees:willow_trunk");
+tree_chop("moretrees:acacia_trunk");
+tree_chop("moretrees:rubber_tree_trunk");
+tree_chop("moretrees:jungletree_trunk");
+tree_chop("moretrees:fir_trunk");
+
+
 
 local function torch_vanish_underwater()
 	local name = "default:torch"

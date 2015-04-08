@@ -467,3 +467,5 @@ local name = player:get_player_name();
 	}
 	)
 end
+
+print ("MYMOD (experience, tweaks, sokoban, checkers...) has loaded")
