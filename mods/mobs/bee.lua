@@ -109,7 +109,7 @@ minetest.register_abm({
 			if active_object_count_wider > 10 then
 				return
 			end
-		local objs = minetest.env:get_objects_inside_radius(pos,10)
+		local objs = minetest.env:get_objects_inside_radius(pos,8)
 		local meta = minetest.get_meta(pos);local owner = meta:get_string("owner");
 		local calm = false
 		for _, o in pairs(objs) do
