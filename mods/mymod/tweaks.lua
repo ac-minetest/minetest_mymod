@@ -126,8 +126,9 @@ adjust_dig_speed("moreores:pick_mithril",dig_factor)
 
 -- ONLY ALLOW TO PLACE LAVA NEAR PROTECTOR WITH HIGH ACTIVITY OR BELOW 0
 
+local old_bucket_lava_on_place=minetest.registered_craftitems["bucket:bucket_lava"].on_place
 
-bucket_check = function(itemstack, placer, pointed_thing)
+lava_bucket_check = function(itemstack, placer, pointed_thing)
 	local pos = pointed_thing.above
 	if pos.y<0 then return old_bucket_lava_on_place(itemstack, placer, pointed_thing) end -- rnd
 	
@@ -155,16 +156,52 @@ bucket_check = function(itemstack, placer, pointed_thing)
 		return old_bucket_lava_on_place(itemstack, placer, pointed_thing)
 	else
         if activity>-1 then
-			minetest.chat_send_player(placer:get_player_name(), "Only place bucket near protector with activity at least 1000. This one has ".. activity)
+			minetest.chat_send_player(placer:get_player_name(), "Only place lava near protector with activity at least 1000. This one has ".. activity)
 			else minetest.chat_send_player(placer:get_player_name(), "Only place lava below ground");
 		end
 		return itemstack
 	end
 end
 
-local old_bucket_lava_on_place=minetest.registered_craftitems["bucket:bucket_lava"].on_place
-minetest.registered_craftitems["bucket:bucket_lava"].on_place=bucket check
+minetest.registered_craftitems["bucket:bucket_lava"].on_place=lava_bucket_check
+
 
 local old_bucket_water_on_place=minetest.registered_craftitems["bucket:bucket_water"].on_place
-minetest.registered_craftitems["bucket:bucket_water"].on_place=bucket check
+
+water_bucket_check = function(itemstack, placer, pointed_thing)
+	local pos = pointed_thing.above
+	if pos.y<0 then return old_bucket_water_on_place(itemstack, placer, pointed_thing) end -- rnd
+	
+	-- look for nearby protector to read activity
+	local activity;
+	local r = 5;
+	local name = placer:get_player_name(); if name==nil then return end
+	local positions = minetest.find_nodes_in_area(
+			{x=pos.x-r, y=pos.y-r, z=pos.z-r},
+			{x=pos.x+r, y=pos.y+r, z=pos.z+r},
+			"protector:protect");
+	local protected = false;local ppos;
+			for _, p in ipairs(positions) do
+				local nmeta = minetest.env:get_meta(p)
+				local owner = nmeta:get_string("owner")
+				if owner == name then protected = true; ppos = p;end
+			end
+	local meta
+	if ppos then  
+		meta = minetest.get_meta(ppos);activity = 0.5*meta:get_int("activity");
+		else activity = -1
+	end
+	
+	if activity>1000 then
+		return old_bucket_water_on_place(itemstack, placer, pointed_thing)
+	else
+        if activity>-1 then
+			minetest.chat_send_player(placer:get_player_name(), "Only place water near protector with activity at least 1000. This one has ".. activity)
+			else minetest.chat_send_player(placer:get_player_name(), "Only place water below ground");
+		end
+		return itemstack
+	end
+end
+
+minetest.registered_craftitems["bucket:bucket_water"].on_place=water_bucket_check
 

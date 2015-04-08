@@ -146,7 +146,7 @@ protector.can_dig = function(r,pos,digger,onlyowner,infolevel)
 				return false
 			end
 			else -- register operation to protector if owner did it
-				meta:set_int("activity",1+meta:get_int("activity")); -- rnd
+				meta:set_int("activity",1+meta:get_int("activity")); --  rnd
 		end
 	end
 	if infolevel == 2 then
