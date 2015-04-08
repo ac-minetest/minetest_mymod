@@ -206,6 +206,9 @@ minetest.register_on_dieplayer(
 		local name = player:get_player_name()
 		if name == nil then return end
 		if playerdata == nil then return end -- ERROR!
+		if playerdata[name] == nil then return end -- ERROR!
+		if playerdata[name].xp == nil then return end -- ERROR!
+		
 		playerdata[name].xp = math.ceil(10*playerdata[name].xp*0.9)/10
 		playerdata[name].dig = math.ceil(10*playerdata[name].dig*0.9)/10
 		playerdata[name].magic = math.ceil(10*playerdata[name].magic*0.9)/10
