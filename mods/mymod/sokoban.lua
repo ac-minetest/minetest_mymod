@@ -283,7 +283,7 @@ function register_board(name,desc,tiles)
 			sounds = default.node_sound_defaults(),
 			on_punch = function(pos, node, player) -- place piece on board
 					local name = player:get_player_name(); if name == nil then return end
-					if checkers.pos.x == nil then minetest.chat_send_all("punch checkers game block before playing.") return end
+					if checkers.pos.x == nil then minetest.chat_send_player(name,"punch checkers game block before playing.") return end
 					if checkers.piece == "" then return end
 					local t = minetest.get_gametime(); if t-checkers.time <1 then return end; checkers.time = t;
 					local above = {x=pos.x,y=pos.y+1;z=pos.z};
