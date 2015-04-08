@@ -416,6 +416,13 @@ minetest.register_node("doors:trapdoor", {
 		state = 0
 	end,
 	on_rightclick = function(pos, node, clicker)
+		local meta = minetest.get_meta(pos); local owner = meta:get_string("owner"); -- rnd
+		local name = clicker:get_player_name(); if name == nil then return end
+		if owner == "" then 
+			meta:set_string("owner",name); meta:set_string("infotext","owned by ".. name) 
+			owner = name
+		end
+		if name~=owner then return end
 		punch(pos)
 	end,
 })
