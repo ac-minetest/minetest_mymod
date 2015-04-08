@@ -87,7 +87,7 @@ for i in ipairs(moretrees.treelist) do
 			},
 			paramtype2 = "facedir",
 			is_ground_content = true,
-			groups = {tree=1,snappy=1,choppy=2,oddly_breakable_by_hand=1,flammable=2},
+			groups = {tree=1,snappy=1,choppy=2,flammable=2}, -- oddly_breakable_by_hand=1
 			sounds = default.node_sound_wood_defaults(),
 			on_place = minetest.rotate_node,
 		})
@@ -96,7 +96,7 @@ for i in ipairs(moretrees.treelist) do
 			description = S(treedesc.." Planks"),
 			tiles = {"moretrees_"..treename.."_wood.png"},
 			is_ground_content = true,
-			groups = {snappy=1,choppy=2,oddly_breakable_by_hand=2,flammable=3,wood=1},
+			groups = {snappy=1,choppy=2,flammable=3,wood=1}, -- oddly_breakable_by_hand=2
 			sounds = default.node_sound_wood_defaults(),
 		})
 

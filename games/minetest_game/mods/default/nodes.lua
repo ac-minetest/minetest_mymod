@@ -230,7 +230,7 @@ minetest.register_node("default:tree", {
 	tiles = {"default_tree_top.png", "default_tree_top.png", "default_tree.png"},
 	paramtype2 = "facedir",
 	is_ground_content = false,
-	groups = {tree=1,choppy=2,flammable=2}, --oddly_breakable_by_hand=1,
+	groups = {tree=1,choppy=2,flammable=2}, 
 	sounds = default.node_sound_wood_defaults(),
 	on_place = minetest.rotate_node
 })
@@ -240,7 +240,7 @@ minetest.register_node("default:jungletree", {
 	tiles = {"default_jungletree_top.png", "default_jungletree_top.png", "default_jungletree.png"},
 	paramtype2 = "facedir",
 	is_ground_content = false,
-	groups = {tree=1,choppy=2,flammable=2}, --oddly_breakable_by_hand=1,
+	groups = {tree=1,choppy=2,flammable=2}, 
 	sounds = default.node_sound_wood_defaults(),
 	on_place = minetest.rotate_node
 })
@@ -248,7 +248,7 @@ minetest.register_node("default:jungletree", {
 minetest.register_node("default:junglewood", {
 	description = "Junglewood Planks",
 	tiles = {"default_junglewood.png"},
-	groups = {choppy=2,flammable=3,wood=1},--oddly_breakable_by_hand=2,
+	groups = {choppy=2,flammable=3,wood=1},
 	sounds = default.node_sound_wood_defaults(),
 })
 
@@ -519,7 +519,7 @@ minetest.register_node("default:ladder", {
 minetest.register_node("default:wood", {
 	description = "Wooden Planks",
 	tiles = {"default_wood.png"},
-	groups = {choppy=2,flammable=3,wood=1}, --oddly_breakable_by_hand=2,
+	groups = {choppy=2,flammable=3,wood=1}, 
 	sounds = default.node_sound_wood_defaults(),
 })
 
@@ -1236,7 +1236,7 @@ minetest.register_node("default:pinetree", {
 	tiles = {"default_pinetree_top.png", "default_pinetree_top.png", "default_pinetree.png"},
 	paramtype2 = "facedir",
 	is_ground_content = false,
-	groups = {tree=1,choppy=2,oddly_breakable_by_hand=1,flammable=2},
+	groups = {tree=1,choppy=2,flammable=2},
 	sounds = default.node_sound_wood_defaults(),
 	on_place = minetest.rotate_node
 })
@@ -1244,7 +1244,7 @@ minetest.register_node("default:pinetree", {
 minetest.register_node("default:pinewood", {
 	description = "Pinewood Planks",
 	tiles = {"default_pinewood.png"},
-	groups = {choppy=2,oddly_breakable_by_hand=2,flammable=3,wood=1},
+	groups = {choppy=2,flammable=3,wood=1},
 	sounds = default.node_sound_wood_defaults(),
 })
 
