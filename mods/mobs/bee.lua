@@ -12,9 +12,11 @@ mobs:register_mob("mobs:bee", {
 	makes_footstep_sound = false,
 	monsterdetect = false,
 	walk_velocity = 1,
-	view_range = 6,
+	run_velocity = 10,
+	view_range = 12,
 	armor = 100,
 	damage = 4,
+	attack_type = "dogfight",
 	drops = {
 		{name = "mobs:med_cooked",
 		chance = 1,
@@ -91,11 +93,37 @@ minetest.register_node("mobs:beehive", {
 	after_place_node = function(pos, placer, itemstack)
 		if placer:is_player() then
 			minetest.set_node(pos, {name="mobs:beehive", param2=1})
+			local meta = minetest.get_meta(pos);meta:set_string("owner",placer:get_player_name())
 			minetest.env:add_entity(pos, "mobs:bee")
 		end
 	end,
 	
 })
+
+minetest.register_abm({
+		nodenames = "mobs:beehive",
+		neighbors = {"air"},
+		interval = 20,
+		chance = 5,
+		action = function(pos, node, active_object_count, active_object_count_wider) 
+			if active_object_count_wider > 10 then
+				return
+			end
+		local objs = minetest.env:get_objects_inside_radius(pos,10)
+		local meta = minetest.get_meta(pos);local owner = meta:get_string("owner");
+		local calm = false
+		for _, o in pairs(objs) do
+			if (o:is_player()) then
+				if o:get_player_name()==owner then calm = true break end
+			end
+		end
+			if not calm then
+				minetest.env:add_entity(pos, "mobs:bee")
+			end
+		end
+		})
+
+
 
 minetest.register_craft({
 	output = "mobs:beehive",
