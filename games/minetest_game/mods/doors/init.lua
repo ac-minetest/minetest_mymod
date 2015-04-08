@@ -379,6 +379,7 @@ local function punch(pos)
 	local meta = minetest.get_meta(pos)
 	local state = meta:get_int("state")
 	local me = minetest.get_node(pos)
+	local owner = meta:get_string("owner")
 	local tmp_node
 	local tmp_node2
 	if state == 1 then
@@ -392,6 +393,7 @@ local function punch(pos)
 	end
 	update_door(pos, tmp_node)
 	meta:set_int("state", state)
+	meta:set_string("owner", owner) -- rnd
 end
 
 minetest.register_node("doors:trapdoor", {
@@ -419,7 +421,7 @@ minetest.register_node("doors:trapdoor", {
 		local meta = minetest.get_meta(pos); local owner = meta:get_string("owner"); -- rnd
 		local name = clicker:get_player_name(); if name == nil then return end
 		if owner == "" then 
-			meta:set_string("owner",name); meta:set_string("infotext","owned by ".. name) 
+			meta:set_string("owner",name);
 			owner = name
 		end
 		if name~=owner then return end
