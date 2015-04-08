@@ -46,11 +46,18 @@ minetest.register_chatcommand("home", {
 
 minetest.register_chatcommand("sethome", {
     description = "Set your home point",
-    privs = {home=true},
+    privs = {}, --home=true}, rnd
     func = function(name)
         local player = minetest.get_player_by_name(name)
         local pos = player:getpos()
-        homepos[player:get_player_name()] = pos
+        
+		if homepos[name]==nil then -- rnd
+			minetest.chat_send_player(name, "Sleep in bed first to set home position.");
+			return
+		end
+		
+		
+		homepos[player:get_player_name()] = pos
         minetest.chat_send_player(name, "Home set!")
         changed = true
         if changed then
