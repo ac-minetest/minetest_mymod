@@ -86,8 +86,6 @@ minetest.register_abm({ -- lava destroyes bones (every?) after 10 minutes
 	end,
 })
 
-
-
 -- here various player stats are saved (experience, skills, effects)
 playerdata = {};
 votingpoll = {}; 
