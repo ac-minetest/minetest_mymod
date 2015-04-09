@@ -97,7 +97,11 @@ minetest.register_node("mobs:beehive", {
 		if placer:is_player() then
 			minetest.set_node(pos, {name="mobs:beehive", param2=1})
 			local meta = minetest.get_meta(pos);meta:set_string("owner",placer:get_player_name())
-			minetest.env:add_entity(pos, "mobs:bee")
+			local obj = minetest.env:add_entity(pos, "mobs:bee")-- rnd
+			local entity = obj:get_luaentity();
+			entity.owner = placer:get_player_name();			
+			
+			
 		end
 	end,
 	
