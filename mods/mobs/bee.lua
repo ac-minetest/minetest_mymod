@@ -18,6 +18,7 @@ mobs:register_mob("mobs:bee", {
 	damage = 4,
 	attack_type = "dogfight",
 	owner = "", -- rnd
+	lifetimer = 200, -- rnd
 	gravity = 0.4,
 	drops = {
 		{name = "mobs:med_cooked",
@@ -113,7 +114,7 @@ minetest.register_abm({
 		interval = 20,
 		chance = 5,
 		action = function(pos, node, active_object_count, active_object_count_wider) 
-			if active_object_count_wider > active_object_count then
+			if active_object_count_wider > 50 then -- no more than 50 bees
 				return
 			end
 		local objs = minetest.env:get_objects_inside_radius(pos,8)

@@ -303,8 +303,10 @@ function register_board(name,desc,tiles)
 end
 
 local piece_punch  = function(pos, node, player) -- pick up piece
-	if checkers.pos.x == nil then minetest.chat_send_all("punch checkers game block before playing (need kick priv).") return end
+	local name = player:get_player_name(); if name == nil then return end
+	if checkers.pos.x == nil then minetest.chat_send_player(name,"punch checkers game block before playing (need kick priv).") return end
 	if checkers.piece~="" then return end -- dont pick up another piece before last one was put down
+	
 	local t = minetest.get_gametime(); if t-checkers.time <1 then return end; checkers.time = t;
 	checkers.piece = node.name; minetest.set_node(pos, {name="air"});
 	checkers.piece_pos = {x=pos.x,y=pos.y,z=pos.z};
