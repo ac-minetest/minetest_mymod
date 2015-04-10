@@ -126,7 +126,9 @@ minetest.register_abm({
 			end
 		end
 			if not calm then
-				minetest.env:add_entity(pos, "mobs:bee")
+				obj = minetest.env:add_entity(pos, "mobs:bee")
+				local entity = obj:get_luaentity();
+				entity.owner = owner;
 			end
 		end
 		})
