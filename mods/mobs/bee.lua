@@ -18,7 +18,8 @@ mobs:register_mob("mobs:bee", {
 	damage = 4,
 	attack_type = "dogfight",
 	owner = "", -- rnd
-	gravity = 0.4,
+	lifetimer = 200, -- rnd
+	gravity = 0.2,
 	drops = {
 		{name = "mobs:med_cooked",
 		chance = 1,
@@ -113,7 +114,7 @@ minetest.register_abm({
 		interval = 20,
 		chance = 5,
 		action = function(pos, node, active_object_count, active_object_count_wider) 
-			if active_object_count_wider > active_object_count then
+			if active_object_count_wider > 50 then -- no more than 50 bees
 				return
 			end
 		local objs = minetest.env:get_objects_inside_radius(pos,8)
@@ -125,7 +126,9 @@ minetest.register_abm({
 			end
 		end
 			if not calm then
-				minetest.env:add_entity(pos, "mobs:bee")
+				obj = minetest.env:add_entity(pos, "mobs:bee")
+				local entity = obj:get_luaentity();
+				entity.owner = owner;
 			end
 		end
 		})

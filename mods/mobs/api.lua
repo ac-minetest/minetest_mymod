@@ -451,21 +451,24 @@ function mobs:register_mob(name, def)
 							yaw = yaw+math.pi
 						end
 						self.object:setyaw(yaw)
+
+						if self.gravity < 0.5 then -- rnd: floating mobs?
+								local v = self.object:getvelocity()
+								if p.y>s.y then v.y = 7 else v.y = -7 end
+								self.object:setvelocity(v)
+						end
+						
+
 						if dist > 2 then
+							
 							if not self.v_start then
 								self.v_start = true
 								self.set_velocity(self, self.walk_velocity)
 							else
-								if self.gravity > 0.5 then
-									if self.jump and self.get_velocity(self) <= 1.5 and self.object:getvelocity().y == 0 then
-										local v = self.object:getvelocity()
-										v.y = 7 -- rnd increased jump
-										self.object:setvelocity(v)
-									end
-									else -- code for floating mobs
-										local v = self.object:getvelocity()
-										v.y = (p.y-s.y)*0.1
-										self.object:setvelocity(v)
+								if self.jump and self.get_velocity(self) <= 1.5 and self.object:getvelocity().y == 0 then
+									local v = self.object:getvelocity()
+									v.y = 7 -- rnd increased jump
+									self.object:setvelocity(v)
 								end
 								self.set_velocity(self, self.walk_velocity)
 							end
@@ -579,6 +582,15 @@ function mobs:register_mob(name, def)
 						self.v_start = true
 						self.set_velocity(self, self.run_velocity*mult) --rnd
 					else
+						
+						if self.gravity<0.5 then -- rnd floating mobs
+							local v = self.object:getvelocity()
+							if p.y>s.y then
+								v.y = 4 else v.y = -4
+							end
+						self.object:setvelocity(v)
+						end
+						
 						if self.jump and self.get_velocity(self) <= 0.5 and self.object:getvelocity().y == 0 then
 							local v = self.object:getvelocity()
 							v.y = 6
