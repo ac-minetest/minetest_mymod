@@ -1,5 +1,4 @@
 mobs = {}
-mobs = {}
 mobs.mod = "redo"
 function mobs:register_mob(name, def)
 	minetest.register_entity(name, {
@@ -79,6 +78,17 @@ function mobs:register_mob(name, def)
 						self.object:remove()
 						return
 					end
+					
+					-- check for nearby protectors: if tolerate intruders = 1 then mobs dont attack
+					local ppos = minetest.find_node_near(pos, 5, {"protector:protect"})
+					if ppos then
+						local meta = minetest.env:get_meta(ppos); if meta:get_int("penalty") == 1 then return end					
+						if self.owner == "" then self.owner = meta:get_string("owner") end -- under protection monsters become yours
+					end
+					
+				
+					
+					
 					
 					--rnd start attack
 					if self.hp_max>10 then -- small monsters are quiet
@@ -609,7 +619,8 @@ function mobs:register_mob(name, def)
 						local s2 = s
 						p2.y = p2.y + 1.5
 						s2.y = s2.y + 1.5
-						if minetest.line_of_sight(p2,s2) == true then
+						-- rnd floating mobs attack in water too
+						if minetest.line_of_sight(p2,s2) == true or minetest.get_node(p2).name == "default:water_source" then 
 							if self.sounds and self.sounds.attack then
 								minetest.sound_play(self.sounds.attack, {object = self.object})
 							end
@@ -982,6 +993,110 @@ function mobs:register_spawn(name, nodes, max_light, min_light, chance, active_o
 		end
 	})
 end
+
+-- RND: spawn mobs in water
+function mobs:register_spawn_water(name, nodes, max_light, min_light, chance, active_object_count, max_height, min_dist, max_dist, spawn_func)
+	mobs.spawning_mobs[name] = true	
+	minetest.register_abm({
+		nodenames = nodes,
+		neighbors = {"default:water_source"},
+		interval = 30,
+		chance = chance,
+		action = function(pos, node, _, active_object_count_wider)
+
+			if active_object_count_wider > active_object_count then
+				return
+			end
+			if not mobs.spawning_mobs[name] then
+				return
+			end
+			
+			pos.y = pos.y+1
+			if not minetest.get_node_light(pos) then
+				return
+			end
+			if minetest.get_node_light(pos) > max_light then
+				return
+			end
+			if minetest.get_node_light(pos) < min_light then
+				return
+			end
+			if pos.y > max_height then
+				return
+			end
+
+			if not minetest.registered_nodes[minetest.get_node(pos).name] then return end
+			if minetest.registered_nodes[minetest.get_node(pos).name].walkable then return end
+
+			pos.y = pos.y+1
+
+			if not minetest.registered_nodes[minetest.get_node(pos).name] then return end
+			if minetest.registered_nodes[minetest.get_node(pos).name].walkable then return end
+
+			if min_dist == nil then
+				min_dist = {x=-1,z=-1}
+			end
+			if max_dist == nil then
+				max_dist = {x=33000,z=33000}
+			end
+	
+			if math.abs(pos.x) < min_dist.x or math.abs(pos.z) < min_dist.z then
+				return
+			end
+			
+			if math.abs(pos.x) > max_dist.x or math.abs(pos.z) > max_dist.z then
+				return
+			end
+			
+			--minetest.chat_send_all("WATER MOB TEST") -- rnd debug
+		
+			if spawn_func and not spawn_func(pos, node) then
+				return
+			end
+
+			if minetest.setting_getbool("display_mob_spawn") then
+				minetest.chat_send_all("[mobs] Add "..name.." at "..minetest.pos_to_string(pos))
+			end
+			local mob = minetest.add_entity(pos, name)
+
+			-- setup the hp, armor, drops, etc... for this specific mob
+			
+			local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
+			local distance_rating = get_distance(static_spawnpoint,pos) 	
+			if mob then
+				mob = mob:get_luaentity()
+				local newHP = mob.hp_min + math.floor( mob.hp_max * distance_rating/500 )
+				mob.object:set_hp( newHP )
+				-- rnd change: make monsters with tougher armor away from spawn or deeper:)
+				local spawnpoint = core.setting_get_pos("static_spawnpoint")
+				local mult = math.sqrt((pos.x-spawnpoint.x)^2+(pos.y-spawnpoint.y)^2+(pos.z-spawnpoint.z)^2)
+				if pos.y-spawnpoint.y>-50 then -- on surface distance from spawn
+					mult = 1/(mult/500+1.) -- at distance 0 armor is normal, at 500 it 50% (smaller the better)
+				else
+					mult = math.abs(pos.y-spawnpoint.y); -- deep enough only depth
+					mult = 1/(mult/300+1.) -- depth 300, double armor
+				end
+				local new_armor = math.max(mob.armor*mult,1);
+				mob.object:set_armor_groups({fleshy=new_armor})
+				
+
+				--TO DO: MAKE DIFFERENT DAMAGE & DROPS
+				
+				-- rnd DOESNT SEEM TO WORK CORRECTLY! drops everything ??
+				-- local dropst = mob.drops;
+				-- for i,_ in pairs(dropst) do -- more probability of drops, DOES THIS WORK CORRECTLY?
+					-- mob.drops[i].chance=math.max(1,math.ceil(dropst[i].chance*mult))
+				-- end
+				 --TO DO make dungeon master info "stonemonster king with flaming crown on its head"
+				
+				
+			end
+		end
+	})
+end
+
+
+
 
 function mobs:register_arrow(name, def)
 	minetest.register_entity(name, {

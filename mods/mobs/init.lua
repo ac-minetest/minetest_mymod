@@ -37,6 +37,10 @@ dofile(minetest.get_modpath("mobs").."/spider.lua")
 
 dofile(minetest.get_modpath("mobs").."/agressor.lua")
 
+-- Water monster by Rnd
+
+dofile(minetest.get_modpath("mobs").."/water_monster.lua")
+
 -- Meat & Cooked Meat
 
 minetest.register_craftitem("mobs:meat_raw", {
