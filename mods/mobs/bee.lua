@@ -19,7 +19,7 @@ mobs:register_mob("mobs:bee", {
 	attack_type = "dogfight",
 	owner = "", -- rnd
 	lifetimer = 200, -- rnd
-	gravity = 0.4,
+	gravity = 0.2,
 	drops = {
 		{name = "mobs:med_cooked",
 		chance = 1,
