@@ -1298,8 +1298,7 @@ minetest.register_node("mobs:spell_fireball", {
 	end,
 	on_place = function(itemstack, placer, pointed_thing) -- when placed it can shoot if mese activated
 		local pos = pointed_thing.under; pos.y=pos.y+1;
-		minetest.set_node(pos,{name="mobs:spell_fireball"});
-		local meta = minetest.get_meta(pos);
+		
 		local name = placer:get_player_name();
 		if name == nil then return end
 		if playerdata==nil then return end
@@ -1307,6 +1306,8 @@ minetest.register_node("mobs:spell_fireball", {
 		if playerdata[name].mana<1 then
 			minetest.chat_send_player(name,"Need at least 1 mana"); return
 		end
+		
+		minetest.set_node(pos,{name="mobs:spell_fireball"});local meta = minetest.get_meta(pos);
 		--meta:set_string("owner",name);
 		local skill = playerdata[name].magic; --  diamond sword 20 dmg/lvl 8 - 4000, mithril 30/lvl 10 - 16000
 		
