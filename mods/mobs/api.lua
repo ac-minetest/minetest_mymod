@@ -83,7 +83,7 @@ function mobs:register_mob(name, def)
 					local ppos = minetest.find_node_near(pos, 5, {"protector:protect"})
 					if ppos then
 						local meta = minetest.env:get_meta(ppos); 
-						if self.owner == "" then self.owner = meta:get_string("owner") end -- under protection monsters become yours
+						if self.owner == "" then self.owner = meta:get_string("owner") return end -- under protection monsters become yours
 						if meta:get_int("penalty") == 1 then return end					
 					end
 					
@@ -1296,7 +1296,8 @@ minetest.register_node("mobs:spell_fireball", {
 		minetest.sound_play("shooter_flare_fire", {pos=pos,gain=1.0,max_hear_distance = 64,})
 		
 	end,
-	on_place = function(itemstack, placer, pointed_thing) -- when placed it can shoot if mese activated
+	 -- when placed it can shoot if mese activated
+	on_place = function(itemstack, placer, pointed_thing)
 		local pos = pointed_thing.under; pos.y=pos.y+1;
 		
 		local name = placer:get_player_name();
