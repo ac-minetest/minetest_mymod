@@ -82,12 +82,12 @@ function mobs:register_mob(name, def)
 					-- check for nearby protectors: if tolerate intruders = 1 then mobs dont attack
 					local ppos = minetest.find_node_near(pos, 5, {"protector:protect"})
 					if ppos then
-						local meta = minetest.env:get_meta(ppos); if meta:get_int("penalty") == 1 then return end					
+						local meta = minetest.env:get_meta(ppos); 
 						if self.owner == "" then self.owner = meta:get_string("owner") end -- under protection monsters become yours
+						if meta:get_int("penalty") == 1 then return end					
 					end
 					
-				
-					
+
 					
 					
 					--rnd start attack
@@ -1296,23 +1296,9 @@ minetest.register_node("mobs:spell_fireball", {
 		minetest.sound_play("shooter_flare_fire", {pos=pos,gain=1.0,max_hear_distance = 64,})
 		
 	end,
-})
-
-
--- fireball shooter
-minetest.register_node("mobs:firebox", {
-	description = "firebox: at placer's skill 0 does 15 dmg, does 35 dmg at skill 4000, 45 dmg at skill 16000, in between linear",
-	wield_image = "fireball_spell.png", -- TO DO : change texture
-	wield_scale = {x=0.6,y=2.,z=1.}, 
-	drawtype = "allfaces",
-	paramtype = "light",
-	light_source = 10,
-	tiles = {"fireball_spell.png"},
-	groups = {oddly_breakable_by_hand=3},
-	on_place = function(itemstack, placer, pointed_thing)
+	on_place = function(itemstack, placer, pointed_thing) -- when placed it can shoot if mese activated
 		local pos = pointed_thing.under; pos.y=pos.y+1;
-		minetest.set_node(pos,{name="mobs:firebox"});
-		local meta = minetest.get_meta(pos);
+		
 		local name = placer:get_player_name();
 		if name == nil then return end
 		if playerdata==nil then return end
@@ -1320,6 +1306,8 @@ minetest.register_node("mobs:firebox", {
 		if playerdata[name].mana<1 then
 			minetest.chat_send_player(name,"Need at least 1 mana"); return
 		end
+		
+		minetest.set_node(pos,{name="mobs:spell_fireball"});local meta = minetest.get_meta(pos);
 		--meta:set_string("owner",name);
 		local skill = playerdata[name].magic; --  diamond sword 20 dmg/lvl 8 - 4000, mithril 30/lvl 10 - 16000
 		
@@ -1332,8 +1320,10 @@ minetest.register_node("mobs:firebox", {
 		meta:set_int("time",minetest.get_gametime());
 		local view = placer:get_look_dir() 
 		meta:set_float("viewx",view.x);meta:set_float("viewz",view.z);
+		itemstack:take_item() 
+		return itemstack
+		
 	end,
-	
 	mesecons = {effector = {
 		action_on = function (pos, node) -- emulate spell
 		
@@ -1358,7 +1348,6 @@ minetest.register_node("mobs:firebox", {
 		end
 		}},
 })
-
 
 
 
