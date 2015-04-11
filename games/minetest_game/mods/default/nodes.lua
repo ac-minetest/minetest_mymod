@@ -794,6 +794,7 @@ minetest.register_node("default:chest", {
 })
 
 local function has_locked_chest_privilege(meta, player)
+	
 	if player:get_player_name() ~= meta:get_string("owner") then
 		return false
 	end
@@ -858,7 +859,8 @@ minetest.register_node("default:chest_locked", {
 	end,
 	on_rightclick = function(pos, node, clicker)
 		local meta = minetest.get_meta(pos)
-		if has_locked_chest_privilege(meta, clicker) then
+		local privs = minetest.get_player_privs(clicker:get_player_name()); -- rnd
+		if has_locked_chest_privilege(meta, clicker) or privs.kick then
 			minetest.show_formspec(
 				clicker:get_player_name(),
 				"default:chest_locked",
