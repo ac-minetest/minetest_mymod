@@ -12,7 +12,7 @@ mobs:register_mob("mobs:bee", {
 	makes_footstep_sound = false,
 	monsterdetect = false,
 	walk_velocity = 1,
-	run_velocity = 10,
+	run_velocity = 6,
 	view_range = 12,
 	armor = 100,
 	damage = 4,
@@ -126,7 +126,7 @@ minetest.register_abm({
 			end
 		end
 			if not calm then
-				obj = minetest.env:add_entity(pos, "mobs:bee")
+				local obj = minetest.env:add_entity(pos, "mobs:bee")
 				local entity = obj:get_luaentity();
 				entity.owner = owner;
 			end
