@@ -43,6 +43,12 @@ local function wielder_on(data, wielder_pos, wielder_node)
 		wieldstack = inv:get_stack(wield_inv_name, 1)
 	end
 	local dir = minetest.facedir_to_dir(wielder_node.param2)
+	-- under/above is currently intentionally left switched
+	-- even though this causes some problems with deployers and e.g. seeds
+	-- as there are some issues related to nodebreakers otherwise breaking 2 nodes afar.
+	-- solidity would have to be checked as well,
+	-- but would open a whole can of worms related to difference in nodebreaker/deployer behavior
+	-- and the problems of wielders acting on themselves if below is solid
 	local under_pos = vector.subtract(wielder_pos, dir)
 	local above_pos = vector.subtract(under_pos, dir)
 	local pitch
@@ -90,7 +96,10 @@ local function wielder_on(data, wielder_pos, wielder_node)
 		setpos = delay(),
 		set_hp = delay(),
 		set_properties = delay(),
-		set_wielded_item = function(self, item) inv:set_stack(wield_inv_name, wieldindex, item) end,
+		set_wielded_item = function(self, item)
+			wieldstack = item
+			inv:set_stack(wield_inv_name, wieldindex, item)
+		end,
 		set_animation = delay(),
 		set_attach = delay(),
 		set_detach = delay(),
@@ -221,27 +230,18 @@ local function register_wielder(data)
 				pipeworks.scan_for_tube_objects(pos)
 			end,
 			on_punch = data.fixup_node,
-			allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
-				local meta = minetest.get_meta(pos)
-				if player:get_player_name() ~= meta:get_string("owner") and meta:get_string("owner") ~= "" then
-					return 0
-				end
-				return count
-			end,
 			allow_metadata_inventory_put = function(pos, listname, index, stack, player)
-				local meta = minetest.get_meta(pos)
-				if player:get_player_name() ~= meta:get_string("owner") and meta:get_string("owner") ~= "" then
-					return 0
-				end
+				if not pipeworks.may_configure(pos, player) then return 0 end
 				return stack:get_count()
 			end,
 			allow_metadata_inventory_take = function(pos, listname, index, stack, player)
-				local meta = minetest.get_meta(pos)
-				if player:get_player_name() ~= meta:get_string("owner") and meta:get_string("owner") ~= "" then
-					return 0
-				end
+				if not pipeworks.may_configure(pos, player) then return 0 end
 				return stack:get_count()
 			end,
+			allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+				if not pipeworks.may_configure(pos, player) then return 0 end
+				return count
+			end
 		})
 	end
 end
@@ -317,13 +317,14 @@ if pipeworks.enable_node_breaker then
 			local oldwieldstack = ItemStack(wieldstack)
 			local on_use = (minetest.registered_items[wieldstack:get_name()] or {}).on_use
 			if on_use then
-				virtplayer:set_wielded_item(on_use(wieldstack, virtplayer, pointed_thing) or wieldstack)
+				wieldstack = on_use(wieldstack, virtplayer, pointed_thing) or wieldstack
+				virtplayer:set_wielded_item(wieldstack)
 			else
 				local under_node = minetest.get_node(pointed_thing.under)
 				local on_dig = (minetest.registered_nodes[under_node.name] or {on_dig=minetest.node_dig}).on_dig
 				on_dig(pointed_thing.under, under_node, virtplayer)
+				wieldstack = virtplayer:get_wielded_item()
 			end
-			wieldstack = virtplayer:get_wielded_item()
 			local wieldname = wieldstack:get_name()
 			if wieldname == oldwieldstack:get_name() then
 				-- don't mechanically wear out tool
@@ -335,9 +336,8 @@ if pipeworks.enable_node_breaker then
 			elseif wieldname ~= "" then
 				-- tool got replaced by something else:
 				-- treat it as a drop
-				
-					virtplayer:get_inventory():add_item("main", wieldstack) -- RND: here it adds item to virtual stack?
-					virtplayer:set_wielded_item(ItemStack(""))
+				virtplayer:get_inventory():add_item("main", wieldstack)
+				virtplayer:set_wielded_item(ItemStack(""))
 			end
 		end,
 		eject_drops = true,

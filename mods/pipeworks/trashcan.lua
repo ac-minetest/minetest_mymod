@@ -23,17 +23,17 @@ minetest.register_node("pipeworks:trashcan", {
 				"size[8,7]"..
 				"item_image[0,0;1,1;pipeworks:trashcan]"..
 				"label[1,0;Trash Can]"..
-				"list[current_name;trash;3.5,1;1,1;]"..
+				"list[context;trash;3.5,1;1,1;]"..
+				default.gui_bg..
+				default.gui_bg_img..
+				default.gui_slots..
+				default.get_hotbar_bg(0,3) ..
 				"list[current_player;main;0,3;8,4;]")
 		meta:set_string("infotext", "Trash Can")
 		meta:get_inventory():set_size("trash", 1)
 	end, 
-	after_place_node = function(pos)
-		pipeworks.scan_for_tube_objects(pos)
-	end,
-	after_dig_node = function(pos)
-		pipeworks.scan_for_tube_objects(pos)
-	end,
+	after_place_node = pipeworks.after_place,
+	after_dig_node = pipeworks.after_dig,
 	on_metadata_inventory_put = function(pos, listname, index, stack, player)
 		minetest.get_meta(pos):get_inventory():set_stack(listname, index, ItemStack(""))
 	end,
