@@ -85,6 +85,8 @@ end)
 
 function mesecon.queue:execute(action)
 	if action.pos == nil then return end -- rnd safety?
+	if action.pos.x == nil then return end
+	
 	mesecon.queue.funcs[action.func](action.pos, unpack(action.params))
 end
 
