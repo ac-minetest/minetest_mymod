@@ -84,6 +84,7 @@ minetest.register_globalstep(function (dtime)
 end)
 
 function mesecon.queue:execute(action)
+	if action.pos == nil then return end -- rnd safety?
 	mesecon.queue.funcs[action.func](action.pos, unpack(action.params))
 end
 

@@ -105,7 +105,7 @@ description = "sokoban crate",
 		local privs = minetest.get_player_privs(name); 
 		if not privs.ban then return end
 		local meta = minetest.get_meta(pos)
-		local t = minetest.get_gametime(); meta:set_int("time", t-130)		
+		local t = minetest.get_gametime(); meta:set_int("time", t-500)		
 		minetest.chat_send_all("Sokoban loader reset. Load level now.")
 	end,
 	on_receive_fields = function(pos, formname, fields, sender) 
