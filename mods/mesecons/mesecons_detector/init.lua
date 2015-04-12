@@ -14,13 +14,10 @@ end
 
 local object_detector_on_receive_fields = function(pos, formname, fields)
 	--rnd : players cant change fields if protected
-	local objs = minetest.get_objects_inside_radius(pos,4) 
-	local player = nil
-	for _, o in pairs(objs) do
-			if  o:is_player() then player = o end
-	end
+	local objs = minetest.get_objects_inside_radius(pos,4);	local player = nil
+	for _, o in pairs(objs) do 	if  o:is_player() then player = o break end end
 	if player == nil then return end
-	if not protector.can_dig(5,pos,player) then return end
+	if minetest.is_protected(pos, player::get_player_name()) then return end -- rnd : protection check
 	-- rnd: end
 	
 	if not fields.scanname or not fields.digiline_channel then return end;
