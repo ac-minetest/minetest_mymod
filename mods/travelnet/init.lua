@@ -435,7 +435,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    local meta = minetest.env:get_meta(pos);
 
    local name = player:get_player_name();
-
+   
    -- if the box has not been configured yet
    if( meta:get_string("station_network")=="" ) then
 
@@ -502,6 +502,13 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
 
    if( not( travelnet.allow_travel( name, owner_name, station_network, station_name, fields.target ))) then
       return;
+   end
+   
+   -- rnd: only allow travel if player inside box (xz)
+   local ppos = player:getpos();  ppos.x = ppos.x-pos.x; ppos.y = ppos.y-pos.y; ppos.z = ppos.z-pos.z;
+   if math.abs(ppos.x)>0.5 or math.abs(ppos.z)>0.5 or math.abs(ppos.y)>0.5 then
+		--minetest.chat_send_all(ppos.x .. " " .. ppos.y .. " " .. ppos.z)
+		minetest.chat_send_player(name, "Please stand inside the travelnet box to use it.");
    end
    minetest.chat_send_player(name, "Initiating transfer to station '"..( fields.target or "?").."'.'");
 

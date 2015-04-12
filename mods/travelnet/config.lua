@@ -4,7 +4,7 @@ travelnet.MAX_STATIONS_PER_NETWORK = 24;
 -- set this to true if you want a simulated beam effect
 travelnet.travelnet_effect_enabled = false;
 -- set this to true if you want a sound to be played when the travelnet is used
-travelnet.travelnet_sound_enabled  = false;
+travelnet.travelnet_sound_enabled  = true;
 
 -- if you set this to false, travelnets cannot be created
 -- (this may be useful if you want nothing but the elevators on your server)
