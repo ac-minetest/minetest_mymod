@@ -272,7 +272,7 @@ minetest.register_globalstep(function(dtime)
 			mult = dist
 			if mult>200 and pos.y> 0 and not privs.privs then -- only on "surface" and if not admin
 				mult = (7./5)/(mult/500.+1.)  -- starts linearly falling from 200
-				t  = 1-1/(playerdata[name].xp/2000+1); mult = t+(1-t)*mult -- adjust factor with experience
+				t  = 1-1/(playerdata[name].xp/10000+1); mult = 1*t+(1-t)*mult -- adjust factor with experience
 			else
 				mult = 1.
 			end

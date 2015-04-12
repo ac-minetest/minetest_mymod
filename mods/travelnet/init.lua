@@ -514,6 +514,14 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    minetest.chat_send_player(name, "Initiating transfer to station '"..( fields.target or "?").."'.'");
 
 
+   -- transport the player to the target location
+   local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
+   -- display distance: rnd
+   
+   player:moveto( target_pos, false);
+   
+   
+   
 
    if( travelnet.travelnet_sound_enabled ) then
       minetest.sound_play("128590_7037-lq.mp3", {pos = pos, gain = 1.0, max_hear_distance = 10,})
@@ -525,9 +533,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    -- close the doors at the sending station
    travelnet.open_close_door( pos, player, 1 );
 
-   -- transport the player to the target location
-   local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
-   player:moveto( target_pos, false);
+   
 
    if( travelnet.travelnet_sound_enabled ) then
       minetest.sound_play("travelnet_travel.wav", {pos = target_pos, gain = 1.0, max_hear_distance = 10,})
