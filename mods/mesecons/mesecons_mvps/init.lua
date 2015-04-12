@@ -21,6 +21,7 @@ end
 
 -- Objects that cannot be moved (e.g. movestones)
 function mesecon:register_mvps_unmov(objectname)
+	if not objectname then return end -- rnd ERROR
 	mesecon.mvps_unmov[objectname] = true;
 end
 
