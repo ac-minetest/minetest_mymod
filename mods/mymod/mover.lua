@@ -92,6 +92,21 @@ minetest.register_node("mymod:mover", {
 	--minetest.chat_send_all(" moving ")
 	meta:set_float("fuel", fuel - 1);
 	meta:set_string("infotext", "Mover block. Fuel "..fuel-1);
+	
+	-- if target chest put in chest
+	if node2.name == "default:chest" or node2.name == "default:chest_locked" then
+		local cmeta = minetest.get_meta(pos2);
+		local inv = cmeta:get_inventory();
+		local stack = ItemStack({name=node1.name})
+		if inv:room_for_item("main", stack) then
+			minetest.set_node(pos1, {name = "air"});
+			inv:add_item("main", stack);
+		else return
+		end
+	return
+	end
+	
+	
 	minetest.set_node(pos2, {name = node1.name});
 	minetest.set_node(pos1, {name = "air"});
 	local meta2 = minetest.get_meta(pos2);meta2:from_table(table1); 

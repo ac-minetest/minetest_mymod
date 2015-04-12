@@ -57,6 +57,7 @@ minetest.register_craft({
 	}
 })
 
+-- OTHER RECIPES
 
 minetest.register_craft({
 	output = "default:papyrus",
@@ -273,5 +274,23 @@ minetest.register_craft({
 		{"default:mese","default:mese","default:mese"},
 		{"default:mese","moreores:mithril_block","default:mese"},
 		{"default:mese","default:mese","default:mese"},
+	}
+})
+
+-- ORES
+
+minetest.register_craft({
+	output = "default:diamond",
+	recipe = {
+		{"default:coalblock", "default:coalblock",""},
+		{"default:coalblock", "default:coalblock",""}
+	}
+})
+minetest.register_craft({
+	output = "default:mese_crystal 2",
+	recipe = {
+		{"default:steel_ingot", "default:steel_ingot","default:steel_ingot"},
+		{"default:steel_ingot", "default:diamond","default:steel_ingot"},
+		{"default:steel_ingot", "default:steel_ingot","default:steel_ingot"}
 	}
 })
