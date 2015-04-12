@@ -509,6 +509,7 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    if math.abs(ppos.x)>0.5 or math.abs(ppos.z)>0.5 or math.abs(ppos.y)>0.5 then
 		--minetest.chat_send_all(ppos.x .. " " .. ppos.y .. " " .. ppos.z)
 		minetest.chat_send_player(name, "Please stand inside the travelnet box to use it.");
+		return
    end
    minetest.chat_send_player(name, "Initiating transfer to station '"..( fields.target or "?").."'.'");
 
