@@ -91,10 +91,22 @@ minetest.register_node("mymod:mover", {
 		meta:set_string("infotext", "Mover block. Protection fail. Deactivated.")
 	return end
 	
+	
+	local prefer = meta:get_string("prefer")
+	
+	if prefer == "object" then -- teleport ppl
+		for _,obj in pairs(minetest.get_objects_inside_radius(pos1, 2)) do
+			obj:moveto(pos2, false) 	
+		end
+		minetest.sound_play("transporter", {pos=pos2,gain=1.0,max_hear_distance = 32,})
+		return 
+	end
+	
+	
 	local node1 = minetest.get_node(pos1);
 	local source_chest;	if string.find(node1.name,"default:chest") then source_chest=true end
 	if node1.name == "air" then return end -- nothing to move
-	local prefer = meta:get_string("prefer")
+	
 	if prefer~="" then -- prefered node set
 		if prefer~=node1.name and not source_chest  then return end -- only take prefered node or from chests
 		if source_chest then -- take stuff from chest
