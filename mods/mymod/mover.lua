@@ -155,7 +155,7 @@ minetest.register_node("mymod:mover", {
 		if drop then 
 			local stack = ItemStack(node1.name);minetest.add_item(pos2,stack) -- drops it
 		end
-		if dig then minetest.dig_node(pos2) end
+		if dig then minetest.dig_node(pos2);minetest.dig_node(pos1) end
 		if place and not source_chest then minetest.place_node(pos2,node1) end
 	end
 	if not source_chest then
