@@ -74,11 +74,12 @@ minetest.register_node("mymod:mover", {
 				--minetest.chat_send_all(" refueled ")
 				inv:remove_item("main", stack)
 				meta:set_float("fuel", MOVER_FUEL_STORAGE_CAPACITY);
+				fuel = MOVER_FUEL_STORAGE_CAPACITY;
 				meta:set_string("infotext", "Mover block. Fuel "..MOVER_FUEL_STORAGE_CAPACITY);
 			else meta:set_string("infotext", "Mover block. Out of fuel.");return
 			end
 			--check fuel
-			return 
+			if fuel == 0 then return  end
 		end 
 	
 	local pos1 = {x=meta:get_int("x1")+pos.x,y=meta:get_int("y1")+pos.y,z=meta:get_int("z1")+pos.z};
