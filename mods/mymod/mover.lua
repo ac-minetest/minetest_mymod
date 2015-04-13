@@ -129,6 +129,8 @@ minetest.register_node("mymod:mover", {
 		end
 	end	
 	
+	minetest.sound_play("transporter", {pos=pos2,gain=1.0,max_hear_distance = 32,})
+	
 	if not target_chest then
 		minetest.set_node(pos2, {name = node1.name});
 	end
