@@ -95,6 +95,7 @@ minetest.register_node("mymod:mover", {
 	
 	
 	local prefer = meta:get_string("prefer")
+	local dig=false; if prefer == "dig" then dig = true; prefer = ""; end -- digs at target location
 	
 	if prefer == "object" then -- teleport objects, for free
 		for _,obj in pairs(minetest.get_objects_inside_radius(pos1, 2)) do
@@ -148,6 +149,7 @@ minetest.register_node("mymod:mover", {
 	
 	if not target_chest then
 		minetest.set_node(pos2, {name = node1.name});
+		if dig then minetest.dig_node(pos2) end
 	end
 	if not source_chest then
 		minetest.set_node(pos1, {name = "air"});
