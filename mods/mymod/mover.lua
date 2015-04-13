@@ -97,8 +97,8 @@ minetest.register_node("mymod:mover", {
 	
 	local prefer = meta:get_string("prefer")
 	local dig=false; if prefer == "dig" then dig = true; prefer = ""; end -- digs at target location
-	local place=false; if prefer == "place" then place = truen; prefer = ""; end -- places node at target location
-	
+	local place=false; if prefer == "place" then place = true; prefer = ""; end -- places node at target location
+	local drop = false; if prefer == "drop" then drop = true; prefer = ""; end -- drops node instead of placing it
 	
 	if prefer == "object" then -- teleport objects, for free
 		for _,obj in pairs(minetest.get_objects_inside_radius(pos1, 2)) do
@@ -151,7 +151,10 @@ minetest.register_node("mymod:mover", {
 	minetest.sound_play("transporter", {pos=pos2,gain=1.0,max_hear_distance = 32,})
 	
 	if not target_chest then
-		minetest.set_node(pos2, {name = node1.name});
+		if not place and not drop then minetest.set_node(pos2, {name = node1.name}); end
+		if drop then 
+			local stack = ItemStack(node1.name);minetest.add_item(pos2,stack) -- drops it
+		end
 		if dig then minetest.dig_node(pos2) end
 		if place and not source_chest then minetest.place_node(pos2,node1) end
 	end
