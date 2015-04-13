@@ -2,6 +2,8 @@
 
 -- MOVER: universal moving machine, requires coal in nearby chest to operate
 -- can take item from chest and place it in chest or as a node outside at ranges -5,+5
+-- it can be used for filtering by setting "prefered block". if set to "object" it will teleport all objects.
+
 -- input is: where to take and where to put
 -- to operate mese power is needed
 
@@ -94,11 +96,12 @@ minetest.register_node("mymod:mover", {
 	
 	local prefer = meta:get_string("prefer")
 	
-	if prefer == "object" then -- teleport ppl
+	if prefer == "object" then -- teleport objects, for free
 		for _,obj in pairs(minetest.get_objects_inside_radius(pos1, 2)) do
 			obj:moveto(pos2, false) 	
 		end
 		minetest.sound_play("transporter", {pos=pos2,gain=1.0,max_hear_distance = 32,})
+		--meta:set_float("fuel", fuel - 1);
 		return 
 	end
 	
