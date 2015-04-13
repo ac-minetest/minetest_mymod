@@ -5,6 +5,7 @@
 -- purpose: define nodes that spawn specific mobs if there are not too many around yet
 -- from https://forum.minetest.net/viewtopic.php?p=57231#p57231
 
+
 function mob_breeder(pos, mob_name)
 	local objects = minetest.get_objects_inside_radius(pos, 8) -- radius
 	local mob_count = 0
@@ -33,7 +34,10 @@ minetest.register_abm({
 	nodenames = {"dctest:mob_breeder"},
 	interval = 1.0,
 	chance = 10,
-	action = function(pos)
+	action = function(pos, node, active_object_count, active_object_count_wider) 
+			if active_object_count_wider > 30 then -- no more than 30 chickens
+				return
+			end 
 		local pos_under = {x=pos.x,y=pos.y-1,z=pos.z}
 		local under = minetest.get_node(pos_under)
 		if under.name == "default:furnace_active" then

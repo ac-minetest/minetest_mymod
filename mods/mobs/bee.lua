@@ -114,7 +114,7 @@ minetest.register_abm({
 		interval = 20,
 		chance = 5,
 		action = function(pos, node, active_object_count, active_object_count_wider) 
-			if active_object_count_wider > 50 then -- no more than 50 bees
+			if active_object_count_wider > 30 then -- no more than 30 bees
 				return
 			end
 		local objs = minetest.env:get_objects_inside_radius(pos,8)
