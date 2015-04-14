@@ -94,7 +94,6 @@ minetest.register_node("mymod:mover", {
 		meta:set_string("infotext", "Mover block. Protection fail. Deactivated.")
 	return end
 	
-	
 	local prefer = meta:get_string("prefer")
 	local dig=false; if prefer == "dig" then dig = true; prefer = ""; end -- digs at target location
 	local place=false; if prefer == "place" then place = true; prefer = ""; end -- places node at target location
@@ -108,7 +107,6 @@ minetest.register_node("mymod:mover", {
 		--meta:set_float("fuel", fuel - 1);
 		return 
 	end
-	
 	
 	local node1 = minetest.get_node(pos1);
 	local source_chest;	if string.find(node1.name,"default:chest") then source_chest=true end
@@ -155,8 +153,11 @@ minetest.register_node("mymod:mover", {
 		if drop then 
 			local stack = ItemStack(node1.name);minetest.add_item(pos2,stack) -- drops it
 		end
-		if dig then minetest.dig_node(pos2);minetest.dig_node(pos1) end
-		if place and not source_chest then minetest.place_node(pos2,node1) end
+		if dig then 
+			--minetest.node_dig(pos1, node1, digger) -- maybe this fix?
+			minetest.dig_node(pos2);minetest.dig_node(pos1) 
+		end -- DOESNT WORK!
+		if place and not source_chest then minetest.place_node(pos2,node1) end -- DOESNT WORK!
 	end
 	if not source_chest then
 		minetest.set_node(pos1, {name = "air"});
@@ -201,6 +202,7 @@ minetest.register_on_player_receive_fields(function(player,formname,fields)
 			meta:set_int("x2",x2);meta:set_int("y2",y2);meta:set_int("z2",z2);
 			meta:set_string("prefer",fields.prefer or "");
 			meta:set_string("infotext", "Mover block. Set up with source coords ".. x1 ..","..y1..","..z1.. " and target coord ".. x2 ..","..y2..",".. z2 .. ". Put chest with coal next to it and start with mese signal.");
+			if meta:get_float("fuel")<0 then meta:set_float("fuel",0) end -- reset block
 		end
 	end
 end)
