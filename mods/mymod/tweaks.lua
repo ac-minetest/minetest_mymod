@@ -37,6 +37,16 @@ minetest.register_craft({
 	output = "default:coal_lump",
 	recipe = "default:tree",
 })
+local function hurt_cactus() -- cactus tweak
+	local name = "default:cactus"
+	local table = minetest.registered_nodes[name];
+	local table2 = {};
+	for i,v in pairs(table) do table2[i] = v end
+	table2.groups.disable_jump = 1
+	table2.damage_per_second = 5
+	minetest.register_node(":"..name, table2)	
+end
+hurt_cactus();
 
 local function tree_chop(name) -- cactus like tree chopping for breaker
 	local table = minetest.registered_nodes[name];
