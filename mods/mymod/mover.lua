@@ -151,7 +151,14 @@ minetest.register_node("mymod:mover", {
 		local count = 0;
 		if dig then 
 			-- check for cactus or tree
-			if node1.name=="default:cactus" or node1.name == "default:tree" then -- dig up to height 10, break sooner if needed
+			local dig_up = false
+			local dig_up_table = {"default:cactus","default:tree","default:jungletree","default:papyrus"};
+			for i,v in pairs(dig_up_table) do
+				if node1.name==v then dig_up = true break end
+			end
+			
+			
+			if dig_up == true then -- dig up to height 10, break sooner if needed
 				for i=0,10 do
 					local pos3 = {x=pos1.x,y=pos1.y+i,z=pos1.z};
 					local dname= minetest.get_node(pos3).name;
