@@ -136,6 +136,49 @@ adjust_dig_speed("moreores:pick_mithril",dig_factor)
 
 -- ONLY ALLOW TO PLACE LAVA NEAR PROTECTOR WITH HIGH ACTIVITY OR BELOW 0
 
+local function restrict_place_source(name)
+	local table = minetest.registered_items[name];
+	local table2 = {};
+	for i,v in pairs(table) do table2[i] = v end
+		
+	table2.on_place = function(itemstack, placer, pointed_thing)
+		local pos = pointed_thing.above
+		if pos.y>=0 then return else end -- rnd: unfinished
+		
+		-- look for nearby protector to read activity
+		local activity;
+		local r = 5;
+		local name = placer:get_player_name(); if name==nil then return end
+		local positions = minetest.find_nodes_in_area(
+				{x=pos.x-r, y=pos.y-r, z=pos.z-r},
+				{x=pos.x+r, y=pos.y+r, z=pos.z+r},
+				"protector:protect");
+		local protected = false;local ppos;
+				for _, p in ipairs(positions) do
+					local nmeta = minetest.env:get_meta(p)
+					local owner = nmeta:get_string("owner")
+					if owner == name then protected = true; ppos = p;end
+				end
+		local meta
+		if ppos then  
+			meta = minetest.get_meta(ppos);activity = 0.5*meta:get_int("activity");
+			else activity = -1
+		end
+		
+		if activity<1000 then
+			return 
+		else -- unfinished
+		end
+	end
+	minetest.register_node(name, table2);
+			
+end
+
+restrict_place_source("default:water_source")
+restrict_place_source("default:lava_source")
+restrict_place_source("mymod:acid_source_active")
+
+
 local old_bucket_lava_on_place=minetest.registered_craftitems["bucket:bucket_lava"].on_place
 
 lava_bucket_check = function(itemstack, placer, pointed_thing)

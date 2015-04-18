@@ -94,12 +94,9 @@ minetest.register_node("mymod:mover", {
 		meta:set_string("infotext", "Mover block. Protection fail. Deactivated.")
 	return end
 	
-	local prefer = meta:get_string("prefer")
-	local dig=false; if prefer == "dig" then dig = true; prefer = ""; end -- digs at target location
-	local place=false; if prefer == "place" then place = true; prefer = ""; end -- places node at target location
-	local drop = false; if prefer == "drop" then drop = true; prefer = ""; end -- drops node instead of placing it
+	local prefer = meta:get_string("prefer"); local mode = meta:get_string("mode");
 	
-	if prefer == "object" then -- teleport objects, for free
+	if mode == "object" then -- teleport objects, for free
 		for _,obj in pairs(minetest.get_objects_inside_radius(pos1, 2)) do
 			obj:moveto(pos2, false) 	
 		end
@@ -107,6 +104,13 @@ minetest.register_node("mymod:mover", {
 		--meta:set_float("fuel", fuel - 1);
 		return 
 	end
+	
+	
+	local dig=false; if mode == "dig" then dig = true; end -- digs at target location
+	local place=false; if mode == "place" then place = true; end -- places node at target location
+	local drop = false; if mode == "drop" then drop = true; end -- drops node instead of placing it
+	
+	
 	
 	local node1 = minetest.get_node(pos1);
 	local source_chest;	if string.find(node1.name,"default:chest") then source_chest=true end
@@ -131,8 +135,8 @@ minetest.register_node("mymod:mover", {
 	
 	local node2 = minetest.get_node(pos2);
 	--minetest.chat_send_all(" moving ")
-	meta:set_float("fuel", fuel - 1);
-	meta:set_string("infotext", "Mover block. Fuel "..fuel-1);
+	fuel = fuel -1;	meta:set_float("fuel", fuel); -- burn fuel
+	meta:set_string("infotext", "Mover block. Fuel "..fuel);
 	
 	-- if target chest put in chest
 	local target_chest = false
@@ -167,19 +171,31 @@ minetest.register_node("mymod:mover", {
 	},
 	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
 		local meta = minetest.get_meta(pos);
-		local x1,y1,z1,x2,y2,z2,prefer;
+		local x1,y1,z1,x2,y2,z2,prefer,mode;
 		x1=meta:get_int("x1");y1=meta:get_int("y1");z1=meta:get_int("z1");
 		x2=meta:get_int("x2");y2=meta:get_int("y2");z2=meta:get_int("z2");
-		prefer = meta:get_string("prefer");
+		prefer = meta:get_string("prefer");mode = meta:get_string("mode");
 		local form  = 
-		"size[3,3]" ..  -- width, height
-		"field[0,0.5;1,1;x1;x1;"..x1.."] field[1,0.5;1,1;y1;y1;"..y1.."] field[2,0.5;1,1;z1;z1;"..z1.."]"..
-		"field[0,1.5;1,1;x2;x2;"..x2.."] field[1,1.5;1,1;y2;y2;"..y2.."] field[2,1.5;1,1;z2;z2;"..z2.."]"..
-		"button[0,2.;1,1;OK;OK] field[1.5,2.5;2,1;prefer;prefered block;"..prefer.."]"
-		--meta:set_string("formspec", form)
+		"size[2.75,4]" ..  -- width, height
+		"field[0.25,0.5;1,1;x1;x1;"..x1.."] field[1.25,0.5;1,1;y1;y1;"..y1.."] field[2.25,0.5;1,1;z1;z1;"..z1.."]"..
+		"field[0.25,1.5;1,1;x2;x2;"..x2.."] field[1.25,1.5;1,1;y2;y2;"..y2.."] field[2.25,1.5;1,1;z2;z2;"..z2.."]"..
+		"button[2,3.25.;1,1;OK;OK] field[0.25,2.5;2,1;prefer;prefered block;"..prefer.."]"..
+		"field[0.25,3.5;2,1;mode;mode;"..mode.."]";
+		
 		minetest.show_formspec(player:get_player_name(), "mymod:mover_"..minetest.pos_to_string(pos), form)
 	end
 })
+--[[
+
+//lua local form  = 
+		"size[2.75,4]" ..  -- width, height
+		"field[0.25,0.5;1,1;x1;x1;".. 0 .."] field[1.25,0.5;1,1;y1;y1;".. 0 .."] field[2.25,0.5;1,1;z1;z1;".. 0 .."]"..
+		"field[0.25,1.5;1,1;x2;x2;".. 0 .."] field[1.25,1.5;1,1;y2;y2;".. 0 .."] field[2.25,1.5;1,1;z2;z2;".. 0 .."]"..
+		"button[2,3.25;1,1;OK;OK] field[0.25,2.5;2,1;prefer;prefered block;".."".."]"..
+		"field[0.25,3.5;2,1;mode;mode;".."".."]";
+minetest.show_formspec("rnd", "testform", form)
+
+--]]
 
 minetest.register_on_player_receive_fields(function(player,formname,fields)
 	
@@ -201,6 +217,7 @@ minetest.register_on_player_receive_fields(function(player,formname,fields)
 			meta:set_int("x1",x1);meta:set_int("y1",y1);meta:set_int("z1",z1);			
 			meta:set_int("x2",x2);meta:set_int("y2",y2);meta:set_int("z2",z2);
 			meta:set_string("prefer",fields.prefer or "");
+			meta:set_string("mode",fields.mode or "");
 			meta:set_string("infotext", "Mover block. Set up with source coords ".. x1 ..","..y1..","..z1.. " and target coord ".. x2 ..","..y2..",".. z2 .. ". Put chest with coal next to it and start with mese signal.");
 			if meta:get_float("fuel")<0 then meta:set_float("fuel",0) end -- reset block
 		end
@@ -215,3 +232,13 @@ minetest.register_craft({
 		{"bones:bones", "bones:bones", "bones:bones"}
 	}
 })
+
+
+minetest.register_chatcommand("test", {
+    description = "test dig",
+    privs = {kick=true},
+    func = function(name,param)
+		
+	end
+	}
+)
