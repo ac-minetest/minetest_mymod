@@ -49,8 +49,7 @@ minetest.register_node("mymod:mover", {
 		action_on = function (pos, node) 
 		local meta = minetest.get_meta(pos);
 		local fuel = meta:get_float("fuel");
-		if fuel < 0 then return end -- deactivated
-		if fuel==0 then -- needs fuel to operate, find nearby open chest with fuel within radius 1
+		if fuel<=0 then -- needs fuel to operate, find nearby open chest with fuel within radius 1
 			local r = 1;
 			local pos1 = {x=meta:get_int("x1")+pos.x,y=meta:get_int("y1")+pos.y,z=meta:get_int("z1")+pos.z};
 			local pos2 = {x=meta:get_int("x2")+pos.x,y=meta:get_int("y2")+pos.y,z=meta:get_int("z2")+pos.z};
@@ -66,15 +65,21 @@ minetest.register_node("mymod:mover", {
 				end
 			end
 			
-			if not fpos then return end -- no chest with fuel found
+			if not fpos then return end -- no chest found
 			local cmeta = minetest.get_meta(fpos);
 			local inv = cmeta:get_inventory();
-			local stack = ItemStack({name="default:coal_lump"}) -- check for this fuel
-			if inv:contains_item("main", stack) then
+			local fuels = {["default:coal_lump"]=1,["default:cactus"]=1,["default:coalblock"]=10};
+			local found_fuel = nil;local stack;
+			for i,v in pairs(fuels) do
+				stack = ItemStack({name=i})
+				if inv:contains_item("main", stack) then found_fuel = v break end
+			end
+			 -- check for this fuel
+			if found_fuel~=nil then
 				--minetest.chat_send_all(" refueled ")
 				inv:remove_item("main", stack)
-				meta:set_float("fuel", MOVER_FUEL_STORAGE_CAPACITY);
-				fuel = MOVER_FUEL_STORAGE_CAPACITY;
+				meta:set_float("fuel", fuel+MOVER_FUEL_STORAGE_CAPACITY*found_fuel);
+				fuel = fuel+MOVER_FUEL_STORAGE_CAPACITY*found_fuel;
 				meta:set_string("infotext", "Mover block. Fuel "..MOVER_FUEL_STORAGE_CAPACITY);
 			else meta:set_string("infotext", "Mover block. Out of fuel.");return
 			end
@@ -235,9 +240,9 @@ end)
 minetest.register_craft({
 	output = "mymod:mover",
 	recipe = {
-		{"bones:bones", "bones:bones", "bones:bones"},
-		{"bones:bones", "default:diamondblock","bones:bones"},
-		{"bones:bones", "bones:bones", "bones:bones"}
+		{"default:diamond", "default:diamond", "default:diamond"},
+		{"default:mese_crystal", "default:mese_crystal","default:mese_crystal"},
+		{"default:stone", "default:wood", "default:stone"}
 	}
 })
 
