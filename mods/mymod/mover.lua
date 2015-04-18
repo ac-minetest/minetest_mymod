@@ -107,7 +107,6 @@ minetest.register_node("mymod:mover", {
 	
 	
 	local dig=false; if mode == "dig" then dig = true; end -- digs at target location
-	local place=false; if mode == "place" then place = true; end -- places node at target location
 	local drop = false; if mode == "drop" then drop = true; end -- drops node instead of placing it
 	
 	
@@ -153,15 +152,14 @@ minetest.register_node("mymod:mover", {
 	minetest.sound_play("transporter", {pos=pos2,gain=1.0,max_hear_distance = 32,})
 	
 	if not target_chest then
-		if not place and not drop then minetest.set_node(pos2, {name = node1.name}); end
+		if not drop then minetest.set_node(pos2, {name = node1.name}); end
 		if drop then 
 			local stack = ItemStack(node1.name);minetest.add_item(pos2,stack) -- drops it
 		end
 		if dig then 
-			--minetest.node_dig(pos1, node1, digger) -- maybe this fix?
+			--minetest.node_dig(pos1, node1, digger) -- maybe this fix? but dont want items in player inventory
 			minetest.dig_node(pos2);minetest.dig_node(pos1) 
 		end -- DOESNT WORK!
-		if place and not source_chest then minetest.place_node(pos2,node1) end -- DOESNT WORK!
 	end
 	if not source_chest then
 		minetest.set_node(pos1, {name = "air"});
@@ -176,10 +174,10 @@ minetest.register_node("mymod:mover", {
 		x2=meta:get_int("x2");y2=meta:get_int("y2");z2=meta:get_int("z2");
 		prefer = meta:get_string("prefer");mode = meta:get_string("mode");
 		local form  = 
-		"size[2.75,4]" ..  -- width, height
+		"size[3,4]" ..  -- width, height
 		"field[0.25,0.5;1,1;x1;x1;"..x1.."] field[1.25,0.5;1,1;y1;y1;"..y1.."] field[2.25,0.5;1,1;z1;z1;"..z1.."]"..
 		"field[0.25,1.5;1,1;x2;x2;"..x2.."] field[1.25,1.5;1,1;y2;y2;"..y2.."] field[2.25,1.5;1,1;z2;z2;"..z2.."]"..
-		"button[2,3.25.;1,1;OK;OK] field[0.25,2.5;2,1;prefer;prefered block;"..prefer.."]"..
+		"button[2,3.25.;1,1;OK;OK] field[0.25,2.5;3,1;prefer;prefered block;"..prefer.."]"..
 		"field[0.25,3.5;2,1;mode;mode;"..mode.."]";
 		
 		minetest.show_formspec(player:get_player_name(), "mymod:mover_"..minetest.pos_to_string(pos), form)
