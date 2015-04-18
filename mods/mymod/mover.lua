@@ -94,6 +94,7 @@ minetest.register_node("mymod:mover", {
 		meta:set_string("infotext", "Mover block. Protection fail. Deactivated.")
 	return end
 	
+	local node1 = minetest.get_node(pos1);local node2 = minetest.get_node(pos2);
 	local prefer = meta:get_string("prefer"); local mode = meta:get_string("mode");
 	
 	if mode == "object" then -- teleport objects, for free
@@ -110,8 +111,6 @@ minetest.register_node("mymod:mover", {
 	local drop = false; if mode == "drop" then drop = true; end -- drops node instead of placing it
 	
 	
-	
-	local node1 = minetest.get_node(pos1);
 	local source_chest;	if string.find(node1.name,"default:chest") then source_chest=true end
 	if node1.name == "air" then return end -- nothing to move
 	
@@ -131,8 +130,6 @@ minetest.register_node("mymod:mover", {
 	end
 	
 	if source_chest and prefer == "" then return end -- doesnt know what to take out of chest
-	
-	local node2 = minetest.get_node(pos2);
 	--minetest.chat_send_all(" moving ")
 	fuel = fuel -1;	meta:set_float("fuel", fuel); -- burn fuel
 	meta:set_string("infotext", "Mover block. Fuel "..fuel);
@@ -168,7 +165,7 @@ minetest.register_node("mymod:mover", {
 			
 		end
 		
-		local stack = ItemStack({name=node1.name})
+		local stack = ItemStack(node1.name)
 		if count>0 then stack = ItemStack({name=node1.name, count=count}) end
 		
 		if inv:room_for_item("main", stack) then
