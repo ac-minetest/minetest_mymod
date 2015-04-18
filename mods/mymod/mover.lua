@@ -130,7 +130,7 @@ minetest.register_node("mymod:mover", {
 		node1 = {}; node1.name = prefer; 
 	end
 	
-	if source_chest and prefer == "" then return end
+	if source_chest and prefer == "" then return end -- doesnt know what to take out of chest
 	
 	local node2 = minetest.get_node(pos2);
 	--minetest.chat_send_all(" moving ")
@@ -143,7 +143,34 @@ minetest.register_node("mymod:mover", {
 		target_chest = true
 		local cmeta = minetest.get_meta(pos2);
 		local inv = cmeta:get_inventory();
+		
+		
+		-- dig tree or cactus
+		local count = 0;
+		if dig then 
+			-- check for cactus or tree
+			if node1.name=="default:cactus" or node1.name == "default:tree" then -- dig up to height 10, break sooner if needed
+				for i=0,10 do
+					local pos3 = {x=pos1.x,y=pos1.y+i,z=pos1.z};
+					local dname= minetest.get_node(pos3).name;
+					if dname ~=node1.name then break end
+					minetest.set_node(pos3,{name="air"}); count = count+1;
+				end
+			end
+			
+			-- read what to drop, if none just keep original node
+			local table = minetest.registered_items[node1.name];
+			if table~=nil then 
+				if table.drop~= nil and table.drop~="" then 
+					node1={}; node1.name = table.drop;
+				end
+			end
+			
+		end
+		
 		local stack = ItemStack({name=node1.name})
+		if count>0 then stack = ItemStack({name=node1.name, count=count}) end
+		
 		if inv:room_for_item("main", stack) then
 			inv:add_item("main", stack);
 		end
@@ -156,14 +183,11 @@ minetest.register_node("mymod:mover", {
 		if drop then 
 			local stack = ItemStack(node1.name);minetest.add_item(pos2,stack) -- drops it
 		end
-		if dig then 
-			--minetest.node_dig(pos1, node1, digger) -- maybe this fix? but dont want items in player inventory
-			minetest.dig_node(pos2);minetest.dig_node(pos1) 
-		end -- DOESNT WORK!
-	end
+	end 
 	if not source_chest then
+		if dig then minetest.dig_node(pos1) end
 		minetest.set_node(pos1, {name = "air"});
-	end
+		end
 	end
 	}
 	},
