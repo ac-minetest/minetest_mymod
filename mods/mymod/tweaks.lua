@@ -174,9 +174,9 @@ local function restrict_place_source(name)
 			
 end
 
-restrict_place_source("default:water_source")
-restrict_place_source("default:lava_source")
-restrict_place_source("mymod:acid_source_active")
+-- restrict_place_source("default:water_source")
+-- restrict_place_source("default:lava_source")
+-- restrict_place_source("mymod:acid_source_active")
 
 
 local old_bucket_lava_on_place=minetest.registered_craftitems["bucket:bucket_lava"].on_place

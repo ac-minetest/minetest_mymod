@@ -185,17 +185,6 @@ minetest.register_node("mymod:mover", {
 		minetest.show_formspec(player:get_player_name(), "mymod:mover_"..minetest.pos_to_string(pos), form)
 	end
 })
---[[
-
-//lua local form  = 
-		"size[2.75,4]" ..  -- width, height
-		"field[0.25,0.5;1,1;x1;x1;".. 0 .."] field[1.25,0.5;1,1;y1;y1;".. 0 .."] field[2.25,0.5;1,1;z1;z1;".. 0 .."]"..
-		"field[0.25,1.5;1,1;x2;x2;".. 0 .."] field[1.25,1.5;1,1;y2;y2;".. 0 .."] field[2.25,1.5;1,1;z2;z2;".. 0 .."]"..
-		"button[2,3.25;1,1;OK;OK] field[0.25,2.5;2,1;prefer;prefered block;".."".."]"..
-		"field[0.25,3.5;2,1;mode;mode;".."".."]";
-minetest.show_formspec("rnd", "testform", form)
-
---]]
 
 minetest.register_on_player_receive_fields(function(player,formname,fields)
 	
