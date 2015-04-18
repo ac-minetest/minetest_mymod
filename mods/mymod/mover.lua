@@ -69,7 +69,7 @@ minetest.register_node("mymod:mover", {
 			if not fpos then return end -- no chest with fuel found
 			local cmeta = minetest.get_meta(fpos);
 			local inv = cmeta:get_inventory();
-			local stack = ItemStack({name="default:coal_lump"})
+			local stack = ItemStack({name="default:coal_lump"}) -- check for this fuel
 			if inv:contains_item("main", stack) then
 				--minetest.chat_send_all(" refueled ")
 				inv:remove_item("main", stack)
@@ -185,7 +185,7 @@ minetest.register_node("mymod:mover", {
 		end
 	end 
 	if not source_chest then
-		if dig then minetest.dig_node(pos1) end
+		if dig then minetest.dig_node(pos1);nodeupdate(pos1) end
 		minetest.set_node(pos1, {name = "air"});
 		end
 	end
