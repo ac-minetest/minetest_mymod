@@ -204,7 +204,7 @@ minetest.register_on_dieplayer(function(player)
 	meta:set_int("bonetime_counter", 0) -- rnd: this is lag fix for bone counter
 	--rnd owner decrease fresh bone timer if bones inside other protection
 	if  minetest.is_protected(pos, player_name) then 
-		meta:set_int("bonetime_counter", 420) -- only 3 minutes till old bones now..
+		meta:set_int("bonetime_counter", 42) -- only 3 minutes till old bones now..
 	end
 	
 	local timer  = minetest.get_node_timer(pos)
