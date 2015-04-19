@@ -68,14 +68,14 @@ minetest.register_node("bones:bones", {
 		local meta = minetest.get_meta(pos)
 		local ownername = meta:get_string("owner");
 		if playerdata[ownername]~=nil then
-			local xpadd = playerdata[ownername].xp*0.1
+			local xpadd = meta:get_float("xp");
 			local name = player:get_player_name()
 			playerdata[name].xp=math.ceil(10*(playerdata[name].xp+xpadd))/10
 			minetest.chat_send_player(player:get_player_name(), "Received ".. xpadd .. " experience from players bones");
-			xpadd= playerdata[ownername].dig*0.1
+			xpadd= meta:get_float("dig");
 			playerdata[name].dig=math.ceil(10*(playerdata[name].dig+xpadd))/10
 			minetest.chat_send_player(player:get_player_name(), "Received ".. xpadd .. " dig skill from players bones");
-			xpadd= playerdata[ownername].magic*0.1
+			xpadd= meta:get_float("magic");
 			playerdata[name].magic=math.ceil(10*(playerdata[name].magic+xpadd))/10
 			minetest.chat_send_player(player:get_player_name(), "Received ".. xpadd .. " magic skill from players bones");
 		end
@@ -114,6 +114,11 @@ minetest.register_node("bones:bones", {
 		if time >= publish and meta:get_string("owner")~="" then
 			meta:set_string("infotext", meta:get_string("infotext").." OLD bones")
 			meta:set_string("owner", "")
+			if playerdata then -- record xp into bones
+				meta:set_float("xp", math.ceil(10*(playerdata[name].xp))/100); -- remember 10%
+				meta:set_float("dig", math.ceil(10*(playerdata[name].dig))/100);
+				meta:set_float("magic", math.ceil(10*(playerdata[name].magic))/100);
+			end
 		else
 			meta:set_int("bonetime_counter", meta:get_int("bonetime_counter") + 1) -- rnd: lag fix for bone timeout
 			return true
@@ -194,11 +199,16 @@ minetest.register_on_dieplayer(function(player)
 	
 	
 	
-	--rnd owner sets to empty if bones inside other protection
-	if  minetest.is_protected(pos, player_name) then meta:set_string("owner", "") else meta:set_string("owner", player_name) end
+	
+		
+	meta:set_string("owner", player_name) 
 	
 	meta:set_int("time", 0)
 	meta:set_int("bonetime_counter", 0) -- rnd: this is lag fix for bone counter
+	--rnd owner decrease fresh bone timer if bones inside other protection
+	if  minetest.is_protected(pos, player_name) then 
+		meta:set_int("bonetime_counter", 420) -- only 3 minutes till old bones now..
+	end
 	
 	local timer  = minetest.get_node_timer(pos)
 	timer:start(10)
