@@ -190,7 +190,7 @@ minetest.register_on_dieplayer(function(player)
 			"list[current_player;main;0,5;8,4;]")
 	-- rnd: record time of death
 	local time = os.date("*t");
-	meta:set_string("infotext", player_name.."'s bones. Server time: " .. time.hour.. ":".. time.min ..":" .. time.sec .. " date: ".. time.month .. " " .. time.day)
+	meta:set_string("infotext", player_name.."'s bones. time: ".. time.month .. "/" .. time.day .. ", " ..time.hour.. ":".. time.min ..":" .. time.sec)
 	
 	if playerdata then -- rnd: record xp into bones
 				meta:set_float("xp", math.ceil(10*(playerdata[player_name].xp))/100); -- remember 10%
