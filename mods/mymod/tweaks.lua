@@ -64,8 +64,7 @@ local function locked_chests_takeover()
 
 	minetest.register_node(":"..name, table2)	
 end
-
-
+locked_chests_takeover()
 
 minetest.register_craft({
 	type = "cooking",
