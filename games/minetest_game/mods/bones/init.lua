@@ -114,11 +114,6 @@ minetest.register_node("bones:bones", {
 		if time >= publish and meta:get_string("owner")~="" then
 			meta:set_string("infotext", meta:get_string("infotext").." OLD bones")
 			meta:set_string("owner", "")
-			if playerdata then -- record xp into bones
-				meta:set_float("xp", math.ceil(10*(playerdata[name].xp))/100); -- remember 10%
-				meta:set_float("dig", math.ceil(10*(playerdata[name].dig))/100);
-				meta:set_float("magic", math.ceil(10*(playerdata[name].magic))/100);
-			end
 		else
 			meta:set_int("bonetime_counter", meta:get_int("bonetime_counter") + 1) -- rnd: lag fix for bone timeout
 			return true
@@ -193,13 +188,15 @@ minetest.register_on_dieplayer(function(player)
 	meta:set_string("formspec", "size[8,9;]"..
 			"list[current_name;main;0,0;8,4;]"..
 			"list[current_player;main;0,5;8,4;]")
+	-- rnd: record time of death
 	local time = os.date("*t");
-	
 	meta:set_string("infotext", player_name.."'s bones. Server time: " .. time.hour.. ":".. time.min ..":" .. time.sec .. " date: ".. time.month .. " " .. time.day)
 	
-	
-	
-	
+	if playerdata then -- rnd: record xp into bones
+				meta:set_float("xp", math.ceil(10*(playerdata[player_name].xp))/100); -- remember 10%
+				meta:set_float("dig", math.ceil(10*(playerdata[player_name].dig))/100);
+				meta:set_float("magic", math.ceil(10*(playerdata[player_name].magic))/100);
+			end	
 		
 	meta:set_string("owner", player_name) 
 	
