@@ -111,8 +111,8 @@ minetest.register_node("bones:bones", {
 		--	if publish == 0 then
 		--	return
 		--end
-		if time >= publish then
-			meta:set_string("infotext", meta:get_string("owner").."'s old bones")
+		if time >= publish and meta:get_string("owner")~="" then
+			meta:set_string("infotext", meta:get_string("infotext").." OLD bones")
 			meta:set_string("owner", "")
 		else
 			meta:set_int("bonetime_counter", meta:get_int("bonetime_counter") + 1) -- rnd: lag fix for bone timeout
@@ -188,7 +188,10 @@ minetest.register_on_dieplayer(function(player)
 	meta:set_string("formspec", "size[8,9;]"..
 			"list[current_name;main;0,0;8,4;]"..
 			"list[current_player;main;0,5;8,4;]")
-	meta:set_string("infotext", player_name.."'s fresh bones")
+	local time = os.date("*t");
+	
+	meta:set_string("infotext", player_name.."'s bones. Server time: " .. time.hour.. ":".. time.min ..":" .. time.sec .. " date: ".. time.month .. " " .. time.day)
+	
 	
 	
 	--rnd owner sets to empty if bones inside other protection
