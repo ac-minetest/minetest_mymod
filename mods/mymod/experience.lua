@@ -138,6 +138,7 @@ minetest.register_chatcommand("xp", {
     privs = {},
     func = function(name,param)
         local player = minetest.env:get_player_by_name(name)
+		local privs = minetest.get_player_privs(name);
 		if player == nil then
             -- just a check to prevent the server crashing
             return false
@@ -147,6 +148,7 @@ minetest.register_chatcommand("xp", {
 		if playerdata[param] == nil or playerdata[param].dig==nil then return end	
 		minetest.chat_send_player(name,"XP ".. playerdata[param].xp .."/level ".. get_level(playerdata[param].xp) .. ", dig skill " ..playerdata[param].dig .. "/level " ..get_dig_level(playerdata[param].dig) .. ", farming " .. playerdata[param].farming )
 		minetest.chat_send_player(name,"magic "..playerdata[param].magic .. ", max_mana ".. playerdata[param].max_mana)
+		if privs.ban then minetest.chat_send_player(name,"ip " .. minetest.get_player_ip(name)) end
 end,	
 })
 
