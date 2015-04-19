@@ -15,56 +15,6 @@
 -- overwrite("default:torch")
 
 
-local function locked_chests_takeover()
-	local name = "default:chest_locked";
-	local table = minetest.registered_nodes[name];
-	local table2 = {};
-	for i,v in pairs(table) do table2[i] = v end
-
-
-
-	table2.on_rightclick = function(pos, node, clicker)
-		local meta = minetest.get_meta(pos)
-		local privs = minetest.get_player_privs(clicker:get_player_name()); -- rnd
-		if has_locked_chest_privilege(meta, clicker) or (privs.kick and not clicker:get_player_control().sneak)then -- moderator with kick priv can see contents
-			minetest.show_formspec(
-				clicker:get_player_name(),
-				"default:chest_locked",
-				default.get_locked_chest_formspec(pos)
-			)
-		else -- rnd
-			local r = 5;
-			local name = clicker:get_player_name(); if name==nil then return end
-			local positions = minetest.find_nodes_in_area(
-			{x=pos.x-r, y=pos.y-r, z=pos.z-r},
-			{x=pos.x+r, y=pos.y+r, z=pos.z+r},
-			"protector:protect");
-			local protected = false;local ppos;
-			for _, p in ipairs(positions) do
-				local nmeta = minetest.env:get_meta(p)
-				local owner = nmeta:get_string("owner")
-				if owner == name then protected = true; ppos = p;end
-			end
-			if protected then -- your protector nearby, attempt capture			
-				local form  = 
-				"size[5.5,1.5]" ..  -- width, height
-				"textarea[0,0;6,1;text1;chest_takeover;Try to take over chest. There is 1:3 chance you will fail and loose protector.]"..
-				"button[0,1;1,1;OK;OK]";
-				minetest.show_formspec(name, "mymod:form_chest_takeover ".. pos.x .. " " .. pos.y .. " " .. pos.z.. " " .. ppos.x .. " " .. ppos.y .. " " .. ppos.z , form)
-		
-				-- local i = math.random(3);
-				-- if i==1 then minetest.set_node(ppos,{name="air"}); minetest.chat_send_player(name,"Take over fail.") return end
-				-- meta:set_string("owner", name) 
-				-- meta:set_string("infotext", "chest taken over by " ..name) 
-				-- minetest.chat_send_player(name,"Congratulations, chest is yours now");
-			end
-		end
-	end
-
-
-	minetest.register_node(":"..name, table2)	
-end
-locked_chests_takeover()
 
 minetest.register_craft({
 	type = "cooking",
