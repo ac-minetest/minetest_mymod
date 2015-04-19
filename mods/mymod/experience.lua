@@ -639,7 +639,7 @@ minetest.register_craft({
 
 
 minetest.register_node("mymod:spell_haste", {
-	description = "haste spell: speeds up player 2x for 1+min(magic_skill/1000,4) seconds",
+	description = "haste spell: speeds up player 2x for 2+min(magic_skill/500,20) seconds",
 	wield_image = "3d_armor_inv_boots_gold.png",
 	wield_scale = {x=0.8,y=0.8,z=0.8}, 
 	drawtype = "allfaces",
@@ -659,7 +659,7 @@ minetest.register_node("mymod:spell_haste", {
 		end
 		
 		local skill = playerdata[name].magic;
-		playerdata[name].slow.time =  1+math.min(skill/1000,4)
+		playerdata[name].slow.time =  2+min(magic_skill/500,20)
 		playerdata[name].slow.mag = 2;
 		user:set_physics_override({speed = playerdata[name].slow.mag});
 		playerdata[name].speed = true;
