@@ -661,7 +661,7 @@ minetest.register_node("mymod:spell_haste", {
 		end
 		
 		local skill = playerdata[name].magic;
-		playerdata[name].slow.time =  2+min(magic_skill/500,20)
+		playerdata[name].slow.time =  2+min(skill/500,20)
 		playerdata[name].slow.mag = 2;
 		user:set_physics_override({speed = playerdata[name].slow.mag});
 		playerdata[name].speed = true;
