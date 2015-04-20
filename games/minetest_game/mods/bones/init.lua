@@ -66,7 +66,7 @@ minetest.register_node("bones:bones", {
 		 --minetest.chat_send_all("TEST PUNCH BONES xp is ".. playerdata[player:get_player_name()].xp)
 		
 		local meta = minetest.get_meta(pos)
-			local xpadd = meta:get_float("xp" or 0;
+			local xpadd = meta:get_float("xp") or 0;
 			local name = player:get_player_name()
 			playerdata[name].xp=math.ceil(10*(playerdata[name].xp+xpadd))/10
 			minetest.chat_send_player(player:get_player_name(), "Received ".. xpadd .. " experience from players bones");
