@@ -250,7 +250,7 @@ minetest.register_node(protector.node, {
 		if not protector.can_dig(1,pos,puncher,true) then
 			return
 		end
-		local objs = minetest.env:get_objects_inside_radius(pos,.5) -- a radius of .5 since the entity serialization seems to be not that precise
+		local objs = minetest.env:get_objects_inside_radius(pos,5) -- a radius of .5 since the entity serialization seems to be not that precise
 		local removed = false
 		for _, o in pairs(objs) do
 			if (not o:is_player()) and o:get_luaentity().name == "protector:display" then
@@ -259,6 +259,7 @@ minetest.register_node(protector.node, {
 			end
 		end
 		if not removed then -- nothing was removed: there wasn't the entity
+			--minetest.chat_send_all("debug : added")
 			minetest.env:add_entity(pos, "protector:display")
 		end
 	end,
@@ -342,7 +343,7 @@ minetest.register_entity("protector:display", {
 	collisionbox = {0,0,0,0,0,0},
 	visual = "wielditem",
 	visual_size = {x=1.0/1.5,y=1.0/1.5}, -- wielditem seems to be scaled to 1.5 times original node size
-	textures = {"protector:display_node"},
+	textures = {"protector:display_node"	}, -- rnd : fix texture
 	on_step = function(self, dtime)
 		if minetest.get_node(self.object:getpos()).name ~= protector.node then
 			self.object:remove()
