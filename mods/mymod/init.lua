@@ -352,7 +352,7 @@ minetest.register_globalstep(function(dtime)
 				if minetest.get_node_light(pos) ~= nil then -- crashed once, safety
 				if minetest.get_node_light(pos)>LIGHT_MAX*0.9 then
 					if player:get_hp()>15 then
-						minetest.chat_send_player(name,"Desert sunlight is scorching hot. Find shadow, get at more experience or return closer to spawn.")
+						minetest.chat_send_player(name,"Desert heat is too much to bear. Find shadow, get more experience or return closer to spawn.")
 					end
 					
 					player:set_hp(player:get_hp()-0.25-dist/200)

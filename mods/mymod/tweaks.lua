@@ -106,7 +106,7 @@ local function adjust_dig_speed(name,factor)
 	minetest.register_tool(":"..name, table2)	
 end
 
-local dig_factor = 2;
+local dig_factor = 2.5;
 adjust_dig_speed("default:pick_wood",dig_factor)
 adjust_dig_speed("default:pick_stone",dig_factor)
 adjust_dig_speed("default:pick_steel",dig_factor)
