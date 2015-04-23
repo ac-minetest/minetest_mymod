@@ -347,13 +347,15 @@ minetest.register_globalstep(function(dtime)
 			
 			-- SURVIVABILITY CHECK
 			
-			if pos.y>0 and dist>500 and playerdata[name].xp<1000 and not privs.privs then
+			local totalxp = playerdata[name].xp+playerdata[name].magic;
+			if pos.y>0 and dist>500+totalxp/10 and not privs.privs then
 				if minetest.get_node_light(pos) ~= nil then -- crashed once, safety
 				if minetest.get_node_light(pos)>LIGHT_MAX*0.9 then
-					if player:get_hp()==20 then
-						minetest.chat_send_player(name,"Desert sunlight is scorching hot. Find shadow, get at least 1000 experience or return closer to spawn.")
+					if player:get_hp()>15 then
+						minetest.chat_send_player(name,"Desert sunlight is scorching hot. Find shadow, get at more experience or return closer to spawn.")
 					end
-					player:set_hp(player:get_hp()-0.25)
+					
+					player:set_hp(player:get_hp()-0.25-dist/200)
 				end
 				end
 			end
