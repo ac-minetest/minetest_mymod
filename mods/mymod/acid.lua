@@ -142,10 +142,10 @@ local function overwrite(name)
 		 
 		local name = digger:get_player_name(); if name == nil then return end
 		if playerdata then
-			local dig  = playerdata[name].dig/2+300 
+			local dig  = playerdata[name].dig/2+200 
 			if pos.y<-dig then
 				minetest.set_node(pos, {name="mymod:stone"})
-				minetest.chat_send_player(name,"Need at least ".. 2*(-pos.y-300) .. " dig skill to dig at this depth ");
+				minetest.chat_send_player(name,"With current dig skill you can only dig up to depth "..dig);
 				return
 			end
 		end
