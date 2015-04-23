@@ -50,7 +50,7 @@ mobs:register_mob("mobs:stone_monster", {
 	drawtype = "front",
 	water_damage = 0,
 	lava_damage = 5,
-	light_damage = 5,
+	light_damage = 0,
 	attack_type = "dogfight",
 	animation = {
 		speed_normal = 15,
@@ -68,4 +68,4 @@ mobs:register_mob("mobs:stone_monster", {
 	step = 0.5,
 	blood_texture = "mobs_blood.png",
 })
-mobs:register_spawn("mobs:stone_monster", {"default:stone"}, 2, -1, 10000, 30, 31000)
+mobs:register_spawn("mobs:stone_monster", {"default:stone"}, 3, -1, 10000, 30, 31000)
