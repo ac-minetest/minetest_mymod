@@ -1304,7 +1304,7 @@ minetest.register_node("mobs:spell_fireball", {
 		if name == nil then return end
 		if playerdata==nil then return end
 		
-		if minetest.is_protected(pos, name) then return end -- check protection
+		if minetest.is_protected(pos, name) or minetest.get_node(pos).name~="air" then return end -- check protection
 		
 		if playerdata[name].mana<1 then
 			minetest.chat_send_player(name,"Need at least 1 mana"); return

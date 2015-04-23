@@ -139,6 +139,16 @@ local function overwrite(name)
 		
 		 if not protector.can_dig(5,pos,digger) then return end
 		 minetest.node_dig(pos, node, digger) -- this code handles dig itself
+		 
+		local name = digger:get_player_name(); if name == nil then return end
+		if playerdata then
+			local dig  = playerdata[name].dig/2+300 
+			if pos.y<-dig then
+				minetest.set_node(pos, {name="mymod:stone"})
+				minetest.chat_send_player(name,"Need at least ".. 2*(-pos.y-300) .. " dig skill to dig at this depth ");
+				return
+			end
+		end
 				
 		local i,j,k
 		i = math.random(100) -- probability if spawns acid
@@ -189,7 +199,6 @@ local function overwrite(name)
 			return
 		end
 		
-		local name = digger:get_player_name(); if name == nil then return end
 		local wielded = (digger:get_wielded_item()):get_name()
 		-- better picks dig in one step
 		if wielded == "default:pick_diamond" or wielded == "moreores:pick_mithril" then 
@@ -209,7 +218,8 @@ local function overwrite(name)
 		
 		if i == 1 and pos.y<0 then -- only underground
 			minetest.set_node(pos, {name="mymod:acid_source_active"})
-			else minetest.set_node(pos, {name="mymod:stone1"}) -- progressive stone digging
+			else -- progressive stone digging
+				minetest.set_node(pos, {name="mymod:stone1"}) 
 		end
 	end;
 	minetest.register_node(":"..name, table2)
