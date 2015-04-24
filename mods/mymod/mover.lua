@@ -47,6 +47,8 @@ minetest.register_node("mymod:mover", {
 			pos1.z = z0 + pc;
 			pos1.x = pos.x+pos1.x;pos1.y = pos.y+pos1.y;pos1.z = pos.z+pos1.z;
 			
+
+		
 		if fuel<=0 then -- needs fuel to operate, find nearby open chest with fuel within radius 1
 			local r = 1;
 		
@@ -92,8 +94,15 @@ minetest.register_node("mymod:mover", {
 		meta:set_string("infotext", "Mover block. Protection fail. Deactivated.")
 	return end
 	
-	local node1 = minetest.get_node(pos1);local node2 = minetest.get_node(pos2);
+	
 	local prefer = meta:get_string("prefer"); local mode = meta:get_string("mode");
+	
+	if mode == "reverse" then -- reverse pos1, pos2
+		local post = {x=pos1.x,y=pos1.y,z=pos1.z};
+		pos1 = {x=pos2.x,y=pos2.y,z=pos2.z};
+		pos2 = {x=post.x,y=post.y,z=post.z};
+	end
+	local node1 = minetest.get_node(pos1);local node2 = minetest.get_node(pos2);
 	
 	if mode == "object" then -- teleport objects, for free
 		for _,obj in pairs(minetest.get_objects_inside_radius(pos1, 2)) do
@@ -107,10 +116,17 @@ minetest.register_node("mymod:mover", {
 	local dig=false; if mode == "dig" then dig = true; end -- digs at target location
 	local drop = false; if mode == "drop" then drop = true; end -- drops node instead of placing it
 	
-	
-	local source_chest;	if string.find(node1.name,"default:chest") then source_chest=true end
+	-- decide what to do if source or target are chests
+	local source_chest=false; if string.find(node1.name,"default:chest") then source_chest=true end
 	if node1.name == "air" then return end -- nothing to move
-	
+
+	local target_chest = false
+	if node2.name == "default:chest" or node2.name == "default:chest_locked" then
+		target_chest = true
+	end
+	if not target_chest and minetest.get_node(pos2).name ~= "air" then return end -- do nothing if target nonempty and not chest
+
+	-- filtering
 	if prefer~="" then -- prefered node set
 		if prefer~=node1.name and not source_chest  then return end -- only take prefered node or from chests
 		if source_chest then -- take stuff from chest
@@ -128,13 +144,9 @@ minetest.register_node("mymod:mover", {
 	
 	if source_chest and prefer == "" then return end -- doesnt know what to take out of chest
 	--minetest.chat_send_all(" moving ")
-	fuel = fuel -1;	meta:set_float("fuel", fuel); -- burn fuel
-	meta:set_string("infotext", "Mover block. Fuel "..fuel);
 	
 	-- if target chest put in chest
-	local target_chest = false
-	if node2.name == "default:chest" or node2.name == "default:chest_locked" then
-		target_chest = true
+	if target_chest then
 		local cmeta = minetest.get_meta(pos2);
 		local inv = cmeta:get_inventory();
 		
@@ -176,7 +188,11 @@ minetest.register_node("mymod:mover", {
 		end
 	end	
 	
+	
 	minetest.sound_play("transporter", {pos=pos2,gain=1.0,max_hear_distance = 32,})
+	fuel = fuel -1;	meta:set_float("fuel", fuel); -- burn fuel
+	meta:set_string("infotext", "Mover block. Fuel "..fuel);
+	
 	
 	if not target_chest then
 		if not drop then minetest.set_node(pos2, {name = node1.name}); end
