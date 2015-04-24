@@ -18,7 +18,9 @@ minetest.register_node("mymod:mover", {
 		local meta = minetest.env:get_meta(pos)
 		meta:set_string("infotext", "Mover block. Right click to set it up.")
 		meta:set_string("owner", placer:get_player_name());
-		meta:set_int("x1",0);meta:set_int("y1",-1);meta:set_int("z1",0);
+		meta:set_int("x0",0);meta:set_int("y0",-1);meta:set_int("z0",0); -- source1
+		meta:set_int("x1",0);meta:set_int("y1",-1);meta:set_int("z1",0); -- source2: defines cube
+		meta:set_int("pc",0); meta:set_int("dim",1);-- current cube position and dimensions
 		meta:set_int("x2",0);meta:set_int("y2",1);meta:set_int("z2",0);
 		meta:set_float("fuel",0)
 		meta:set_string("prefer", "");
@@ -26,33 +28,29 @@ minetest.register_node("mymod:mover", {
 		
 	end,
 		
-	-- on_receive_fields = function(pos, formname, fields, sender) 
-		-- local name = sender:get_player_name(); if name==nil then return end
-		-- local meta = minetest.get_meta(pos)
-		-- if name ~= meta:get_string("owner") or not fields then return end -- only owner can interact
-		----minetest.chat_send_all("formname " .. formname .. " fields " .. dump(fields))
-		
-		-- if fields.OK == "OK" then
-			-- local x1,y1,z1,x2,y2,z2;
-			-- x1=tonumber(fields.x1) or 0;y1=tonumber(fields.y1) or -1;z1=tonumber(fields.z1) or 0
-			-- x2=tonumber(fields.x2) or 0;y2=tonumber(fields.y2) or 1;z2=tonumber(fields.z2) or 0;
-			-- if math.abs(x1)>5 or math.abs(y1)>5 or math.abs(z1)>5 or math.abs(x2)>5 or math.abs(y2)>5 or math.abs(z2)>5 then
-				-- minetest.chat_send_player(name,"all coordinates must be between -5 and 5"); return
-			-- end
-			-- meta:set_int("x1",x1);meta:set_int("y1",y1);meta:set_int("z1",z1);			
-			-- meta:set_int("x2",x2);meta:set_int("y2",y2);meta:set_int("z2",z2);
-			-- meta:set_string("infotext", "Mover block. Set up with source coords ".. x1 ..","..y1..","..z1.. " and target coord ".. x2 ..","..y2..",".. z2 .. ". Put chest with coal next to it and start with mese signal.");
-		-- end
-	-- end,
-		
 	mesecons = {effector = {
 		action_on = function (pos, node) 
 		local meta = minetest.get_meta(pos);
 		local fuel = meta:get_float("fuel");
+		
+		local x0,y0,z0,x1,y1,z1;
+			x0=meta:get_int("x0");y0=meta:get_int("y0");z0=meta:get_int("z0");
+			local pos1 = {x=x0+pos.x,y=y0+pos.y,z=z0+pos.z}; -- where to take from
+			local pos2 = {x=meta:get_int("x2")+pos.x,y=meta:get_int("y2")+pos.y,z=meta:get_int("z2")+pos.z}; -- where to put
+
+			local pc = meta:get_int("pc"); local dim = meta:get_int("dim");	pc = (pc+1) % dim;meta:set_int("pc",pc) -- cycle position
+			x1=meta:get_int("x1")-x0+1;y1=meta:get_int("y1")-y0+1;z1=meta:get_int("z1")-z0+1; -- get dimensions
+			
+			--pc = z*a*b+x*b+y, from x,y,z to pc
+			-- set current input position
+			pos1.y = y0 + (pc % y1); pc = (pc - (pc % y1))/y1;
+			pos1.x = x0 + (pc % x1); pc = (pc - (pc % x1))/x1;
+			pos1.z = z0 + pc;
+			pos1.x = pos.x+pos1.x;pos1.y = pos.y+pos1.y;pos1.z = pos.z+pos1.z;
+			
 		if fuel<=0 then -- needs fuel to operate, find nearby open chest with fuel within radius 1
 			local r = 1;
-			local pos1 = {x=meta:get_int("x1")+pos.x,y=meta:get_int("y1")+pos.y,z=meta:get_int("z1")+pos.z};
-			local pos2 = {x=meta:get_int("x2")+pos.x,y=meta:get_int("y2")+pos.y,z=meta:get_int("z2")+pos.z};
+		
 			local positions = minetest.find_nodes_in_area( --find furnace with fuel
 			{x=pos.x-r, y=pos.y-r, z=pos.z-r},
 			{x=pos.x+r, y=pos.y+r, z=pos.z+r},
@@ -86,10 +84,7 @@ minetest.register_node("mymod:mover", {
 			--check fuel
 			if fuel == 0 then return  end
 		end 
-	
-	local pos1 = {x=meta:get_int("x1")+pos.x,y=meta:get_int("y1")+pos.y,z=meta:get_int("z1")+pos.z};
-	local pos2 = {x=meta:get_int("x2")+pos.x,y=meta:get_int("y2")+pos.y,z=meta:get_int("z2")+pos.z};
-	
+
 	local owner = meta:get_string("owner");
 	-- check protections
 	
@@ -110,7 +105,6 @@ minetest.register_node("mymod:mover", {
 		--meta:set_float("fuel", fuel - 1);
 		return 
 	end
-	
 	
 	local dig=false; if mode == "dig" then dig = true; end -- digs at target location
 	local drop = false; if mode == "drop" then drop = true; end -- drops node instead of placing it
@@ -145,7 +139,6 @@ minetest.register_node("mymod:mover", {
 		target_chest = true
 		local cmeta = minetest.get_meta(pos2);
 		local inv = cmeta:get_inventory();
-		
 		
 		-- dig tree or cactus
 		local count = 0;
@@ -202,16 +195,18 @@ minetest.register_node("mymod:mover", {
 	},
 	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
 		local meta = minetest.get_meta(pos);
-		local x1,y1,z1,x2,y2,z2,prefer,mode;
+		local x0,y0,z0,x1,y1,z1,x2,y2,z2,prefer,mode;
+		x0=meta:get_int("x0");y0=meta:get_int("y0");z0=meta:get_int("z0");
 		x1=meta:get_int("x1");y1=meta:get_int("y1");z1=meta:get_int("z1");
 		x2=meta:get_int("x2");y2=meta:get_int("y2");z2=meta:get_int("z2");
 		prefer = meta:get_string("prefer");mode = meta:get_string("mode");
 		local form  = 
-		"size[3,4]" ..  -- width, height
-		"field[0.25,0.5;1,1;x1;x1;"..x1.."] field[1.25,0.5;1,1;y1;y1;"..y1.."] field[2.25,0.5;1,1;z1;z1;"..z1.."]"..
-		"field[0.25,1.5;1,1;x2;x2;"..x2.."] field[1.25,1.5;1,1;y2;y2;"..y2.."] field[2.25,1.5;1,1;z2;z2;"..z2.."]"..
-		"button[2,3.25.;1,1;OK;OK] field[0.25,2.5;3,1;prefer;prefered block;"..prefer.."]"..
-		"field[0.25,3.5;2,1;mode;mode;"..mode.."]";
+		"size[3,5]" ..  -- width, height
+		"field[0.25,0.5;1,1;x0;source1;"..x0.."] field[1.25,0.5;1,1;y0;;"..y0.."] field[2.25,0.5;1,1;z0;;"..z0.."]"..
+		"field[0.25,1.5;1,1;x1;source2;"..x1.."] field[1.25,1.5;1,1;y1;;"..y1.."] field[2.25,1.5;1,1;z1;;"..z1.."]"..
+		"field[0.25,2.5;1,1;x2;Target;"..x2.."] field[1.25,2.5;1,1;y2;;"..y2.."] field[2.25,2.5;1,1;z2;;"..z2.."]"..
+		"button[2,4.25.;1,1;OK;OK] field[0.25,3.5;3,1;prefer;filter only block;"..prefer.."]"..
+		"field[0.25,4.5;2,1;mode;mode;"..mode.."]";
 		
 		minetest.show_formspec(player:get_player_name(), "mymod:mover_"..minetest.pos_to_string(pos), form)
 	end
@@ -228,17 +223,24 @@ minetest.register_on_player_receive_fields(function(player,formname,fields)
 		--minetest.chat_send_all("formname " .. formname .. " fields " .. dump(fields))
 		
 		if fields.OK == "OK" then
-			local x1,y1,z1,x2,y2,z2;
+			local x0,y0,z0,x1,y1,z1,x2,y2,z2;
+			x0=tonumber(fields.x0) or 0;y0=tonumber(fields.y0) or -1;z0=tonumber(fields.z0) or 0
 			x1=tonumber(fields.x1) or 0;y1=tonumber(fields.y1) or -1;z1=tonumber(fields.z1) or 0
 			x2=tonumber(fields.x2) or 0;y2=tonumber(fields.y2) or 1;z2=tonumber(fields.z2) or 0;
 			if math.abs(x1)>5 or math.abs(y1)>5 or math.abs(z1)>5 or math.abs(x2)>5 or math.abs(y2)>5 or math.abs(z2)>5 then
 				minetest.chat_send_player(name,"all coordinates must be between -5 and 5"); return
 			end
-			meta:set_int("x1",x1);meta:set_int("y1",y1);meta:set_int("z1",z1);			
+			if x1<x0 or y1<y0 or z1<z0 then
+				minetest.chat_send_player(name,"second source coordinates must all be larger than first source coordinates"); return
+			end
+			
+			meta:set_int("x0",x0);meta:set_int("y0",y0);meta:set_int("z0",z0);
+			meta:set_int("x1",x1);meta:set_int("y1",y1);meta:set_int("z1",z1);
+			meta:set_int("pc",0); meta:set_int("dim",(x1-x0+1)*(y1-y0+1)*(z1-z0+1))
 			meta:set_int("x2",x2);meta:set_int("y2",y2);meta:set_int("z2",z2);
 			meta:set_string("prefer",fields.prefer or "");
 			meta:set_string("mode",fields.mode or "");
-			meta:set_string("infotext", "Mover block. Set up with source coords ".. x1 ..","..y1..","..z1.. " and target coord ".. x2 ..","..y2..",".. z2 .. ". Put chest with coal next to it and start with mese signal.");
+			meta:set_string("infotext", "Mover block. Set up with source coords ".. x0 ..","..y0..","..z0.. " -> ".. x1 ..","..y1..","..z1.. " and target coord ".. x2 ..","..y2..",".. z2 .. ". Put chest with coal next to it and start with mese signal.");
 			if meta:get_float("fuel")<0 then meta:set_float("fuel",0) end -- reset block
 		end
 	end

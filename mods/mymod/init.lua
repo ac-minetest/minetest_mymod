@@ -288,6 +288,7 @@ minetest.register_globalstep(function(dtime)
 						player:set_physics_override({speed =  playerdata[name].slow.mag});
 						else 
 						minetest.chat_send_player(name,"[EFFECT] normal speed restored.")
+						player:set_physics_override({speed =  mult})
 						playerdata[name].slow.time = 0
 						playerdata[name].speed = false;
 					end
