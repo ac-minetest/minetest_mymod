@@ -2,12 +2,13 @@
 
 -- MOVER: universal moving machine, requires coal in nearby chest to operate
 -- can take item from chest and place it in chest or as a node outside at ranges -5,+5
--- it can be used for filtering by setting "prefered block". if set to "object" it will teleport all objects.
+-- it can be used for filtering by setting "filter". if set to "object" it will teleport all objects at start location.
+-- if set to "drop" it will drop node at target location, if set to "dig" it will dig out nodes and return appropriate drops.
 
 -- input is: where to take and where to put
 -- to operate mese power is needed
 
-MOVER_FUEL_STORAGE_CAPACITY =  5;
+MOVER_FUEL_STORAGE_CAPACITY =  5; -- how many operations from one coal lump
 
 minetest.register_node("mymod:mover", {
 	description = "Mover",
@@ -16,7 +17,7 @@ minetest.register_node("mymod:mover", {
 	sounds = default.node_sound_wood_defaults(),
 	after_place_node = function(pos, placer)
 		local meta = minetest.env:get_meta(pos)
-		meta:set_string("infotext", "Mover block. Right click to set it up.")
+		meta:set_string("infotext", "Mover block. Right click to set it up. Or set positions by punching it.")
 		meta:set_string("owner", placer:get_player_name());
 		meta:set_int("x0",0);meta:set_int("y0",-1);meta:set_int("z0",0); -- source1
 		meta:set_int("x1",0);meta:set_int("y1",-1);meta:set_int("z1",0); -- source2: defines cube
@@ -24,8 +25,6 @@ minetest.register_node("mymod:mover", {
 		meta:set_int("x2",0);meta:set_int("y2",1);meta:set_int("z2",0);
 		meta:set_float("fuel",0)
 		meta:set_string("prefer", "");
-
-		
 	end,
 		
 	mesecons = {effector = {
@@ -88,7 +87,6 @@ minetest.register_node("mymod:mover", {
 	local owner = meta:get_string("owner");
 	-- check protections
 	
-	--minetest.chat_send_all(" checking protection for owner ".. owner)
 	if minetest.is_protected(pos1, owner) or minetest.is_protected(pos2, owner) then
 		meta:set_float("fuel", -1);
 		meta:set_string("infotext", "Mover block. Protection fail. Deactivated.")
@@ -212,6 +210,67 @@ minetest.register_node("mymod:mover", {
 	end
 })
 
+
+local punchset = {}; 
+
+-- set up mover by punching it first, then start and end
+minetest.register_on_punchnode(function(pos, node, puncher, pointed_thing)
+	local name = puncher:get_player_name(); if name==nil then return end
+	if punchset[name]== nil then  -- set up punchstate
+		punchset[name] = {} 
+		punchset[name].pos1 = {x=0,y=0,z=0};punchset[name].pos2 = {x=0,y=0,z=0};punchset[name].pos = {x=0,y=0,z=0};
+		punchset[name].state = 0; -- 0 ready for punch, 1 ready for start position, 2 ready for end position
+		return
+	end
+	
+	if punchset[name].state == 0 and node.name~="mymod:mover" then return end
+	
+	if punchset[name].state == 0 and node.name=="mymod:mover" then  -- check if owner of mover is punching
+			local meta = minetest.get_meta(pos);
+			if meta:get_string("owner")~= name then return end
+	end
+	
+	if punchset[name].state == 0 and node.name == "mymod:mover" then 
+		minetest.chat_send_player(name, "Punch starting and end position to set up mover.")
+		punchset[name].pos = {x=pos.x,y=pos.y,z=pos.z};
+		punchset[name].state = 1 
+		return
+	end
+	
+	if punchset[name].state == 1 then 
+		if math.abs(punchset[name].pos.x - pos.x)>5 or math.abs(punchset[name].pos.y - pos.y)>5 or math.abs(punchset[name].pos.z - pos.z)>5 then
+				minetest.chat_send_player(name, "Punch closer to mover. reseting.")
+				punchset[name].state = 0; return
+		end
+		punchset[name].pos1 = {x=pos.x,y=pos.y,z=pos.z};punchset[name].state = 2;
+		minetest.chat_send_player(name, "Start position for mover set. Punch again to set end position.")
+		return
+	end
+	
+	if punchset[name].state == 2 then 
+		if math.abs(punchset[name].pos.x - pos.x)>5 or math.abs(punchset[name].pos.y - pos.y)>5 or math.abs(punchset[name].pos.z - pos.z)>5 then
+				minetest.chat_send_player(name, "Punch closer to mover. reseting.")
+				punchset[name].state = 0; return
+		end
+		
+		punchset[name].pos2 = {x=pos.x,y=pos.y,z=pos.z}; punchset[name].state = 0;
+		minetest.chat_send_player(name, "End position for mover set.")
+		local x = punchset[name].pos1.x-punchset[name].pos.x;
+		local y = punchset[name].pos1.y-punchset[name].pos.y;
+		local z = punchset[name].pos1.z-punchset[name].pos.z;
+		local meta = minetest.get_meta(punchset[name].pos);
+		meta:set_int("x0",x);meta:set_int("y0",y);meta:set_int("z0",z);
+		meta:set_int("x1",x);meta:set_int("y1",y);meta:set_int("z1",z);
+		x = punchset[name].pos2.x-punchset[name].pos.x;
+		y = punchset[name].pos2.y-punchset[name].pos.y;
+		z = punchset[name].pos2.z-punchset[name].pos.z;
+		meta:set_int("x2",x);meta:set_int("y2",y);meta:set_int("z2",z);
+		meta:set_int("pc",0); meta:set_int("dim",1);
+		return
+	end
+end)
+
+
 minetest.register_on_player_receive_fields(function(player,formname,fields)
 	
 	local fname = "mymod:mover_"
@@ -260,7 +319,6 @@ minetest.register_chatcommand("test", {
     description = "test dig",
     privs = {kick=true},
     func = function(name,param)
-		
 	end
 	}
 )
