@@ -105,7 +105,7 @@ minetest.register_on_joinplayer(function(player) -- init stuff on player join
 	
 	playerdata[name] = {}
 	playerdata[name] = {xp=0,dig=0,speed=false,gravity=false, jail = 0}; -- jail >0 means player is in jail
-
+	playerdata[name].warning = 0
 	playerdata[name].manahud = init_mana_hud(player)
 	end
 )
@@ -349,15 +349,18 @@ minetest.register_globalstep(function(dtime)
 			
 			local totalxp = playerdata[name].xp+playerdata[name].magic;
 			if pos.y>0 and dist>500+totalxp/10 and not privs.privs then
+				if player:get_hp()<=0 then playerdata[name].warning = 0 return end -- when player is dead do nothing
 				if minetest.get_node_light(pos) ~= nil then -- crashed once, safety
 				if minetest.get_node_light(pos)>LIGHT_MAX*0.9 then
-					if player:get_hp()>15 then
-						minetest.chat_send_player(name,"Desert heat is too much to bear. Find shadow, get more experience or return closer to spawn.")
+					playerdata[name].warning = playerdata[name].warning+1
+					minetest.chat_send_player(name,"Desert heat is too much to bear. Find shadow, get more experience or return closer to spawn." .. playerdata[name].warning .. "/5")
+					if playerdata[name].warning>=5 then 
+						
+						player:set_hp(player:get_hp()-0.25-dist/200) 
 					end
-					
-					player:set_hp(player:get_hp()-0.25-dist/200)
 				end
 				end
+				elseif playerdata[name].warning>0 then playerdata[name].warning = playerdata[name].warning -1
 			end
 			
 			-- MANA REGENERATION
