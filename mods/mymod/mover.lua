@@ -313,12 +313,3 @@ minetest.register_craft({
 		{"default:stone", "default:wood", "default:stone"}
 	}
 })
-
-
-minetest.register_chatcommand("test", {
-    description = "test dig",
-    privs = {kick=true},
-    func = function(name,param)
-	end
-	}
-)
