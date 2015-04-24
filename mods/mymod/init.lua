@@ -287,6 +287,7 @@ minetest.register_globalstep(function(dtime)
 						playerdata[name].slow.time = playerdata[name].slow.time - MYMOD_UPDATE_TIME -- error reading table entry
 						player:set_physics_override({speed =  playerdata[name].slow.mag});
 						else 
+						minetest.chat_send_player(name,"[EFFECT] normal speed restored.")
 						playerdata[name].slow.time = 0
 						playerdata[name].speed = false;
 					end
@@ -341,8 +342,6 @@ minetest.register_globalstep(function(dtime)
 				else
 					playerdata[name].jail = playerdata[name].jail - 0.01; -- jail time slowly decreases
 				end
-				
-				
 			end
 			
 			-- SURVIVABILITY CHECK
@@ -406,7 +405,6 @@ minetest.register_globalstep(function(dtime)
 							playerdata[name].water.state = 0
 							playerdata[name].water.lastheight = p.y
 						else 
-							playerdata[name].speed = false
 							playerdata[name].water.lastheight = p.y -- not quite cleared of water, but not completely inside
 						end
 					else -- init
