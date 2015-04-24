@@ -143,11 +143,14 @@ minetest.register_chatcommand("xp", {
             -- just a check to prevent the server crashing
             return false
         end
+		
+		
 		if param=="" or param==nil then param = name end
 		
 		if playerdata[param] == nil or playerdata[param].dig==nil then return end	
 		minetest.chat_send_player(name,"XP ".. playerdata[param].xp .."/level ".. get_level(playerdata[param].xp) .. ", dig skill " ..playerdata[param].dig .. "/level " ..get_dig_level(playerdata[param].dig) .. ", farming " .. playerdata[param].farming )
 		minetest.chat_send_player(name,"magic "..playerdata[param].magic .. ", max_mana ".. playerdata[param].max_mana)
+		if not minetest.get_player_ip(param) then return end
 		if privs.kick then minetest.chat_send_player(name,"ip " .. minetest.get_player_ip(param)) end
 end,	
 })

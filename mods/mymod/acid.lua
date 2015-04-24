@@ -138,18 +138,18 @@ local function overwrite(name)
 	table2.on_dig = function(pos, node, digger)
 		
 		 if not protector.can_dig(5,pos,digger) then return end
-		 minetest.node_dig(pos, node, digger) -- this code handles dig itself
-		 
 		local name = digger:get_player_name(); if name == nil then return end
 		if playerdata then
-			local dig  = playerdata[name].dig/2+200 
+			local dig  = playerdata[name].dig/5+200 
 			if pos.y<-dig then
 				minetest.set_node(pos, {name="default:stone"})
 				minetest.chat_send_player(name,"With current dig skill you can only dig up to depth "..dig);
 				return
 			end
 		end
-				
+
+		minetest.node_dig(pos, node, digger) -- this code handles dig itself, after this experience is added
+		
 		local i,j,k
 		i = math.random(100) -- probability if spawns acid
 		local node;
