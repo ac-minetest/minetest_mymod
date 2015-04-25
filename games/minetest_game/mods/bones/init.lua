@@ -190,10 +190,12 @@ minetest.register_on_dieplayer(function(player)
 	meta:set_string("infotext", player_name.."'s bones. time: ".. time.month .. "/" .. time.day .. ", " ..time.hour.. ":".. time.min ..":" .. time.sec)
 	
 	if playerdata then -- rnd: record xp into bones
-				meta:set_float("xp", math.ceil(10*(playerdata[player_name].xp))/100); -- remember 10%
-				meta:set_float("dig", math.ceil(10*(playerdata[player_name].dig))/100);
-				meta:set_float("magic", math.ceil(10*(playerdata[player_name].magic))/100);
-			end	
+	if playerdata[player_name] then
+				meta:set_float("xp", math.ceil(10*(playerdata[player_name].xp or 0))/100); -- remember 10%
+				meta:set_float("dig", math.ceil(10*(playerdata[player_name].dig or 0))/100);
+				meta:set_float("magic", math.ceil(10*(playerdata[player_name].magic or 0))/100);
+	end
+	end	
 		
 	meta:set_string("owner", player_name) 
 	
