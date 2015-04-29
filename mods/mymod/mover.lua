@@ -228,7 +228,7 @@ minetest.register_node("mymod:mover", {
 
 
 local punchset = {}; 
-local punchset.known_nodes = {"mymod:mover"=true,"mymod:keypad"=true};
+punchset.known_nodes = {"mymod:mover"=true,"mymod:keypad"=true};
 
 -- set up mover by punching it first, then start and end
 minetest.register_on_punchnode(function(pos, node, puncher, pointed_thing)
