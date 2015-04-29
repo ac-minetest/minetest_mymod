@@ -28,9 +28,11 @@ minetest.register_craftitem("farming:bread", {
 		--minetest.item_eat(20); -- breads heals fully
 		if user:get_player_name()~=nil then
 		user:set_hp(20)
-			if playerdata[user:get_player_name()].speed == true then
-				playerdata[user:get_player_name()].speed = false
-				minetest.chat_send_player(user:get_player_name(),"<HEAL> speed returned to normal.")
+			if playerdata then
+				if playerdata[user:get_player_name()].speed == true then
+					playerdata[user:get_player_name()].speed = false
+					minetest.chat_send_player(user:get_player_name(),"<HEAL> speed returned to normal.")
+				end
 			end
 		return itemstack:take_item(itemstack:get_count()-1) --ItemStack("")
 		end

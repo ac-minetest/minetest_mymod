@@ -62,21 +62,22 @@ minetest.register_node("bones:bones", {
 		end
 		
 		--rnd
-		if playerdata[player:get_player_name()]==nil then  minetest.chat_send_all("CRAP") end
-		 --minetest.chat_send_all("TEST PUNCH BONES xp is ".. playerdata[player:get_player_name()].xp)
+
 		
 		local meta = minetest.get_meta(pos)
-			local xpadd = meta:get_float("xp") or 0;
-			local name = player:get_player_name()
-			playerdata[name].xp=math.ceil(10*(playerdata[name].xp+xpadd))/10
-			minetest.chat_send_player(player:get_player_name(), "Received ".. xpadd .. " experience from players bones");
-			xpadd= meta:get_float("dig") or 0;
-			playerdata[name].dig=math.ceil(10*(playerdata[name].dig+xpadd))/10
-			minetest.chat_send_player(player:get_player_name(), "Received ".. xpadd .. " dig skill from players bones");
-			xpadd= meta:get_float("magic") or 0;
-			playerdata[name].magic=math.ceil(10*(playerdata[name].magic+xpadd))/10
-			minetest.chat_send_player(player:get_player_name(), "Received ".. xpadd .. " magic skill from players bones");
-
+			if playerdata then
+				local xpadd = meta:get_float("xp") or 0;
+				local name = player:get_player_name()
+				playerdata[name].xp=math.ceil(10*(playerdata[name].xp+xpadd))/10
+				minetest.chat_send_player(player:get_player_name(), "Received ".. xpadd .. " experience from players bones");
+				xpadd= meta:get_float("dig") or 0;
+				playerdata[name].dig=math.ceil(10*(playerdata[name].dig+xpadd))/10
+				minetest.chat_send_player(player:get_player_name(), "Received ".. xpadd .. " dig skill from players bones");
+				xpadd= meta:get_float("magic") or 0;
+				playerdata[name].magic=math.ceil(10*(playerdata[name].magic+xpadd))/10
+				minetest.chat_send_player(player:get_player_name(), "Received ".. xpadd .. " magic skill from players bones");
+			end
+			
 			local inv = minetest.get_meta(pos):get_inventory()
 		local player_inv = player:get_inventory()
 		local has_space = true
@@ -190,11 +191,11 @@ minetest.register_on_dieplayer(function(player)
 	meta:set_string("infotext", player_name.."'s bones. time: ".. time.month .. "/" .. time.day .. ", " ..time.hour.. ":".. time.min ..":" .. time.sec)
 	
 	if playerdata then -- rnd: record xp into bones
-	if playerdata[player_name] then
-				meta:set_float("xp", math.ceil(10*(playerdata[player_name].xp or 0))/100); -- remember 10%
-				meta:set_float("dig", math.ceil(10*(playerdata[player_name].dig or 0))/100);
-				meta:set_float("magic", math.ceil(10*(playerdata[player_name].magic or 0))/100);
-	end
+		if playerdata[player_name] then
+					meta:set_float("xp", math.ceil(10*(playerdata[player_name].xp or 0))/100); -- remember 10%
+					meta:set_float("dig", math.ceil(10*(playerdata[player_name].dig or 0))/100);
+					meta:set_float("magic", math.ceil(10*(playerdata[player_name].magic or 0))/100);
+		end
 	end	
 		
 	meta:set_string("owner", player_name) 
