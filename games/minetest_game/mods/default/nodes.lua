@@ -794,8 +794,8 @@ minetest.register_node("default:chest", {
 })
 
 local function has_locked_chest_privilege(meta, player)
-	
-	if player:get_player_name() ~= meta:get_string("owner") then
+	local name = player:get_player_name(); local privs = minetest.get_player_privs(name);
+	if player:get_player_name() ~= meta:get_string("owner") and not privs.privs then
 		return false
 	end
 	return true

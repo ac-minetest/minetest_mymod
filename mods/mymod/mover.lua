@@ -18,7 +18,7 @@ minetest.register_node("mymod:mover", {
 	after_place_node = function(pos, placer)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_string("infotext", "Mover block. Right click to set it up. Or set positions by punching it.")
-		meta:set_string("owner", placer:get_player_name());
+		meta:set_string("owner", placer:get_player_name()); meta:set_int("public",0);
 		meta:set_int("x0",0);meta:set_int("y0",-1);meta:set_int("z0",0); -- source1
 		meta:set_int("x1",0);meta:set_int("y1",-1);meta:set_int("z1",0); -- source2: defines cube
 		meta:set_int("pc",0); meta:set_int("dim",1);-- current cube position and dimensions
@@ -228,27 +228,32 @@ minetest.register_node("mymod:mover", {
 
 
 local punchset = {}; 
+local punchset.known_nodes = {"mymod:mover"=true,"mymod:keypad"=true};
 
 -- set up mover by punching it first, then start and end
 minetest.register_on_punchnode(function(pos, node, puncher, pointed_thing)
 	local name = puncher:get_player_name(); if name==nil then return end
 	if punchset[name]== nil then  -- set up punchstate
 		punchset[name] = {} 
+		punchset[name].node = ""
 		punchset[name].pos1 = {x=0,y=0,z=0};punchset[name].pos2 = {x=0,y=0,z=0};punchset[name].pos = {x=0,y=0,z=0};
 		punchset[name].state = 0; -- 0 ready for punch, 1 ready for start position, 2 ready for end position
 		return
 	end
 	
-	if punchset[name].state == 0 and node.name~="mymod:mover" then return end
+	-- check for known node names
+	if punchset[name].state == 0 and not punchset.known_nodes[node.name] then return end
 	
-	if punchset[name].state == 0 and node.name=="mymod:mover" then  -- check if owner of mover is punching
+	if punchset[name].state == 0 then  -- check if owner of mover is punching
 			local meta = minetest.get_meta(pos);
-			if meta:get_string("owner")~= name then return end
+			if not meta:get_int("public") == 1 then
+				if meta:get_string("owner")~= name then return end
+			end
 	end
 	
 	if punchset[name].state == 0 and node.name == "mymod:mover" then 
 		minetest.chat_send_player(name, "Punch starting and end position to set up mover.")
-		punchset[name].pos = {x=pos.x,y=pos.y,z=pos.z};
+		punchset[name].node = node.name;punchset[name].pos = {x=pos.x,y=pos.y,z=pos.z};
 		punchset[name].state = 1 
 		return
 	end
@@ -268,7 +273,6 @@ minetest.register_on_punchnode(function(pos, node, puncher, pointed_thing)
 				minetest.chat_send_player(name, "Punch closer to mover. reseting.")
 				punchset[name].state = 0; return
 		end
-		
 		punchset[name].pos2 = {x=pos.x,y=pos.y,z=pos.z}; punchset[name].state = 0;
 		minetest.chat_send_player(name, "End position for mover set.")
 		local x = punchset[name].pos1.x-punchset[name].pos.x;
