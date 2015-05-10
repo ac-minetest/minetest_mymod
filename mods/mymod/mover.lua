@@ -32,6 +32,8 @@ minetest.register_node("mymod:mover", {
 		local meta = minetest.get_meta(pos);
 		local fuel = meta:get_float("fuel");
 		
+		--minetest.chat_send_all("mover mesecons: runnning with pos " .. pos.x .. " " .. pos.y .. " " .. pos.z)
+		
 		local x0,y0,z0,x1,y1,z1;
 			x0=meta:get_int("x0");y0=meta:get_int("y0");z0=meta:get_int("z0");
 			local pos1 = {x=x0+pos.x,y=y0+pos.y,z=z0+pos.z}; -- where to take from
@@ -227,10 +229,81 @@ minetest.register_node("mymod:mover", {
 })
 
 
+
+minetest.register_node("mymod:keypad", {
+	description = "Keypad",
+	tiles = {"keypad.png"},
+	groups = {oddly_breakable_by_hand=2},
+	sounds = default.node_sound_wood_defaults(),
+	after_place_node = function(pos, placer)
+		local meta = minetest.env:get_meta(pos)
+		meta:set_string("infotext", "Keypad. Right click to set it up. Or punch it while holding sneak.")
+		meta:set_string("owner", placer:get_player_name()); meta:set_int("public",1);
+		meta:set_int("x0",0);meta:set_int("y0",1);meta:set_int("z0",0); -- target
+		meta:set_string("pass", "");
+	end,
+		
+	mesecons = {effector = {
+		action_on = function (pos, node) 
+		local meta = minetest.get_meta(pos);
+		-- not yet defined ... ???
+	end
+	}
+	},
+	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
+		local meta = minetest.get_meta(pos);
+		local x0,y0,z0,pass;
+		x0=meta:get_int("x0");y0=meta:get_int("y0");z0=meta:get_int("z0");
+		pass = meta:get_string("pass");
+		local form  = 
+		"size[3,2.5]" ..  -- width, height
+		"field[0.25,0.5;1,1;x0;target;"..x0.."] field[1.25,0.5;1,1;y0;;"..y0.."] field[2.25,0.5;1,1;z0;;"..z0.."]"..
+		"button[0.,2;1,1;OK;OK] field[0.25,1.5;3,1;pass;Password: ;"..pass.."]";
+		minetest.show_formspec(player:get_player_name(), "mymod:keypad_"..minetest.pos_to_string(pos), form)
+	end
+})
+
+local function use_keypad(pos,name)
+	local meta = minetest.get_meta(pos);
+	local x0,y0,z0;
+	x0=meta:get_int("x0");y0=meta:get_int("y0");z0=meta:get_int("z0");
+	x0=pos.x+x0;y0=pos.y+y0;z0=pos.z+z0;
+	--minetest.chat_send_all("KEYPAD USED. TARGET ".. x0 .. " " .. y0 .. " " .. z0);
+	local tpos = {x=x0,y=y0,z=z0};
+	
+	local node = minetest.get_node(tpos);if not node.name then return end -- error
+	local table = minetest.registered_nodes[node.name];
+	if not table then return end -- error
+	if not table.mesecons then return end -- error
+	if not table.mesecons.effector then return end -- error
+	local effector=table.mesecons.effector;
+	if not effector.action_on then return end
+	
+	effector.action_on(tpos,node); -- run
+	--minetest.chat_send_all("MESECONS RUN")
+	
+
+end
+
+
+local function check_keypad(pos,name)
+	local meta = minetest.get_meta(pos);
+	local pass =  meta:get_string("pass");
+	if pass == "" then use_keypad(pos,name) return end
+	pass = ""
+	local form  = 
+		"size[3,1]" ..  -- width, height
+		"button[0.,0.5;1,1;OK;OK] field[0.25,0.25;3,1;pass;Enter Password: ;".."".."]";
+		minetest.show_formspec(name, "mymod:check_keypad_"..minetest.pos_to_string(pos), form)
+
+end
+
+
+
 local punchset = {}; 
 punchset.known_nodes = {["mymod:mover"]=true,["mymod:keypad"]=true};
 
--- set up mover by punching it first, then start and end
+-- handles set up punches
 minetest.register_on_punchnode(function(pos, node, puncher, pointed_thing)
 	local name = puncher:get_player_name(); if name==nil then return end
 	if punchset[name]== nil then  -- set up punchstate
@@ -241,56 +314,98 @@ minetest.register_on_punchnode(function(pos, node, puncher, pointed_thing)
 		return
 	end
 	
-	-- check for known node names
+	-- check for known node names in case of first punch
 	if punchset[name].state == 0 and not punchset.known_nodes[node.name] then return end
 	
-	if punchset[name].state == 0 then  -- check if owner of mover is punching
+	if punchset[name].state == 0 then  -- check if owner of mover is punching or if node public
 			local meta = minetest.get_meta(pos);
 			if not meta:get_int("public") == 1 then
 				if meta:get_string("owner")~= name then return end
 			end
 	end
 	
-	if punchset[name].state == 0 and node.name == "mymod:mover" then 
-		minetest.chat_send_player(name, "Punch starting and end position to set up mover.")
-		punchset[name].node = node.name;punchset[name].pos = {x=pos.x,y=pos.y,z=pos.z};
-		punchset[name].state = 1 
-		return
+	if node.name == "mymod:mover" then -- mover init code
+		if punchset[name].state == 0 then 
+			minetest.chat_send_player(name, "mover setup: Now punch starting and end position to set up mover.")
+			punchset[name].node = node.name;punchset[name].pos = {x=pos.x,y=pos.y,z=pos.z};
+			punchset[name].state = 1 
+			return
+		end
 	end
 	
-	if punchset[name].state == 1 then 
-		if math.abs(punchset[name].pos.x - pos.x)>5 or math.abs(punchset[name].pos.y - pos.y)>5 or math.abs(punchset[name].pos.z - pos.z)>5 then
-				minetest.chat_send_player(name, "Punch closer to mover. reseting.")
-				punchset[name].state = 0; return
+	 if punchset[name].node == "mymod:mover" then -- mover code
+		if punchset[name].state == 1 then 
+			if math.abs(punchset[name].pos.x - pos.x)>5 or math.abs(punchset[name].pos.y - pos.y)>5 or math.abs(punchset[name].pos.z - pos.z)>5 then
+					minetest.chat_send_player(name, "mover setup: Punch closer to mover. reseting.")
+					punchset[name].state = 0; return
+			end
+			punchset[name].pos1 = {x=pos.x,y=pos.y,z=pos.z};punchset[name].state = 2;
+			minetest.chat_send_player(name, "mover setup: Start position for mover set. Punch again to set end position.")
+			return
 		end
-		punchset[name].pos1 = {x=pos.x,y=pos.y,z=pos.z};punchset[name].state = 2;
-		minetest.chat_send_player(name, "Start position for mover set. Punch again to set end position.")
-		return
+		
+		if punchset[name].state == 2 then 
+			if punchset[name].node~="mymod:mover" then punchset[name].state = 0 return end
+			if math.abs(punchset[name].pos.x - pos.x)>5 or math.abs(punchset[name].pos.y - pos.y)>5 or math.abs(punchset[name].pos.z - pos.z)>5 then
+					minetest.chat_send_player(name, "mover setup: Punch closer to mover. reseting.")
+					punchset[name].state = 0; return
+			end
+			punchset[name].pos2 = {x=pos.x,y=pos.y,z=pos.z}; punchset[name].state = 0;
+			minetest.chat_send_player(name, "End position for mover set.")
+			local x = punchset[name].pos1.x-punchset[name].pos.x;
+			local y = punchset[name].pos1.y-punchset[name].pos.y;
+			local z = punchset[name].pos1.z-punchset[name].pos.z;
+			local meta = minetest.get_meta(punchset[name].pos);
+			meta:set_int("x0",x);meta:set_int("y0",y);meta:set_int("z0",z);
+			meta:set_int("x1",x);meta:set_int("y1",y);meta:set_int("z1",z);
+			x = punchset[name].pos2.x-punchset[name].pos.x;
+			y = punchset[name].pos2.y-punchset[name].pos.y;
+			z = punchset[name].pos2.z-punchset[name].pos.z;
+			meta:set_int("x2",x);meta:set_int("y2",y);meta:set_int("z2",z);
+			meta:set_int("pc",0); meta:set_int("dim",1);
+			return
+		end
 	end
 	
-	if punchset[name].state == 2 then 
-		if math.abs(punchset[name].pos.x - pos.x)>5 or math.abs(punchset[name].pos.y - pos.y)>5 or math.abs(punchset[name].pos.z - pos.z)>5 then
-				minetest.chat_send_player(name, "Punch closer to mover. reseting.")
-				punchset[name].state = 0; return
+	if node.name == "mymod:keypad" then -- keypad init/usage code
+		if not puncher:get_player_control().sneak then
+			check_keypad(pos,name)-- not setup, just standard operation
+			return
 		end
-		punchset[name].pos2 = {x=pos.x,y=pos.y,z=pos.z}; punchset[name].state = 0;
-		minetest.chat_send_player(name, "End position for mover set.")
-		local x = punchset[name].pos1.x-punchset[name].pos.x;
-		local y = punchset[name].pos1.y-punchset[name].pos.y;
-		local z = punchset[name].pos1.z-punchset[name].pos.z;
-		local meta = minetest.get_meta(punchset[name].pos);
-		meta:set_int("x0",x);meta:set_int("y0",y);meta:set_int("z0",z);
-		meta:set_int("x1",x);meta:set_int("y1",y);meta:set_int("z1",z);
-		x = punchset[name].pos2.x-punchset[name].pos.x;
-		y = punchset[name].pos2.y-punchset[name].pos.y;
-		z = punchset[name].pos2.z-punchset[name].pos.z;
-		meta:set_int("x2",x);meta:set_int("y2",y);meta:set_int("z2",z);
-		meta:set_int("pc",0); meta:set_int("dim",1);
-		return
+		local meta = minetest.get_meta(pos);
+		if meta:get_string("owner")~= name then minetest.chat_send_player(name, "Only owner can set up keypad.") return end
+		
+		if punchset[name].state == 0 then 
+			minetest.chat_send_player(name, "keypad setup: Now punch the target block.")
+			punchset[name].node = node.name;punchset[name].pos = {x=pos.x,y=pos.y,z=pos.z};
+			punchset[name].state = 1 
+			return
+		end
 	end
+	
+	if punchset[name].node=="mymod:keypad" then -- keypad setup code
+		if punchset[name].state == 1 then 
+			local meta = minetest.get_meta(punchset[name].pos);
+			local x = pos.x-punchset[name].pos.x;
+			local y = pos.y-punchset[name].pos.y;
+			local z = pos.z-punchset[name].pos.z;
+			
+			if math.abs(x)>5 or math.abs(y)>5 or math.abs(z)>5 then
+					minetest.chat_send_player(name, "keypad setup: Punch closer to keypad. reseting.")
+					punchset[name].state = 0; return
+			end
+			
+			meta:set_int("x0",x);meta:set_int("y0",y);meta:set_int("z0",z);			
+			punchset[name].state = 0 
+			minetest.chat_send_player(name, "keypad setup: Keypad target set with coordinates " .. x .. " " .. y .. " " .. z)
+			return
+		end
+	end
+	
 end)
 
 
+-- handles forms for all machines
 minetest.register_on_player_receive_fields(function(player,formname,fields)
 	
 	local fname = "mymod:mover_"
@@ -319,11 +434,63 @@ minetest.register_on_player_receive_fields(function(player,formname,fields)
 			meta:set_int("x2",x2);meta:set_int("y2",y2);meta:set_int("z2",z2);
 			meta:set_string("prefer",fields.prefer or "");
 			meta:set_string("mode",fields.mode or "");
-			meta:set_string("infotext", "Mover block. Set up with source coords ".. x0 ..","..y0..","..z0.. " -> ".. x1 ..","..y1..","..z1.. " and target coord ".. x2 ..","..y2..",".. z2 .. ". Put chest with coal next to it and start with mese signal.");
+			meta:set_string("infotext", "Mover block. Set up with source coordinates ".. x0 ..","..y0..","..z0.. " -> ".. x1 ..","..y1..","..z1.. " and target coord ".. x2 ..","..y2..",".. z2 .. ". Put chest with coal next to it and start with mese signal.");
 			if meta:get_float("fuel")<0 then meta:set_float("fuel",0) end -- reset block
 		end
+		return
 	end
+	
+	fname = "mymod:keypad_"
+	if string.sub(formname,0,string.len(fname)) == fname then
+		local pos_s = string.sub(formname,string.len(fname)+1); local pos = minetest.string_to_pos(pos_s)
+		local name = player:get_player_name(); if name==nil then return end
+		local meta = minetest.get_meta(pos)
+		if name ~= meta:get_string("owner") or not fields then return end -- only owner can interact
+		
+		if fields.OK == "OK" then
+			local x0,y0,z0,pass;
+			x0=tonumber(fields.x0) or 0;y0=tonumber(fields.y0) or 1;z0=tonumber(fields.z0) or 0
+			pass = fields.pass or "";
+			if math.abs(x0)>5 or math.abs(y0)>5 or math.abs(z0)>5 then
+				minetest.chat_send_player(name,"all coordinates must be between -5 and 5"); return
+			end
+			meta:set_int("x0",x0);meta:set_int("y0",y0);meta:set_int("z0",z0);meta:set_string("pass",pass);
+			meta:set_string("infotext", "Keypad. Set up with target coordinates ".. x0 ..","..y0..","..z0);
+			if pass~="" then meta:set_string("infotext",meta:get_string("infotext").. ". Password protected."); end
+			
+			if meta:get_float("fuel")<0 then meta:set_float("fuel",0) end -- reset block
+		end
+		return
+	end
+	
+	fname = "mymod:check_keypad_"
+	if string.sub(formname,0,string.len(fname)) == fname then
+		local pos_s = string.sub(formname,string.len(fname)+1); local pos = minetest.string_to_pos(pos_s)
+		local name = player:get_player_name(); if name==nil then return end
+		local meta = minetest.get_meta(pos)
+	
+		if fields.OK == "OK" then
+			local pass;
+			pass = fields.pass or "";			
+			if pass~=meta:get_string("pass") then
+				minetest.chat_send_player(name,"ACCESS DENIED. WRONG PASSWORD.")
+				return
+			end
+		use_keypad(pos,name)
+		return
+		end
+	end
+	
 end)
+
+-- LOCKED DOOR TWEAK, so they will open
+
+--closed door: doors:door_steel_b_1, open door: doors:door_steel_b_2
+
+dofile(minetest.get_modpath("mymod").."/mesecon_doors.lua")
+
+
+-- CRAFTS
 
 minetest.register_craft({
 	output = "mymod:mover",
