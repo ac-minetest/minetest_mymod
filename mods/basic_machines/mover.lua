@@ -103,7 +103,7 @@ minetest.register_node("basic_machines:mover", {
 	mesecons = {effector = {
 		action_on = function (pos, node,ttl) 
 		
-			if type(ttl)~="number" then return end
+			if type(ttl)~="number" then ttl = 1 end
 			local meta = minetest.get_meta(pos);
 			local fuel = meta:get_float("fuel");
 			
@@ -372,7 +372,7 @@ minetest.register_node("basic_machines:keypad", {
 		
 	mesecons = {effector = { 
 		action_on = function (pos, node,ttl) 
-		if type(ttl)~="number" then return end
+		if type(ttl)~="number" then ttl = 1 end
 		if ttl<0 then return end -- machines_TTL prevents infinite recursion
 		use_keypad(pos,ttl-1);
 	end
@@ -423,7 +423,7 @@ minetest.register_node("basic_machines:detector", {
 		
 	mesecons = {effector = {
 		action_on = function (pos, node,ttl) 
-			if type(ttl)~="number" then return end
+			if type(ttl)~="number" then ttl = 1 end
 			if ttl<0 then return end -- prevent infinite recursion
 			local meta = minetest.get_meta(pos);
 		-- not yet defined ... ???
@@ -558,7 +558,7 @@ minetest.register_node("basic_machines:distributor", {
 		
 	mesecons = {effector = {
 		action_on = function (pos, node,ttl) 
-			if type(ttl)~="number" then return end
+			if type(ttl)~="number" then ttl = 1 end
 			if not(ttl>0) then return end
 			local meta = minetest.get_meta(pos);
 			local x1,y1,z1,x2,y2,z2,active1,active2
@@ -669,7 +669,7 @@ minetest.register_node("basic_machines:light_off", {
 	groups = {oddly_breakable_by_hand=2},
 	mesecons = {effector = {
 		action_on = function (pos, node,ttl) 
-			if type(ttl)~="number" then return end
+			if type(ttl)~="number" then ttl = 1 end
 			minetest.set_node(pos,{name = "basic_machines:light_on"});		
 		end
 				}
@@ -958,7 +958,7 @@ minetest.register_on_player_receive_fields(function(player,formname,fields)
 			x0=tonumber(fields.x0) or 0;y0=tonumber(fields.y0) or -1;z0=tonumber(fields.z0) or 0
 			x1=tonumber(fields.x1) or 0;y1=tonumber(fields.y1) or -1;z1=tonumber(fields.z1) or 0
 			x2=tonumber(fields.x2) or 0;y2=tonumber(fields.y2) or 1;z2=tonumber(fields.z2) or 0;
-			if math.abs(x1)>max_range or math.abs(y1)>max_range or math.abs(z1)>5 or math.abs(x2)>max_range or math.abs(y2)>max_range or math.abs(z2)>max_range then
+			if math.abs(x1)>max_range or math.abs(y1)>max_range or math.abs(z1)>max_range or math.abs(x2)>max_range or math.abs(y2)>max_range or math.abs(z2)>max_range then
 				minetest.chat_send_player(name,"all coordinates must be between ".. -max_range .. " and " .. max_range); return
 			end
 			
