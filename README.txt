@@ -68,6 +68,9 @@ ENVIROMENT:
 	
 	Gravity changes with height, above height=y=50 its reduced by factor 2/((y/50)^2+1.)
 	
+	Digging inside mines has its dangers too. Occasionaly player dugs out acid, which can be hard to clean. Cave in can happen which turns nearby block into gravel, thereby destroying precious diamonds
+	you just found.
+	
 	Diving in water becomes dangerous when player dives below depth 10 and damage increases with depth. More shallow water ( >=depth 5) 
 	imposes movement speed decrease.
 	
