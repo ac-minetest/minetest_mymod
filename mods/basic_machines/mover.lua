@@ -542,7 +542,7 @@ minetest.register_abm({
 -- DISTRIBUTOR: spreads one signal to two outputs
 
 minetest.register_node("basic_machines:distributor", {
-	description = "Detector",
+	description = "Distributor",
 	tiles = {"distributor.png"},
 	groups = {oddly_breakable_by_hand=2},
 	sounds = default.node_sound_wood_defaults(),

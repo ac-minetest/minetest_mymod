@@ -320,6 +320,8 @@ farming.register_plant = function(name, def)
 			end 
 			minetest.set_node(pos, {name = mname .. ":" .. pname .. "_" .. plant_height + 1})
 			
+			if plant_height+1 == 8 then minetest.set_node({x=pos.x,y=pos.y-1,z=pos.z}, {name ="default:dirt"}) end -- rnd: when plant fully grown it creates dirt
+			
 			quality = quality - 3; -- degrade slowly during growth
 			meta = minetest.get_meta(pos); meta:set_int("quality",quality); -- rnd	
 			meta:set_string("infotext", "seed quality " .. quality .. ", growth progress "..plant_height+1 .. ", light level "..  minetest.get_node_light(pos))
