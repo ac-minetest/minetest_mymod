@@ -223,7 +223,7 @@ farming.register_plant = function(name, def)
 				{items = {mname .. ":" .. pname}, rarity = 9 - i},
 				{items = {mname .. ":" .. pname}, rarity= 18 - i * 2},
 				{items = {mname .. ":seed_" .. pname}, rarity = 9 - i},
-				{items = {mname .. ":seed_" .. pname}, rarity = 18 - i * 2},
+				{items = {mname .. ":seed_" .. pname}, rarity = 18 - i * 2}, --rnd comment: here plants drop seed when harvested
 			}
 		}
 		local nodegroups = {snappy = 3, flammable = 2, plant = 1, not_in_creative_inventory = 1, attached_node = 1}
