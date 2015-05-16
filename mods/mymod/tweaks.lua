@@ -261,7 +261,7 @@ local function tweak_seeds(name) -- farming:seed_wheat
 		local inv = digger:get_inventory();
 		if inv:room_for_item("main",stack) then inv:add_item("main",stack) end
 	end
-	minetest.register_node(name, table2);
+	minetest.register_node("farming:"..name.."_8", table2);
 			
 end
 
