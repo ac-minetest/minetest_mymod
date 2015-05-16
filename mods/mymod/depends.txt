@@ -3,3 +3,4 @@ bones
 craft_guide
 chatplus
 simple_skins
+farming
