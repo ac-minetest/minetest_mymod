@@ -25,6 +25,13 @@ minetest.register_chatcommand("spawn", {
             return false
         end
 
+		if playerdata then
+			if playerdata[name].speed == true then
+				minetest.chat_send_player(name, "can only use /spawn when not slowed.")
+				return 
+			end
+		end
+		
 		local pos=player:getpos()
 		local static_spawnpoint = core.setting_get_pos("static_spawnpoint") 
 		if math.abs(pos.x-static_spawnpoint.x)<32 and math.abs(pos.z-static_spawnpoint.z)<32 and math.abs(pos.y-static_spawnpoint.y)<20 then 

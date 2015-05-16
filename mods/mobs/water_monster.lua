@@ -16,7 +16,7 @@ mobs:register_mob("mobs:water_monster", {
 	walk_velocity = 1,
 	run_velocity = 5,
 	gravity = 0.1, -- rnd
-	damage = 10,
+	damage = 8,
 	drops = {
 		{name = "default:water_source",
 		chance = 5,

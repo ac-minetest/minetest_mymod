@@ -35,6 +35,14 @@ minetest.register_chatcommand("home", {
             -- just a check to prevent the server crashing
             return false
         end
+		
+	if playerdata then
+		if playerdata[name].speed == true then
+			minetest.chat_send_player(name, "can only use /home when not slowed.")
+			return 
+		end
+	end
+
         if homepos[player:get_player_name()] then
             player:setpos(homepos[player:get_player_name()])
             minetest.chat_send_player(name, "Teleported to home!")

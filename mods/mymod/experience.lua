@@ -601,7 +601,7 @@ minetest.register_craft({
 
 
 minetest.register_node("mymod:spell_float", {
-	description = "float spell: enable glitch climbing and reduce gravity to max(0.75-magic_skill/5000,0.25) for 5+min(magic_skill/1000,5) seconds",
+	description = "float spell: enable glitch climbing and reduce gravity to max(0.75-magic_skill/5000,0.15) for 5+min(magic_skill/1000,5) seconds",
 	wield_image = "bubble.png",
 	wield_scale = {x=0.8,y=0.8,z=0.8}, 
 	drawtype = "allfaces",
@@ -622,7 +622,7 @@ minetest.register_node("mymod:spell_float", {
 		
 		local skill = playerdata[name].magic;
 		playerdata[name].float.time = playerdata[name].float.time + 5+math.min(skill/1000,10)
-		playerdata[name].float.mag = math.max(0.75-skill/10000,0.25);
+		playerdata[name].float.mag = math.max(0.75-skill/10000,0.15);
 		user:set_physics_override({gravity = playerdata[name].float.mag, sneak_glitch = true});
 		playerdata[name].gravity = true;
 		minetest.sound_play("magic", {pos=user:getpos(),gain=1.0,max_hear_distance = 32,})

@@ -1264,6 +1264,7 @@ minetest.register_node("mobs:spell_fireball", {
 	tiles = {"fireball_spell.png"},
 	groups = {oddly_breakable_by_hand=3},
 	on_use = function(itemstack, user, pointed_thing)
+		
 		local name = user:get_player_name(); if name == nil then return end
 		if playerdata == nil then return end
 		local t = minetest.get_gametime();if t-playerdata[name].spelltime<1 then return end;playerdata[name].spelltime = t;
@@ -1271,6 +1272,25 @@ minetest.register_node("mobs:spell_fireball", {
 		if playerdata[name].mana<1 then
 			minetest.chat_send_player(name,"Need at least 1 mana"); return
 		end
+		
+		if pointed_thing.type == "object" then -- on direct contact damage over time
+			local skill = playerdata[name].magic;
+			if skill> 4000 then skill = (skill/100-40)/12+20; skill = skill*1.5 -- fireball does 50% more dmg as sword
+			else skill = (10+skill/400)*1.5;
+		end
+			skill = skill * 0.25;
+			local target = pointed_thing.ref;
+			if target:is_player() then 
+				local tname = target:get_player_name();
+				playerdata[tname].poison = {time=20.,mag=skill};
+				playerdata[name].mana = playerdata[name].mana -1
+				minetest.sound_play("shooter_flare_fire", {pos=pos,gain=1.0,max_hear_distance = 64,})
+				minetest.chat_send_player(tname,"[EFFECT} fire damage ".. playerdata[tname].poison.mag .. " for " .. playerdata[tname].poison.time .. "s ");
+				return
+			end
+		end
+		
+		
 		local pos  = user:getpos()
 		pos.y = pos.y + 1.5
 		local view = user:get_look_dir() 
@@ -1381,21 +1401,25 @@ mobs:register_arrow("mobs:fireball_spell_projectile", {
 			minetest.sound_play("tnt_explode", {pos=pos,gain=1.0,max_hear_distance = 64,})
 			if node.name=="default:ice" then 
 					minetest.set_node(pos, {name="default:water_source"}) 
+					return
 			end 
 			
 			if node.name=="mymod:acid_source_active" then -- changes acid source to flowing
 					minetest.set_node(pos, {name="mymod:acid_flowing_active"}) 
+					return
 			end 
 			
 			if node.name=="mymod:acid_flowing_active" then -- changes acid source to flowing
 					minetest.set_node(pos, {name="air"}) 
+					return
 			end 
 			
 			--furnace gets fuel for 5 secs 
 			if node.name == "default:furnace" or node.name == "default:furnace_active" then
 				local meta = minetest.get_meta(pos) 
-				local fuel_totaltime = meta:get_float("fuel_totaltime") or 0; fuel_totaltime = fuel_totaltime +5;
+				local fuel_totaltime = meta:get_float("fuel_totaltime") or 0; fuel_totaltime = fuel_totaltime +self.damage/10;
 				meta:set_float("fuel_totaltime", fuel_totaltime) 
+				return
 			end
 			
 	end,
