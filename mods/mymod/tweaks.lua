@@ -256,7 +256,7 @@ ocal function tweak_seeds(name) -- farming:seed_wheat
 		if not playerdata then return end; if not playerdata[name] then return end
 		local skill = playerdata[name].farming;	if skill < 10 then return end
 		
-		local count = math.random(2);
+		local count = math.random(2)+math.random(2);
 		local stack = ItemStack("farming:seed_"..name.." " .. count);
 		local inv = digger:get_inventory();
 		if inv:room_for_item("main",stack) then inv:add_item("main",stack) end
