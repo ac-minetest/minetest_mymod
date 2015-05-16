@@ -246,7 +246,7 @@ minetest.registered_craftitems["bucket:bucket_water"].on_place=water_bucket_chec
 -- when fully grown wheat/cotton is picked it gives extra seeds when farm skill >= 10
 
 
-ocal function tweak_seeds(name) -- farming:seed_wheat
+local function tweak_seeds(name) -- farming:seed_wheat
 	local table = minetest.registered_items["farming:"..name.."_8"];
 	local table2 = {};
 	for i,v in pairs(table) do table2[i] = v end
