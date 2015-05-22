@@ -1255,7 +1255,7 @@ end
 
 -- FIREBALL
 minetest.register_node("mobs:spell_fireball", {
-	description = "fireball spell: at skill 0 does 15 dmg, does 35 dmg at skill 4000, 45 dmg at skill 16000, in between linear",
+	description = "fireball spell: at skill 0 does 15 dmg, does 30 dmg at skill 4000, 52 dmg at skill 16000, in between linear",
 	wield_image = "fireball_spell.png", -- TO DO : change texture
 	wield_scale = {x=0.8,y=0.8,z=0.8}, 
 	drawtype = "allfaces",
@@ -1275,7 +1275,7 @@ minetest.register_node("mobs:spell_fireball", {
 		
 		if pointed_thing.type == "object" then -- on direct contact damage over time
 			local skill = playerdata[name].magic;
-			if skill> 4000 then skill = (skill/100-40)/12+20; skill = skill*1.5 -- fireball does 50% more dmg as sword
+			if skill> 4000 then skill = (skill/100-40)/8+20; skill = skill*1.5 -- fireball does 50% more dmg as sword
 			else skill = (10+skill/400)*1.5;
 		end
 			skill = skill * 0.25;
@@ -1306,7 +1306,7 @@ minetest.register_node("mobs:spell_fireball", {
 		obj:get_luaentity().timer =  10
 		local skill = playerdata[name].magic; --  diamond sword 20 dmg/lvl 8 - 4000, mithril 30/lvl 10 - 16000
 		
-		if skill> 4000 then skill = (skill/100-40)/12+20; skill = skill*1.5 -- fireball does 50% more dmg as sword
+		if skill> 4000 then skill = (skill/100-40)/8+20; skill = skill*1.5 -- fireball does 50% more dmg as sword
 			else skill = (10+skill/400)*1.5;
 		end
 		obj:get_luaentity().damage = skill;
@@ -1334,7 +1334,7 @@ minetest.register_node("mobs:spell_fireball", {
 		--meta:set_string("owner",name);
 		local skill = playerdata[name].magic; --  diamond sword 20 dmg/lvl 8 - 4000, mithril 30/lvl 10 - 16000
 		
-		if skill> 4000 then skill = (skill/100-40)/12+20; skill = skill*1.5 -- fireball does 50% more dmg as sword
+		if skill> 4000 then skill = (skill/100-40)/8+20; skill = skill*1.5 -- fireball does 50% more dmg as sword
 			else skill = (10+skill/400)*1.5;
 		end
 		meta:set_int("damage",skill);
@@ -1424,7 +1424,6 @@ mobs:register_arrow("mobs:fireball_spell_projectile", {
 			
 	end,
 	hit_object = function(self,puncher, target)
-			--minetest.chat_send_all("BAM NODE!")
 			target:punch(puncher, 1.0,  {
 				full_punch_interval=1.0,
 				damage_groups = {fleshy=self.damage},

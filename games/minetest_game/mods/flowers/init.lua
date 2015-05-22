@@ -149,10 +149,14 @@ minetest.register_abm({
 			return
 		end
 		
+		-- rnd beehive
+		local bees = minetest.find_node_near(pos, 16, {"mobs:beehive"});
 		local flowers = minetest.find_nodes_in_area(pos0, pos1, "group:flora")
-		if #flowers > 3 then
+		if (not bees and #flowers > 1) or (bees and #flowers > 4) then
 			return
 		end
+		
+		
 		
 		local seedling = minetest.find_nodes_in_area(pos0, pos1, "default:dirt_with_grass")
 		if #seedling > 0 then
