@@ -897,15 +897,15 @@ function mobs:register_mob(name, def)
 end
 
 mobs.spawning_mobs = {}
-function mobs:register_spawn(name, nodes, max_light, min_light, chance, active_object_count, max_height, min_dist, max_dist, spawn_func)
+function mobs:register_spawn(name, nodes, max_light, min_light, chance, max_active_object_count, max_height, min_dist, max_dist, spawn_func)
 	mobs.spawning_mobs[name] = true	
 	minetest.register_abm({
 		nodenames = nodes,
 		neighbors = {"air"},
 		interval = 30,
 		chance = chance,
-		action = function(pos, node, _, active_object_count_wider)
-			if active_object_count_wider > active_object_count then
+		action = function(pos, node, active_object_count, active_object_count_wider)
+			if active_object_count_wider > max_active_object_count then
 				return
 			end
 			if not mobs.spawning_mobs[name] then
@@ -995,16 +995,16 @@ function mobs:register_spawn(name, nodes, max_light, min_light, chance, active_o
 end
 
 -- RND: spawn mobs in water
-function mobs:register_spawn_water(name, nodes, max_light, min_light, chance, active_object_count, max_height, min_dist, max_dist, spawn_func)
+function mobs:register_spawn_water(name, nodes, max_light, min_light, chance, max_active_object_count, max_height, min_dist, max_dist, spawn_func)
 	mobs.spawning_mobs[name] = true	
 	minetest.register_abm({
 		nodenames = nodes,
 		neighbors = {"default:water_source"},
 		interval = 30,
 		chance = chance,
-		action = function(pos, node, _, active_object_count_wider)
+		action = function(pos, node, active_object_count, active_object_count_wider)
 
-			if active_object_count_wider > active_object_count then
+			if active_object_count_wider > max_active_object_count then
 				return
 			end
 			if not mobs.spawning_mobs[name] then
