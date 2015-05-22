@@ -125,10 +125,13 @@ minetest.register_abm({
 				if o:get_player_name()==owner then calm = true break end
 			end
 		end
-			if not calm then
+			if not calm then -- spawn bee
 				local obj = minetest.env:add_entity(pos, "mobs:bee")
 				local entity = obj:get_luaentity();
 				entity.owner = owner;
+				
+				-- EXTRA ACTIONS: find nearby flower, and duplicate another flower with small probability
+				
 			end
 		end
 		})
