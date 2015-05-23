@@ -905,7 +905,7 @@ function mobs:register_spawn(name, nodes, max_light, min_light, chance, max_acti
 		interval = 30,
 		chance = chance,
 		action = function(pos, node, active_object_count, active_object_count_wider)
-			if active_object_count_wider > max_active_object_count then
+			if active_object_count_wider > max_active_object_count or active_object_count > max_active_object_count then
 				return
 			end
 			if not mobs.spawning_mobs[name] then
