@@ -17,11 +17,16 @@ farming.hoe_on_use = function(itemstack, user, pointed_thing, uses)
 	--rnd
 	
 	if string.find(under.name,"farming:wheat")~=nil or string.find(under.name,"farming:cotton")~=nil then
-	-- each application of hoe on plant increases plant quality by 3
+	-- each application of hoe on plant increases plant quality by 4+farming/5
 		local meta = minetest.get_meta(pt.under);
 		if string.find(meta:get_string("infotext"),"hoe applied")~=nil then return end
+		local name = user:get_player_name(); if name == nil then return end
+		local quality =  meta:get_int("quality");
+		if playerdata then
+			quality = quality+playerdata[name].farming/5 end
+		end
+		quality = quality+4
 		
-		local quality =  meta:get_int("quality")+4
 		meta:set_int("quality",quality)
 		meta:set_string("infotext", "hoe applied. new quality ".. quality);
 		
