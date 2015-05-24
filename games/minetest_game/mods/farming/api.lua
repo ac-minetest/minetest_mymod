@@ -23,7 +23,7 @@ farming.hoe_on_use = function(itemstack, user, pointed_thing, uses)
 		local name = user:get_player_name(); if name == nil then return end
 		local quality =  meta:get_int("quality");
 		if playerdata then
-			quality = quality+playerdata[name].farming/5 end
+			quality = quality+playerdata[name].farming/5
 		end
 		quality = quality+4
 		
