@@ -59,9 +59,9 @@ minetest.register_craft({
 minetest.register_craft({
 	output = "bones:bones 9",
 	recipe = {
-		{"", "bones:bones", ""},
-		{"bones:bones", "default:dirt", "bones:bones"},
-		{"", "bones:bones", ""}
+		{"", "default:stone", ""},
+		{"default:stone", "default:dirt", "default:stone"},
+		{"", "default:stone", ""}
 	}
 })
 
