@@ -149,8 +149,8 @@ farming.place_seed = function(itemstack, placer, pointed_thing, plantname)
 	minetest.add_node(pt.above, {name = plantname, param2 = 1})
 	
 	local quality = 0; local name = placer:get_player_name();  --rnd
-	if playerdata then
-		if name ~= nil then quality = playerdata[name].farming or 0 end
+	if playerdata and name~=nil then
+		quality = playerdata[name].farming or 0
 	else quality = 80
 	end
 	quality = 20 + quality; -- with quality 20 fail probability is around 0.8, with 3 its around 0.5

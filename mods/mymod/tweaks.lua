@@ -271,3 +271,55 @@ end
 
 --tweak_seeds("cotton");tweak_seeds("wheat");
 
+
+-- prevent players with low farming to place advanced tree saplings
+
+local function tweak_saplings(name,skill_req) -- farming:seed_wheat
+	local table = minetest.registered_items["farming:"..name.."_8"];
+	local table2 = {};
+	for i,v in pairs(table) do table2[i] = v end
+		
+	table2.after_place_node = function(pos, placer, itemstack, pointed_thing)
+		local pname = placer:get_player_name(); if pname==nil then return end
+		local skill = playerdata[pname].farming;
+		if skill < skill_req then
+			local inv = placer:get_inventory();
+			inv:remove_item("main", ItemStack(name.. " 90"))
+			minetest.set_node(pos,{name = "air"})
+			itemstack:clear();
+			minetest.chat_send_all("You need " .. skill_req .. " farming before you can plant this sapling .")
+			return
+		end
+	end
+	
+	table2.on_dig = function(pos, node, digger)
+		local pname = digger:get_player_name(); if pname==nil then return end
+		local skill = playerdata[pname].farming;
+		if skill < skill_req then
+			local inv = digger:get_inventory();
+			inv:remove_item("main", ItemStack(name.. " 90"))
+			itemstack:clear();
+			minetest.chat_send_all("You need " .. skill_req .. " farming before you can dig this sapling .")
+			return
+		end
+	end
+
+	minetest.register_node(name, table2);
+	
+			
+end
+
+tweak_saplings("moretrees:apple_tree_sapling",20);
+tweak_saplings("moretrees:rubber_tree_sapling",40);
+tweak_saplings("moretrees:willow_sapling",80);
+tweak_saplings("moretrees:acacia_sapling",160);
+tweak_saplings("moretrees:fir_sapling",320);
+tweak_saplings("moretrees:pine_sapling",640);
+tweak_saplings("moretrees:spruce_sapling",1000);
+tweak_saplings("moretrees:birch_sapling",2000);
+tweak_saplings("moretrees:beech_sapling",3000);
+tweak_saplings("moretrees:oak_sapling",4000);
+tweak_saplings("moretrees:sequoia_sapling",5000);
+tweak_saplings("moretrees:palm_sapling",8000);
+
+
