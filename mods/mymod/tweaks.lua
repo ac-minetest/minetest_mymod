@@ -287,16 +287,18 @@ local function tweak_saplings(name,skill_req) -- farming:seed_wheat
 		end
 	end
 	
-	table2.on_punch = function(pos, node, puncher, pointed_thing)
-		local pname = puncher:get_player_name(); if pname==nil then return end
+	table2.can_dig = function(pos, player)
+		local pname = player:get_player_name(); if pname==nil then return false end
 		local skill = playerdata[pname].farming;
 		if skill < skill_req then
-			local inv = puncher:get_inventory();
+			local inv = player:get_inventory();
 			inv:remove_item("main", ItemStack(name.. " 90"))
 			minetest.chat_send_player(pname,"You need " .. skill_req .. " farming before you can dig this sapling .")
-			return
+			return false
 		end
+		return true
 	end
+	
 
 	minetest.register_node(":"..name, table2);
 	
