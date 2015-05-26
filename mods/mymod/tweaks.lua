@@ -275,7 +275,7 @@ end
 -- prevent players with low farming to place advanced tree saplings
 
 local function tweak_saplings(name,skill_req) -- farming:seed_wheat
-	local table = minetest.registered_items["farming:"..name.."_8"];
+	local table = minetest.registered_items[name];
 	local table2 = {};
 	for i,v in pairs(table) do table2[i] = v end
 		
