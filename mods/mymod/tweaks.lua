@@ -307,16 +307,16 @@ end
 
 minetest.after(1, function()
 tweak_saplings("moretrees:apple_tree_sapling",20);
-tweak_saplings("moretrees:rubber_tree_sapling",40);
-tweak_saplings("moretrees:willow_sapling",80);
-tweak_saplings("moretrees:acacia_sapling",160);
-tweak_saplings("moretrees:fir_sapling",320);
-tweak_saplings("moretrees:pine_sapling",640);
-tweak_saplings("moretrees:spruce_sapling",1000);
-tweak_saplings("moretrees:birch_sapling",2000);
-tweak_saplings("moretrees:beech_sapling",3000);
-tweak_saplings("moretrees:oak_sapling",4000);
-tweak_saplings("moretrees:sequoia_sapling",5000);
-tweak_saplings("moretrees:palm_sapling",8000);
+tweak_saplings("moretrees:rubber_tree_sapling",30);
+tweak_saplings("moretrees:willow_sapling",45);
+tweak_saplings("moretrees:acacia_sapling",67);
+tweak_saplings("moretrees:fir_sapling",101);
+tweak_saplings("moretrees:pine_sapling",151);
+tweak_saplings("moretrees:spruce_sapling",227);
+tweak_saplings("moretrees:birch_sapling",341);
+tweak_saplings("moretrees:beech_sapling",512);
+tweak_saplings("moretrees:oak_sapling",768);
+tweak_saplings("moretrees:sequoia_sapling",1153);
+tweak_saplings("moretrees:palm_sapling",1729);
 end
 )
