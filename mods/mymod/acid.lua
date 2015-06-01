@@ -140,8 +140,9 @@ local function overwrite(name)
 		 if not protector.can_dig(5,pos,digger) then return end
 		local name = digger:get_player_name(); if name == nil then return end
 		if playerdata then
+			local dig = 0;
 			if playerdata[name] then
-				local dig  = playerdata[name].dig/5+200 
+				dig  = playerdata[name].dig/5+200 
 			end
 			if pos.y<-dig then
 				minetest.set_node(pos, {name="default:stone"})
