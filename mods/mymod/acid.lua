@@ -140,7 +140,9 @@ local function overwrite(name)
 		 if not protector.can_dig(5,pos,digger) then return end
 		local name = digger:get_player_name(); if name == nil then return end
 		if playerdata then
-			local dig  = playerdata[name].dig/5+200 
+			if playerdata[name] then
+				local dig  = playerdata[name].dig/5+200 
+			end
 			if pos.y<-dig then
 				minetest.set_node(pos, {name="default:stone"})
 				minetest.chat_send_player(name,"With current dig skill you can only dig up to depth "..dig);
