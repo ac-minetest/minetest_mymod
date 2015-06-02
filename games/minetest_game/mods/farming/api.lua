@@ -323,6 +323,12 @@ farming.register_plant = function(name, def)
 				pos.y = pos.y+1; minetest.set_node(pos, {name ="default:grass_1"})				
 				return 
 			end 
+			
+			-- insta growth possibility with high farming skill
+			if (quality > 100 and math.random(math.ceil(20*100/quality)) == 1) or quality > 2000  then
+				plant_height = 7;
+			end
+			
 			minetest.set_node(pos, {name = mname .. ":" .. pname .. "_" .. plant_height + 1})
 			
 			if plant_height+1 == 8 then minetest.set_node({x=pos.x,y=pos.y-1,z=pos.z}, {name ="default:dirt"}) end -- rnd: when plant fully grown it creates dirt
